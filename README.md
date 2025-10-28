@@ -20,7 +20,7 @@ System umożliwia zarządzanie profilami pacjentów, analizę ich danych zdrowot
 
 ---
 
-## Funkcjonalności
+## Funkcjonalności (dev)
 
 - Tworzenie i edycja profili pacjentów  
 - Uzupełnianie kwestionariuszy zdrowotnych (waga, wzrost, aktywność, schorzenia)  
