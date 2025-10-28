@@ -1,0 +1,113 @@
+img.logo{
+    width: 3rem;
+    margin-bottom: 1.5rem;
+    /*                kolor logo - #7EDC00               */
+}
+
+.authBody {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f1efef;
+    font-family: "Inter", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.authContainer{
+    height: 600px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+div.authContainer > div {
+    color: #669247;
+    cursor: pointer;
+}
+
+div.authContainer > section > label > h1{
+    font-size: 2.25rem;
+    letter-spacing: -0.75px;
+    color: #0D1309;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+div.authContainer > section > label > p{
+    font-size: 0.875rem;
+    color: #669247;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    /*max-width: 32rem;*/
+}
+
+form.authForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+form.authForm > input {
+    width: 28rem;
+    height: 3.375rem;
+    padding: 13px;
+    color: #669247;
+    box-sizing: border-box;
+    border: 1px solid #D6E5CE;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 0;
+}
+
+form.authForm > input::placeholder {
+    color: #669247;
+}
+
+form.authForm > input:first-of-type {
+    border-bottom: none;
+}
+
+form.authForm > input#repeatPassword {
+    border-top: none;
+}
+
+form.authForm > input:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+form.authForm > button {
+    font-size: 16px;
+    font-weight: 600;
+    width: 28rem;
+    height: 2.875rem;
+    border: none;
+    background-color: #7EDC00;
+    color: #16200F;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+form.authForm > button:hover {
+    transform: scale(1.02);
+}
+
+:global(input:-webkit-autofill),
+:global(input:-webkit-autofill:hover),
+:global(input:-webkit-autofill:focus),
+:global(input:-webkit-autofill:active) {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    -webkit-text-fill-color: #669247 !important;
+    caret-color: #669247;
+    border: 1px solid #D6E5CE;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+.authMessage {
+    margin-block: 2rem;
+    color: #812525;
+}

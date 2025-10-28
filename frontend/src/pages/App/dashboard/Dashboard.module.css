@@ -1,0 +1,47 @@
+.dashboardBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.cardsSection {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 3rem;
+    padding: 2rem;
+}
+
+.cardsSection > * {
+    width: 31.875rem;
+    height: 6.875rem;
+    border: 2px solid #E7E7E7;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 1.5rem;
+}
+
+.cardsSection > * > div > p{
+    line-height: 1.5rem;
+    font-size: 1.125rem;
+    color: #3d4d5c;
+}
+
+.cardsSection > * > div > h1{
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #0C1828;
+    font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
