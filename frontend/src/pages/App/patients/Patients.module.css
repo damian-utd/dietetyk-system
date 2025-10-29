@@ -1,0 +1,89 @@
+.patientsBody{
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.patientsBody > a {
+    text-decoration: none;
+    cursor: pointer;
+    color: #0D1309;
+    font-weight: 600;
+}
+.patientsBody > a:visited {
+    text-decoration: none;
+    color: #0D1309;
+}
+
+.patientsBody > section {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.patientForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 31.25rem;
+    gap: 0.5rem;
+}
+
+.inputGroup:focus-within > label {
+    font-weight: 800;
+}
+
+.inputGroup > label {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+
+.inputGroup > input, .inputGroup > select {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    height: 2.625rem;
+    border: 1px solid rgba(126, 220, 0, 0.3);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+}
+
+.inputGroup > input:focus, .inputGroup > select:focus {
+    outline: none;
+    border: 1px solid rgba(126, 220, 0, 0.3);
+    box-shadow: 0 0 4px rgba(126, 220, 0, 0.65);
+}
+
+.inputGroup > select {
+    appearance: none; /* Disable the default arrow */
+    -webkit-appearance: none; /* For WebKit-based browsers */
+    -moz-appearance: none; /* For Firefox */
+    background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+.patientSubmit{
+    width: 15rem;
+    align-self: end;
+}
+

@@ -13,8 +13,6 @@ export async function getPatientsCount() {
         throw new Error(data.message)
     }
 
-    await sleep(1000) // żeby pokazać deffered data
-
     return data
 }
 
