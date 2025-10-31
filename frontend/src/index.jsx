@@ -19,7 +19,8 @@ import RegisterForm, {action as registerAction} from "./pages/auth/RegisterForm.
 import Layout from "./pages/App/Layout.jsx";
 import Dashboard, {loader as dashboardLoader} from "./pages/App/dashboard/Dashboard.jsx";
 import Patients, {loader as patientLoader} from "./pages/App/patients/Patients.jsx";
-import PatientAdd, {loader as PatientAddLoader, action as PatientAddAction} from "./pages/App/patients/PatientAdd.jsx"
+import PatientAdd, {loader as patientAddLoader, action as patientAddAction} from "./pages/App/patients/PatientAdd.jsx"
+import PatientsInfo, {loader as patientsInfoLoader} from "./pages/App/patients/PatientsInfo.jsx";
 import Plans, {loader as plansLoader} from "./pages/App/plans/Plans.jsx";
 import PlanCreator, {loader as planCreatorLoader} from "./pages/App/plancreator/PlanCreator.jsx";
 import Analysis, {loader as analysisLoader} from "./pages/App/analysis/Analysis.jsx";
@@ -64,8 +65,13 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route
                 path="patients/add"
                 element={<PatientAdd />}
-                loader={PatientAddLoader}
-                action={PatientAddAction}
+                loader={patientAddLoader}
+                action={patientAddAction}
+            />
+            <Route
+                path="patients/:id"
+                element={<PatientsInfo />}
+                loader={patientsInfoLoader}
             />
             <Route
                 path="plans"

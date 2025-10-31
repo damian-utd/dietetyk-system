@@ -6,7 +6,7 @@ import styles from "../Patients.module.css"
 export default function PatientForm({ defValues = null }) {
 
     return (
-        <section>
+        <section className={styles.formSection}>
             <Form
                 method="POST"
                 className={styles.patientForm}

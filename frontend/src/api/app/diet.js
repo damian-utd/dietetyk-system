@@ -16,11 +16,39 @@ export async function getPatientsCount() {
     return data
 }
 
+export async function getPatients() {
+    const res = await fetch("/api/diet/patients", {
+        credentials: "include"
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error(data.message)
+    }
+
+    return data
+}
+
 export async function addPatient(patientData) {
     const res = await fetch("/api/diet/patient-add", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(patientData),
+        credentials: "include"
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error(data.message)
+    }
+
+    return data
+}
+
+export async function getPatientById(id) {
+    const res = await fetch(`/api/diet/patients/${id}`, {
         credentials: "include"
     })
 
