@@ -1,7 +1,9 @@
 import React from "react"
-import {useLoaderData} from "react-router-dom";
+import {NavLink, useLoaderData} from "react-router-dom";
 import {requireAuth} from "../../../api/utils.js";
 import {getPatientById} from "../../../api/app/diet.js";
+import PatientForm from "./components/PatientForm.jsx";
+import styles from "./Patients.module.css";
 
 export async function loader( { request, params }) {
     await requireAuth(request)
@@ -17,9 +19,14 @@ export async function loader( { request, params }) {
 
 export default function PatientsInfo() {
     const { patient } = useLoaderData()
-    console.log(patient)
+    const { first_name, last_name, age, sex, weight, height, activity_level, goal, conditions, created_at } = patient
 
     return (
-        <h1>Patients info</h1>
+        <div className={styles.patientsBody}>
+            <NavLink to="/patients">
+                <i className="ri-arrow-go-back-line"></i> Powrót
+            </NavLink>
+            <PatientForm defValues={ patient }/>
+        </div>
     )
 }
