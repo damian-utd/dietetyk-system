@@ -1,0 +1,77 @@
+services:
+  db-app:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_APP}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_APP}
+      POSTGRES_DB: ${POSTGRES_DB_APP}
+      TZ: Europe/Warsaw
+    volumes:
+      - ./db/app-data:/var/lib/postgresql/data
+      - ./db/init-app.sql:/docker-entrypoint-initdb.d/init-app.sql
+    networks:
+      - backend_net
+
+  db-products:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_PRODUCTS}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_PRODUCTS}
+      POSTGRES_DB: ${POSTGRES_DB_PRODUCTS}
+      TZ: Europe/Warsaw
+    volumes:
+      - ./db/products-data:/var/lib/postgresql/data
+      - ./db/init-products.sql:/docker-entrypoint-initdb.d/init-products.sql
+      - ./products.csv:/products.csv
+    networks:
+      - backend_net
+
+  backend:
+    build: ./backend
+    restart: always
+    depends_on:
+      - db-app
+      - db-products
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      PORT: ${PORT}
+      APP_DATABASE_URL: ${APP_DATABASE_URL}
+      PRODUCTS_DATABASE_URL: ${PRODUCTS_DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      TZ: Europe/Warsaw
+
+    expose:
+      - "5000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - frontend_net
+      - backend_net
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - node_modules_frontend:/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=${VITE_API_URL}
+      - "TZ=Europe/Warsaw"
+    depends_on:
+      - backend
+    networks:
+      - frontend_net
+
+volumes:
+  node_modules_frontend:
+
+networks:
+  frontend_net:
+    driver: bridge
+  backend_net:
+    driver: bridge
