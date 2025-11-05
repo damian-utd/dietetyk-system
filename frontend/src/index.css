@@ -24,6 +24,8 @@ body {
 }
 
 .spinner {
+    align-self: center;
+    justify-self: center;
     display: inline-flex;
     align-items: center;
     justify-content: left;

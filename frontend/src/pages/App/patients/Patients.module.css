@@ -85,6 +85,7 @@
 .patientSubmit{
     width: 15rem;
     align-self: end;
+
 }
 
 .patientsSection {
@@ -165,6 +166,7 @@
     line-height: 1.5rem;
     border-radius: 10rem;
     align-self: end;
+    border: none;
 }
 
 

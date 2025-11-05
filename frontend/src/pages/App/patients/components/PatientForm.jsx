@@ -119,7 +119,7 @@ export default function PatientForm({ defValues = null }) {
                         />
                     </div>
 
-                    <button className={styles.patientSubmit}>Zapisz</button>
+                    <button className={styles.addPatientButton}>Zapisz</button>
             </Form>
         </section>
 )
