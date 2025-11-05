@@ -1,10 +1,10 @@
 import React from "react"
-import {Await, NavLink, useLoaderData} from "react-router-dom";
+import {NavLink, useLoaderData} from "react-router-dom";
 import {requireAuth} from "../../../api/utils.js";
-import {getPatientById} from "../../../api/app/diet.js";
+import {getPatientById, updatePatient} from "../../../api/app/diet.js";
 import PatientForm from "./components/PatientForm.jsx";
 import styles from "./Patients.module.css";
-import LoadingCircle from "../../../components/LoadingCircle.jsx";
+
 
 export async function loader( { request, params }) {
     await requireAuth(request)
@@ -16,7 +16,19 @@ export async function loader( { request, params }) {
     } catch (err) {
         return {error: err.message}
     }
+}
 
+export async function action( { request, params }) {
+    const patient_id = params.id
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
+
+    try {
+        const patient = await updatePatient(patient_id, data)
+        return {message: patient.message}
+    } catch (err) {
+        return {error: err.message}
+    }
 }
 
 export default function PatientsInfo() {

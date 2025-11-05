@@ -152,7 +152,7 @@
     gap: 1rem;
 }
 
-.addPatientButton, .addPatientButton:active, .addPatientButton:visited, .addPatientButton:focus {
+.addPatientButton{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -167,6 +167,22 @@
     border-radius: 10rem;
     align-self: end;
     border: none;
+    transition: 0.2s;
+}
+
+/* Efekt po najechaniu */
+.addPatientButton:hover {
+    background-color: #6bc400; /* lekko ciemniejszy zielony */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+}
+
+/* Efekt po kliknięciu */
+.addPatientButton:active {
+    background-color: #5aa800; /* jeszcze ciemniejszy zielony */
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 
