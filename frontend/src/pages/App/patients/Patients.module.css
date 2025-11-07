@@ -170,21 +170,21 @@
     transition: 0.2s;
 }
 
-/* Efekt po najechaniu */
 .addPatientButton:hover {
-    background-color: #6bc400; /* lekko ciemniejszy zielony */
+    background-color: #6bc400;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-
 }
 
-/* Efekt po kliknięciu */
 .addPatientButton:active {
-    background-color: #5aa800; /* jeszcze ciemniejszy zielony */
+    background-color: #5aa800;
     transform: translateY(1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.patientsInfoNav {
+
+}
 
 
 

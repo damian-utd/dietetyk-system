@@ -1,8 +1,7 @@
 import React from "react"
-import {NavLink, useLoaderData} from "react-router-dom";
+import {NavLink, useLoaderData, Outlet} from "react-router-dom";
 import {requireAuth} from "../../../api/utils.js";
-import {getPatientById, updatePatient} from "../../../api/app/diet.js";
-import PatientForm from "./components/PatientForm.jsx";
+import {getPatientById} from "../../../api/app/diet.js";
 import styles from "./Patients.module.css";
 
 
@@ -18,28 +17,39 @@ export async function loader( { request, params }) {
     }
 }
 
-export async function action( { request, params }) {
-    const patient_id = params.id
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-
-    try {
-        const patient = await updatePatient(patient_id, data)
-        return {message: patient.message}
-    } catch (err) {
-        return {error: err.message}
-    }
-}
-
 export default function PatientsInfo() {
     const { patient } = useLoaderData()
 
     return (
         <div className={styles.patientsBody}>
-            <NavLink to="/patients">
-                <i className="ri-arrow-go-back-line"></i> Powrót
-            </NavLink>
-            <PatientForm defValues={ patient.patient }/>
+            <nav className={styles.patientsInfoNav}>
+                <NavLink
+                    to="./"
+                    style={({isActive}) => (
+                        isActive ? "" : ""
+                    )}
+                >
+                    Analiza
+                </NavLink>
+                <NavLink
+                    to="health"
+                    style={({isActive}) => (
+                        isActive ? "" : ""
+                    )}
+                >
+                    Dane zdrowotne
+                </NavLink>
+                <NavLink
+                    to="personal"
+                    style={({isActive}) => (
+                        isActive ? "" : ""
+                    )}
+                >
+                    Dane osobowe
+                </NavLink>
+            </nav>
+
+            <Outlet context={patient}/>
 
         </div>
     )

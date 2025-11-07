@@ -1,20 +1,13 @@
 import React from "react"
-import {NavLink, Outlet, useNavigate} from "react-router-dom";
+import {NavLink, Outlet, useLoaderData, useNavigate} from "react-router-dom";
 
 import { logout } from "../../api/auth/auth.js";
 
 import styles from "./Main.module.css"
 import {requireAuth} from "../../api/utils.js";
 
-export async function loader() {
-    await requireAuth()
-
-    /*
-        todo
-            w loaderze pobrać dane dietetyka
-            w headerze wyswietlić te dane
-            ikonke wsadzić w navlink do informacji o dietetyku
-     */
+export async function loader({ request }) {
+    await requireAuth(request)
 }
 
 export default function Layout() {

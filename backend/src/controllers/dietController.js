@@ -97,30 +97,55 @@ export async function getPatientById(req, res) {
 }
 
 export async function updatePatient(req, res) {
-    const patient_id = req.params.id
-    const { first_name, last_name, age, sex, weight, height, activity_level, goal, conditions } = req.body
+    const patient_id = req.params.id;
+    const fields = [
+        "first_name",
+        "last_name",
+        "age",
+        "sex",
+        "weight",
+        "height",
+        "activity_level",
+        "goal",
+        "conditions"
+    ];
+
+    const updates = [];
+    const values = [];
+    let index = 1;
+
+    for (const field of fields) {
+        if (req.body[field] !== undefined && req.body[field] !== null) {
+            updates.push(`${field} = $${index}`);
+            values.push(req.body[field]);
+            index++;
+        }
+    }
+
+    if (updates.length === 0) {
+        return res.status(400).json({ message: "Brak danych do aktualizacji" });
+    }
+
+    values.push(patient_id);
+
+    const query = `
+        UPDATE patients
+        SET ${updates.join(", ")}
+        WHERE id = $${index}
+        RETURNING *;
+    `;
 
     try {
-        const result = await appDb.query(
-            "UPDATE patients " +
-            "SET first_name = $1, " +
-                "last_name = $2, " +
-                "age = $3, " +
-                "sex = $4, " +
-                "weight = $5, " +
-                "height = $6, " +
-                "activity_level = $7, " +
-                "goal = $8, " +
-                "conditions = $9 " +
-            "WHERE id = $10 ",
-            [first_name, last_name, age, sex, weight, height, activity_level, goal, conditions, patient_id],
-        )
-
-        const patient = result.rows[0]
-
-        res.status(201).json({message: "Pomyślnie zaktualizowano pacjenta", patient});
+        const result = await appDb.query(query, values);
+        const patient = result.rows[0];
+        res.status(200).json({
+            message: "Pomyślnie zaktualizowano pacjenta",
+            patient,
+        });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({message: "Błąd serwera przy aktualizowaniu pacjenta"})
+        res.status(500).json({
+            message: "Błąd serwera przy aktualizowaniu pacjenta",
+        });
     }
 }

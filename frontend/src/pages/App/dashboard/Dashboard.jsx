@@ -1,12 +1,13 @@
 //dashboard
 
 import React from "react"
-import { useLoaderData } from "react-router-dom";
+import {Await, useLoaderData} from "react-router-dom";
 
 import { requireAuth } from "../../../api/utils.js";
 import { getPatientsCount } from "../../../api/app/diet.js";
-import CardsSection from "./components/CardsSection.jsx";
+import Cards from "../../../components/Cards.jsx";
 import styles from "./Dashboard.module.css"
+import LoadingCircle from "../../../components/LoadingCircle.jsx";
 
 
 export async function loader( { request }){
@@ -15,6 +16,8 @@ export async function loader( { request }){
     try{
         return {
             patientsCount: getPatientsCount()
+            // liczba utworzonych notatek
+            // liczba utworzonych planów
         }
 
     }
@@ -25,13 +28,22 @@ export async function loader( { request }){
 }
 
 export default function Dashboard() {
-    const rest = useLoaderData()
+    const promise = useLoaderData()
 
     return (
         <div className={styles.dashboardBody}>
-            <section className={styles.cardsSection}>
-                <CardsSection data={rest}/>
-            </section>
+            <React.Suspense
+                fallback={
+                <section className="cardsSection">
+                    <LoadingCircle/>
+                </section>
+            }>
+                <Await resolve={promise}>
+                    {(resolved) => (
+                        <Cards data={resolved}/>
+                    )}
+                </Await>
+            </React.Suspense>
         </div>
-    )
+)
 }
