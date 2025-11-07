@@ -183,7 +183,28 @@
 }
 
 .patientsInfoNav {
+    width: 92rem;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    border-bottom: 1px solid #7EDC0033;
+}
 
+.patientsInfoNav > a {
+    color: rgba(0, 0, 0, 0.6);
+    padding-inline: 1rem;
+    height: 3.375rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: content-box;
+    font-weight: 500;
+}
+
+.patientsInfoNav > a:hover {
+    color: #000;
+    border-bottom: 2px solid #7EDC00;
 }
 
 

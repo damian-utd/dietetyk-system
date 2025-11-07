@@ -1,7 +1,7 @@
 import React from "react"
-import {calcBMI, calcBMR, calcTDEE, requireAuth} from "../../../api/utils.js";
 import {useOutletContext} from "react-router-dom";
-import Cards from "../../../components/Cards.jsx";
+import {calcBMI, calcBMR, calcTDEE, requireAuth} from "../../../api/utils.js";
+import styles from "./Patients.module.css"
 
 export async function loader({ request }) {
     await requireAuth(request)
@@ -20,8 +20,8 @@ export default function PatientsAnalysis() {
     }
 
     return (
-        <>
+        <section className={styles.patientsSection}>
             <h1>PatientsAnalysis</h1>
-        </>
+        </section>
     )
 }

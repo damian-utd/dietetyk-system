@@ -20,30 +20,30 @@ export async function loader( { request, params }) {
 export default function PatientsInfo() {
     const { patient } = useLoaderData()
 
+    const activeStyle = {
+        color: "#000",
+        borderBottom: "2px solid #7EDC00"
+    }
+
     return (
         <div className={styles.patientsBody}>
             <nav className={styles.patientsInfoNav}>
                 <NavLink
-                    to="./"
-                    style={({isActive}) => (
-                        isActive ? "" : ""
-                    )}
+                    to="."
+                    style={({isActive}) => (isActive ? activeStyle : null)}
+                    end
                 >
                     Analiza
                 </NavLink>
                 <NavLink
                     to="health"
-                    style={({isActive}) => (
-                        isActive ? "" : ""
-                    )}
+                    style={({isActive}) => (isActive ? activeStyle : null)}
                 >
                     Dane zdrowotne
                 </NavLink>
                 <NavLink
                     to="personal"
-                    style={({isActive}) => (
-                        isActive ? "" : ""
-                    )}
+                    style={({isActive}) => (isActive ? activeStyle : null)}
                 >
                     Dane osobowe
                 </NavLink>
