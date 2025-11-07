@@ -90,7 +90,7 @@
 
 .patientsSection {
     align-self: center;
-    width: 92rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -104,7 +104,7 @@
 
 .patientsTable {
     background-color: #ffffff;
-    width: 100%;
+    width: 92rem;
     text-align: left;
     box-sizing: border-box;
     border-radius: 16px;
@@ -121,6 +121,14 @@
 }
 .patientsTable > thead > tr > th:last-of-type, .patientsTable > tbody > tr > td:last-of-type{
     text-align: right;
+}
+
+.patientsTable > thead > tr > th:first-of-type{
+    border-top-left-radius: 16px;
+}
+
+.patientsTable > thead > tr > th:last-of-type{
+    border-top-right-radius: 16px;
 }
 
 .patientsTable > thead {
@@ -200,12 +208,21 @@
     align-items: center;
     box-sizing: content-box;
     font-weight: 500;
+
 }
 
 .patientsInfoNav > a:hover {
     color: #000;
     border-bottom: 2px solid #7EDC00;
 }
+
+.title {
+    align-self: start;
+    margin: 0;
+    padding: 0;
+}
+
+
 
 
 

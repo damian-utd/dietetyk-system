@@ -28,7 +28,7 @@ export default function PatientsHealthData() {
         <>
             <h1>PatientsHealthData</h1>
             <PatientForm
-                defValues={patient.patient}
+                defValues={patient}
                 show="health"
             />
         </>

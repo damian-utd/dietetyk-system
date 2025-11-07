@@ -1,29 +1,16 @@
-//Cards
-import React from "react"
+import React from "react";
+import BmiBar from "./BmiBar.jsx";
 
-export default function Cards({ data, style = {} }){
+export default function Cards({ data, className = "" }) {
 
-    // console.log(data)
+    const cardElements = Object.entries(data).map(([key, {title, value, description = "", visual = ""}]) => {
 
-    const cardElements = Object.entries(data).map(([key, value]) => {
-
-        let content;
-        switch(key){
-            case "patientsCount":
-                content = "Liczba pacjentów"
-                break;
-            default:
-                content = ""
-                break;
-        }
-        console.log(content)
         return (
-            <>
-                <div key={key} style={style}>
-                    <p> {content} </p>
-                    {value.value !== undefined ? <h1>{value.value}</h1> : <h1>{value}</h1>}
-                </div>
-            </>
+            <div key={key} className={`card ${className}`}>
+                {!description ? <span>{title}</span> : <span><b>{title}</b> - {description}</span>}
+                <h1>{value}</h1>
+                {className === "big" && <>{visual ? <BmiBar value={value} /> : ""}</>}
+            </div>
         )
     })
 
@@ -31,5 +18,5 @@ export default function Cards({ data, style = {} }){
         <section className="cardsSection">
             {cardElements}
         </section>
-    )
+    );
 }

@@ -23,6 +23,12 @@ export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function roundDec(number, precision) {
+    const x = Math.pow(10, precision)
+
+    return Math.round(number*x)/x
+}
+
 export function calcBMI(weight, height) {
     const fixedHeight = height/100
     const ratio = weight/(fixedHeight*fixedHeight)
@@ -47,13 +53,13 @@ export function calcBMI(weight, height) {
 export function calcBMR(weight, height, age, sex) {
     if (sex === "male") {
         return {
-            title: "BMR",
+            title: "PPM",
             value: 10 * weight + 6.25 * height - 5 * age + 5,
             description: "Podstawowa przemiana materii"
         }
     }else {
         return {
-            title: "BMR",
+            title: "PPM",
             value: 10 * weight + 6.25 * height - 5 * age - 161,
             description: "Podstawowa przemiana materii"
         }
@@ -62,7 +68,7 @@ export function calcBMR(weight, height, age, sex) {
 
 export function calcTDEE(BMR, activity) {
     return {
-        title: "TDEE",
+        title: "CPM",
         value: BMR.value * activity,
         description: "Całkowita przemiana materii"
     }

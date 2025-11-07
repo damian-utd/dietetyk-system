@@ -10,15 +10,14 @@ export async function loader( { request, params }) {
 
     const patient_id = params.id
     try {
-        return {
-            patient: await getPatientById(patient_id)}
+        return await getPatientById(patient_id)
     } catch (err) {
         return {error: err.message}
     }
 }
 
 export default function PatientsInfo() {
-    const { patient } = useLoaderData()
+    const {message, patient} = useLoaderData()
 
     const activeStyle = {
         color: "#000",
@@ -27,6 +26,7 @@ export default function PatientsInfo() {
 
     return (
         <div className={styles.patientsBody}>
+            <h1 className={styles.title}>Pacjent - {patient.first_name} {patient.last_name}</h1>
             <nav className={styles.patientsInfoNav}>
                 <NavLink
                     to="."

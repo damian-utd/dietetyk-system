@@ -13,7 +13,10 @@ export async function getPatientsCount() {
         throw new Error(data.message)
     }
 
-    return data
+    return {
+        value: data,
+        title: "Liczba pacjentów"
+    }
 }
 
 export async function getPatients() {
