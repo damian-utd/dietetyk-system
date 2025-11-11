@@ -2,8 +2,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/authRoutes.js";
-import dietRoutes from "./src/routes/dietRoutes.js"
-import { productsDb, appDb } from "./src/config/db.js"
+import patientRoutes from "./src/routes/patientRoutes.js"
+import dietRoutes from "./src/routes/dietRoutes.js";
 
 const app = express();
 
@@ -15,6 +15,7 @@ app.use(cookieParser());
 
 // Trasy
 app.use("/api/auth", authRoutes);
+app.use("/api/patients", patientRoutes);
 app.use("/api/diet", dietRoutes);
 
 // Start

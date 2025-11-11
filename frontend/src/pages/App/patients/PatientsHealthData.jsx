@@ -2,7 +2,7 @@ import React from "react"
 import {requireAuth} from "../../../api/utils.js";
 import PatientForm from "./components/PatientForm.jsx";
 import {useOutletContext} from "react-router-dom";
-import {updatePatient} from "../../../api/app/diet.js";
+import {updatePatient} from "../../../api/app/patients.js";
 
 export async function loader({ request }) {
     await requireAuth(request)

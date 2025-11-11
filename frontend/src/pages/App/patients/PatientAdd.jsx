@@ -7,7 +7,7 @@ import {
 import PatientForm from "./components/PatientForm.jsx"
 
 import styles from "./Patients.module.css"
-import { addPatient } from "../../../api/app/diet.js";
+import { addPatient } from "../../../api/app/patients.js";
 import {requireAuth} from "../../../api/utils.js";
 
 export async function action({ request }) {

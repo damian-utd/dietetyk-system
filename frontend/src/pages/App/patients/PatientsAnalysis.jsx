@@ -21,17 +21,6 @@ export default function PatientsAnalysis() {
         tdee: { ...tdee, value: roundDec(tdee.value, 0) }
     }
 
-
-    // const calcsCards = calcs.map((prop) => {
-    //
-    //     return (
-    //         <div key={prop.title}>
-    //             <span><b>{prop.title}</b> - {prop.description}</span>
-    //             <p>{prop.value}</p>
-    //         </div>
-    //     )
-    // })
-
     return (
         <section className={styles.patientsSection}>
             <section>

@@ -1,81 +1,17 @@
-//diet.js
+// diet.js
 
-import {sleep} from "../utils.js";
-
-export async function getPatientsCount() {
-    const res = await fetch("/api/diet/patients-count", {
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error(data.message)
-    }
-
-    return {
-        value: data,
-        title: "Liczba pacjentów"
-    }
-}
-
-export async function getPatients() {
-    const res = await fetch("/api/diet/patients", {
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error(data.message)
-    }
-
-    return data
-}
-
-export async function addPatient(patientData) {
-    const res = await fetch("/api/diet/patients-add", {
+export async function searchProducts(search) {
+    const res = await fetch ("/api/diet/search", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(patientData),
+        body: JSON.stringify({search}),
         credentials: "include"
     })
 
     const data = await res.json()
 
     if (!res.ok) {
-        throw new Error(data.message)
-    }
-
-    return data
-}
-
-export async function getPatientById(id) {
-    const res = await fetch(`/api/diet/patients/${id}`, {
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error(data.message)
-    }
-
-    return data
-}
-
-export async function updatePatient(id, patientData) {
-    const res = await fetch(`/api/diet/patients/${id}/update`, {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(patientData),
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error(data.message)
+        throw new Error (data.message)
     }
 
     return data

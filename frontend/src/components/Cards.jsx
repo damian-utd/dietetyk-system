@@ -9,7 +9,7 @@ export default function Cards({ data, className = "" }) {
             <div key={key} className={`card ${className}`}>
                 {!description ? <span>{title}</span> : <span><b>{title}</b> - {description}</span>}
                 <h1>{value}</h1>
-                {className === "big" && <>{visual ? <BmiBar value={value} /> : ""}</>}
+                {className === "big" && <>{visual ? <BmiBar value={value} /> : <BmiBar empty={true}/>}</>}
             </div>
         )
     })

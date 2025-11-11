@@ -25,7 +25,7 @@ import PatientsAnalysis, {loader as patientsAnalysisLoader} from "./pages/App/pa
 import PatientsHealthData, {loader as patientsHealthDataLoader, action as patientsHealthDataAction} from "./pages/App/patients/PatientsHealthData.jsx";
 import PatientsPersonalData, {loader as patientsPersonalDataLoader, action as patientsPersonalDataAction} from "./pages/App/patients/PatientsPersonalData.jsx";
 import Plans, {loader as plansLoader} from "./pages/App/plans/Plans.jsx";
-import PlanCreator, {loader as planCreatorLoader} from "./pages/App/plancreator/PlanCreator.jsx";
+import PlanCreator, {loader as planCreatorLoader, action as planCreatorAction} from "./pages/App/plancreator/PlanCreator.jsx";
 import Analysis, {loader as analysisLoader} from "./pages/App/analysis/Analysis.jsx";
 
 
@@ -104,6 +104,7 @@ const router = createBrowserRouter(createRoutesFromElements(
                 path="plancreator"
                 element={<PlanCreator />}
                 loader={planCreatorLoader}
+                action={planCreatorAction}
             />
             <Route
                 path="calcs"

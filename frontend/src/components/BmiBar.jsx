@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {roundDec} from "../api/utils.js";
 
-export default function BMIBar({ value }) {
+export default function BMIBar({ value, empty = false }) {
     const [position, setPosition] = useState(50)
 
     const minBMI = 10;
@@ -13,9 +13,9 @@ export default function BMIBar({ value }) {
     }, [targetPosition]);
 
     return (
-        <div className="bmiBar">
+        <div className={`bmiBar ${empty ? "empty" : ""}`}>
             <div
-                className="bmiMarker"
+                className={`bmiMarker ${empty ? "empty" : ""}`}
                 style={{ left: `${position}%` }}
             ></div>
         </div>
