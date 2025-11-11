@@ -2,9 +2,11 @@ import { appDb, productsDb } from "../config/db.js";
 
 export async function searchProducts(req, res) {
     try {
+        if (req.user.role !== "dietetyk") return res.status(403).json("Brak uprawnień do wykonania operacji")
+
         const search = req.body.search
 
-        if(!search || search.length < 3) res.status(400).json("Zbyt krótkie lub brak zapytania")
+        if(!search || search.length < 3) return res.status(400).json("Zbyt krótkie lub brak zapytania")
 
         const searchArray = search.split(" ").filter(word => word !== "").map((s, index) => {
             if (s !== "") {
@@ -29,7 +31,7 @@ export async function searchProducts(req, res) {
 
         const result = await productsDb.query(query, searchArray)
 
-        res.status(201).json({message: "Pomyślnie wyszukano produkty", result})
+        res.status(200).json({message: "Pomyślnie wyszukano produkty", result})
 
     } catch (err) {
         console.error("Błąd przy wyszukiwaniu produktów", err)
