@@ -6,15 +6,11 @@ export async function searchProducts(req, res) {
 
         if(!search || search.length < 3) res.status(400).json("Zbyt krótkie lub brak zapytania")
 
-        const values = []
-
         const searchArray = search.split(" ").filter(word => word !== "").map((s, index) => {
             if (s !== "") {
-                values.push(`%${s}%`)
                 return `%${s}%`
             }
         })
-
 
         const ilikes = searchArray.map((s, index) => {
             if (index === 0) {
@@ -24,10 +20,6 @@ export async function searchProducts(req, res) {
             }
         })
 
-        console.log("values: ", values)
-        console.log("searchArray: ", searchArray)
-        console.log("ilikes: ", ilikes)
-
         const query =
             "SELECT lp, nazwa_polska, nazwa_angielska " +
             "FROM products " +
@@ -35,12 +27,7 @@ export async function searchProducts(req, res) {
             ilikes.join("") +
             "LIMIT 10 "
 
-        console.log(query)
-
         const result = await productsDb.query(query, searchArray)
-
-        console.log(result.rows)
-
 
         res.status(201).json({message: "Pomyślnie wyszukano produkty", result})
 
