@@ -119,19 +119,23 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                                     />
                                 </div>
                             </div>
+                            <div className={styles.formGroup}>
+                                <div className={styles.inputGroup}>
+                                    <label htmlFor="conditions">Schorzenia / Alergie</label>
+                                    <input
+                                        type="text"
+                                        name="conditions"
+                                        id="conditions"
+                                        defaultValue={defValues?.conditions || ""}
+                                    />
+                                </div>
+                                <div className={styles.inputGroup}>
 
-                            <div className={styles.inputGroup}>
-                                <label htmlFor="conditions">Schorzenia / Alergie</label>
-                                <input
-                                    type="text"
-                                    name="conditions"
-                                    id="conditions"
-                                    defaultValue={defValues?.conditions || ""}
-                                />
+                                </div>
                             </div>
-                        </>
-                    )
-                }
+                            </>
+                            )
+                            }
                 <div className={styles.buttonContainer}>
                     <button className={styles.addPatientButton}>Zapisz</button>
                 </div>

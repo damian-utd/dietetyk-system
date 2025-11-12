@@ -18,9 +18,8 @@
     color: #0D1309;
 }
 
-.patientsBody > .formSection {
+.formSection {
     display: flex;
-    width: 100%;
     justify-content: center;
 }
 
@@ -34,6 +33,7 @@
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
+    justify-content: center;
 }
 
 .inputGroup {
@@ -190,6 +190,7 @@
     border-radius: 10rem;
     border: none;
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .addPatientButton:hover {
