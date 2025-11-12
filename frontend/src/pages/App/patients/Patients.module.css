@@ -100,6 +100,15 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+}
+
+.tableCaption > * {
+    min-width: 10rem;
+}
+
+.message {
+    color: red;
 }
 
 .patientsTable {
@@ -160,6 +169,12 @@
     gap: 1rem;
 }
 
+.buttonContainer{
+    width: 92rem;
+    display: flex;
+    justify-content: end;
+}
+
 .addPatientButton{
     display: flex;
     justify-content: center;
@@ -173,7 +188,6 @@
     background-color: #7EDC00;
     line-height: 1.5rem;
     border-radius: 10rem;
-    align-self: end;
     border: none;
     transition: 0.2s;
 }
@@ -221,6 +235,7 @@
     margin: 0;
     padding: 0;
 }
+
 
 
 

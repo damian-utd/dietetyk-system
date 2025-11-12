@@ -6,7 +6,8 @@ import {
     getPatients,
     getPatientsCount,
     getPatientById,
-    updatePatient
+    updatePatient,
+    deletePatient
 } from "../controllers/patientController.js";
 
 const router = express.Router()
@@ -18,5 +19,6 @@ router.get("/count", getPatientsCount)
 router.post("/add", addPatient)
 router.get("/:id", getPatientById)
 router.post("/:id/update", updatePatient)
+router.delete("/:id", deletePatient)
 
 export default router

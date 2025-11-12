@@ -1,9 +1,11 @@
 //PlanCreator
 
 import React from "react"
-import { requireAuth } from "../../../api/utils.js";
 import {Form, useActionData, useSubmit} from "react-router-dom";
+import { requireAuth } from "../../../api/utils.js";
 import {searchProducts} from "../../../api/app/diet.js";
+
+import styles from "./PlanCreator.module.css"
 
 export async function loader( { request }){
     await requireAuth(request)
@@ -16,34 +18,42 @@ export async function action({ request }) {
 
     if (search.length >= 3) {
         try{
-            await searchProducts(search)
+            return await searchProducts(search)
         } catch (err) {
             return err.message
         }
     }
-
-    return {
-        display: search.length >= 3,
-        search
-    };
-        // zamiast query dac wynik z fetcha (w endpoincie dodaj limit 5, a moze bez limitu?)
-        // SELECT * FROM products WHERE nazwa_polska ILIKE '%mleko%' AND nazwa_polska ILIKE '%3,5%';
 }
 
 
 export default function PlanCreator() {
     const submit = useSubmit()
-    const { display, search } = useActionData() || {}
+    const actionData = useActionData()
+
+    const searchResults = actionData ? actionData.products.map((product) => {
+        const {lp, nazwa_polska, nazwa_angielska} = product
+        return (
+            <div key={lp}>
+                {nazwa_polska}
+            </div>
+        )
+    }) : ""
 
     return (
-        <>
+        <div className={styles.planCreatorBody}>
             <h1>PlanCreator</h1>
-            <Form method="post" onChange={(event) => submit(event.currentTarget)}>
-                <input type="text" name="search"/>
-                <button>elo</button>
-            </Form>
-            {display ? search : ""}
+            <section className={styles.searchSection}>
+                <Form
+                    method="post"
+                    onChange={(event) => submit(event.currentTarget)}
+                >
+                    <input type="search" name="search" defaultValue="mlek"/>
+                </Form>
+                <div>
+                    {searchResults}
+                </div>
+            </section>
 
-        </>
+        </div>
     )
 }

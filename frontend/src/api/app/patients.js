@@ -80,3 +80,18 @@ export async function updatePatient(id, patientData) {
 
     return data
 }
+
+export async function deletePatient(id) {
+    const res = await fetch(`/api/patients/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error(data.message)
+    }
+
+    return data
+}

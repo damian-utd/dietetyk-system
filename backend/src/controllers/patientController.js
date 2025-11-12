@@ -141,3 +141,41 @@ export async function updatePatient(req, res) {
         });
     }
 }
+
+export async function deletePatient(req, res) {
+    const patient_id = req.params.id;
+    const user_id = req.user.id
+
+    try {
+        const result = await appDb.query(
+            "DELETE " +
+            "FROM patients p " +
+            "USING dieticians d " +
+            "WHERE " +
+            "d.user_id = $1 AND " +
+            "p.id = $2 AND " +
+            "p.dietician_id = d.id " +
+            "RETURNING p.*",
+
+            [user_id, patient_id]
+        )
+
+        console.log(result.rows)
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Nie znaleziono pacjenta lub brak uprawnień" });
+        }
+
+        const patient = result.rows[0]
+
+        res.status(200).json({
+            message: "Pomyślnie usunięto pacjenta",
+            patient,
+        });
+
+
+    } catch(err) {
+        console.error("Błąd przy usuwaniu pacjenta")
+        res.status(500).json({message: "Błąd serwera"})
+    }
+}

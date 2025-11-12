@@ -14,6 +14,8 @@ export async function searchProducts(req, res) {
             }
         })
 
+        if(!searchArray) return res.status(400).json("Zbyt krótkie lub brak zapytania")
+
         const ilikes = searchArray.map((s, index) => {
             if (index === 0) {
                 return `nazwa_polska ILIKE $${index+1} `
@@ -26,12 +28,11 @@ export async function searchProducts(req, res) {
             "SELECT lp, nazwa_polska, nazwa_angielska " +
             "FROM products " +
             "WHERE " +
-            ilikes.join("") +
-            "LIMIT 10 "
+            ilikes.join("")
 
         const result = await productsDb.query(query, searchArray)
 
-        res.status(200).json({message: "Pomyślnie wyszukano produkty", result})
+        res.status(200).json({message: "Pomyślnie wyszukano produkty", products: result.rows})
 
     } catch (err) {
         console.error("Błąd przy wyszukiwaniu produktów", err)
