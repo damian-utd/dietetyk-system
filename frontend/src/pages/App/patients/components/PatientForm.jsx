@@ -132,7 +132,9 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                         </>
                     )
                 }
-                <button className={styles.addPatientButton}>Zapisz</button>
+                <div className={styles.buttonContainer}>
+                    <button className={styles.addPatientButton}>Zapisz</button>
+                </div>
             </Form>
         </section>
 )

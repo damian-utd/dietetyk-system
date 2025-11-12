@@ -160,7 +160,6 @@ export async function deletePatient(req, res) {
             [user_id, patient_id]
         )
 
-        console.log(result.rows)
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Nie znaleziono pacjenta lub brak uprawnień" });

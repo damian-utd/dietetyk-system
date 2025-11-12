@@ -85,7 +85,6 @@
 .patientSubmit{
     width: 15rem;
     align-self: end;
-
 }
 
 .patientsSection {
@@ -94,6 +93,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .tableCaption{
@@ -235,6 +235,80 @@
     margin: 0;
     padding: 0;
 }
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40rem;
+    background-color: #f1efef;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: #121A0D;
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    padding: 1.5rem;
+    z-index: 1000;
+}
+
+.alert span {
+    font-size: 1.4rem;
+}
+
+.alert b {
+    color: #ff4d4d;
+}
+
+.alert div {
+    display: flex;
+    gap: 1rem;
+}
+
+.alert button {
+    width: 3.5rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.alert button:first-child {
+    background-color: #f1efef;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+}
+
+.alert button:first-child:hover {
+    background-color: #ff4d4d;
+    color: #f1efef;
+}
+
+.alert button:last-child {
+    background-color: #e1dede;
+    color: #333;
+}
+
+.alert button:last-child:hover {
+    background-color: #c8c6c6;
+}
+
+.overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+    backdrop-filter: blur(0.5rem);
+}
+
+
 
 
 
