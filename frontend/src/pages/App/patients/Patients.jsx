@@ -96,7 +96,7 @@ export default function Patients() {
                         {patientRows}
                     </tbody>
                 </table>
-                <div className={styles.buttonContainer}>
+                <div className={styles.buttonContainer} style={{width: "92rem"}}>
                     <Link to="add" className={styles.addPatientButton}>
                         <i className="ri-add-large-line"></i><span>Dodaj pacjenta</span>
                     </Link>
