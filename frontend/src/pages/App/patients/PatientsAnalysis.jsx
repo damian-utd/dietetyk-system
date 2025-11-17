@@ -24,7 +24,6 @@ export default function PatientsAnalysis() {
     return (
         <section className={styles.patientsSection}>
             <section>
-                {/*{calcsCards}*/}
                 <Cards
                     data={calcs}
                     className="big"
