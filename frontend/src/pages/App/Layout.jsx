@@ -54,13 +54,6 @@ export default function Layout() {
                     Plany dietetyczne
                 </NavLink>
                 <NavLink
-                    to="plancreator"
-                    style={({isActive}) => isActive ? activeStyles : null}
-                >
-                    <i className="ri-restaurant-line"></i>
-                    Stwórz plan
-                </NavLink>
-                <NavLink
                     to="calcs"
                     style={({isActive}) => isActive ? activeStyles : null}
                 >
@@ -76,7 +69,7 @@ export default function Layout() {
             </nav>
             <section className={styles.container}>
                 <header>
-                    <h1>Damian Ratańczuk - dietetyk kliniczny</h1>
+                    <h1>Damian Ratańczuk - dietetyk kliniczny</h1> {/* todo w loaderze pobrac zalogowanego dietetyka */}
                     <i className="ri-user-line icon"></i>
                 </header>
                 <Outlet/>

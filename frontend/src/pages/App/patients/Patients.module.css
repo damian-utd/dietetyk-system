@@ -67,6 +67,13 @@
     font-weight: 400;
 }
 
+.inputGroup > input:global(:-webkit-autofill),
+.inputGroup > input:global(:-webkit-autofill:hover),
+.inputGroup > input:global(:-webkit-autofill:focus),
+.inputGroup > input:global(:-webkit-autofill:active) {
+    transition: background-color 9999s ease-in-out 0s;
+}
+
 .inputGroup > input:focus, .inputGroup > select:focus {
     outline: none;
     border: 1px solid rgba(126, 220, 0, 0.3);

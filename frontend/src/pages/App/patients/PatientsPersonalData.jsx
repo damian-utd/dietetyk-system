@@ -26,7 +26,6 @@ export default function PatientsPersonalData() {
 
     return (
         <>
-            <h1>PatientsPersonalData</h1>
             <PatientForm
                 defValues={patient}
                 show="personal"

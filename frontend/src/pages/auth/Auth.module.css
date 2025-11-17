@@ -96,10 +96,10 @@ form.authForm > button:hover {
     transform: scale(1.02);
 }
 
-:global(input:-webkit-autofill),
-:global(input:-webkit-autofill:hover),
-:global(input:-webkit-autofill:focus),
-:global(input:-webkit-autofill:active) {
+.authForm > input:global(:-webkit-autofill),
+.authForm > input:global(:-webkit-autofill:hover),
+.authForm > input:global(:-webkit-autofill:focus),
+.authForm > input:global(:-webkit-autofill:active) {
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     -webkit-text-fill-color: #669247 !important;
     caret-color: #669247;
