@@ -24,7 +24,7 @@ export default function Layout() {
     }
 
     const activeStyles = {
-        color: "#7EDC00",
+        color: "#39513d",
         backgroundColor: "rgba(126, 220, 0, 0.2)"
     }
 

@@ -31,7 +31,7 @@ export default function PatientAdd() {
 
     return (
         <div className={styles.patientsBody}>
-            <NavLink to="..">
+            <NavLink to="/patients">
                 <i className="ri-arrow-go-back-line"></i> Powrót
             </NavLink>
             <PatientForm/>

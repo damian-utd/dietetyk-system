@@ -13,6 +13,21 @@ body {
     overflow-x: hidden;
 }
 
+::placeholder {
+    color: inherit;
+    opacity: 1;
+}
+
+*:focus {
+    outline: none;
+    border-color: inherit;
+}
+
+
+::-ms-input-placeholder {
+    color: inherit;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -87,7 +102,7 @@ button.clearButton {
 .card > h1{
     font-size: 2rem;
     line-height: 2rem;
-    color: #0C1828;
+    color: #11280c;
     font-weight: 700;
 }
 
