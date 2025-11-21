@@ -1,7 +1,5 @@
 //patients.js
 
-import {sleep} from "../utils.js";
-
 export async function getPatientsCount() {
     const res = await fetch("/api/patients/count", {
         credentials: "include"

@@ -1,12 +1,10 @@
 //Plans
 
 import React from "react"
-import {Form, Link, useActionData, useLoaderData, useSubmit} from "react-router-dom";
-import { requireAuth } from "../../../api/utils.js";
-import {searchProducts} from "../../../api/app/diet.js";
+import {Link} from "react-router-dom";
+import { requireAuth } from "../../../utils/utils.js";
 
 import styles from "./Plans.module.css"
-import {getPatients} from "../../../api/app/patients.js";
 
 export async function loader( { request }){
     await requireAuth(request)

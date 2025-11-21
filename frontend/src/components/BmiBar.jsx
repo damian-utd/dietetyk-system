@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {roundDec} from "../api/utils.js";
+import {roundDec} from "../utils/utils.js";
 
 export default function BMIBar({ value, empty = false }) {
     const [position, setPosition] = useState(50)

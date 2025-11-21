@@ -2,7 +2,7 @@
 
 import React from "react"
 
-export default function Day({ day }) {
+export default function PlanDay({ day }) {
 
     const meals = day.meals.map((meal, index) => {
         return (

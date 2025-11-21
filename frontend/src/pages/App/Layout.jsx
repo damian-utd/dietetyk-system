@@ -4,7 +4,7 @@ import {NavLink, Outlet, useLoaderData, useNavigate} from "react-router-dom";
 import { logout } from "../../api/auth/auth.js";
 
 import styles from "./Main.module.css"
-import {requireAuth} from "../../api/utils.js";
+import {requireAuth} from "../../utils/utils.js";
 
 export async function loader({ request }) {
     await requireAuth(request)

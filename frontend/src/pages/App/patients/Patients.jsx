@@ -7,7 +7,7 @@ import {
     useLoaderData,
 } from "react-router-dom";
 
-import { requireAuth } from "../../../api/utils.js";
+import { requireAuth } from "../../../utils/utils.js";
 import {deletePatient, getPatients} from "../../../api/app/patients.js";
 
 import styles from "./Patients.module.css"

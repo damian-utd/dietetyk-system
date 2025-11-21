@@ -1,6 +1,6 @@
 import React from "react"
 import {NavLink, useLoaderData, Outlet} from "react-router-dom";
-import {requireAuth} from "../../../api/utils.js";
+import {requireAuth} from "../../../utils/utils.js";
 import {getPatientById} from "../../../api/app/patients.js";
 import styles from "./Patients.module.css";
 

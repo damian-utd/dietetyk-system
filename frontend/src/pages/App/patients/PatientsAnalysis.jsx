@@ -1,6 +1,7 @@
 import React from "react"
 import {useOutletContext} from "react-router-dom";
-import {calcBMI, calcBMR, calcTDEE, requireAuth, roundDec} from "../../../api/utils.js";
+import {requireAuth, roundDec} from "../../../utils/utils.js";
+import {calcBMI, calcBMR, calcTDEE} from "../../../utils/calcs.js"
 import styles from "./Patients.module.css"
 import Cards from "../../../components/Cards.jsx";
 

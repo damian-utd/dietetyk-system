@@ -2,6 +2,7 @@
   "patient_id": 5,
   "title": "tytuł",
   "description": "opis",
+  "currentDayNumber": 1,
   "days":
   [
     {
@@ -26,7 +27,8 @@
       ]
     },
     {
-      "id": 2
+      "id": 2,
+      "meals": []
     }
   ]
 

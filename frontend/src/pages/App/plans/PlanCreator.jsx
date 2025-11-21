@@ -1,15 +1,16 @@
 //PlanCreator
 
-import React, {useState} from "react"
+import React, { useReducer } from "react"
 import {useLoaderData, Form} from "react-router-dom";
 
 import styles from "./Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
-import Day from "./Day.jsx"
+import {planReducer} from "./planReducer.js";
+import PlanSidebar from "./components/PlanSidebar.jsx";
+import PlanMetaSection from "./components/PlanMetaSection.jsx";
+import PlanDaysSection from "./components/PlanDaysSection.jsx";
 
-export async function loader( { request } ){
-    // await requireAuth(request)
-
+export async function loader(){
     try {
         return await getPatients()
     } catch (error) {

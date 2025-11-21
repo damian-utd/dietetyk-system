@@ -3,7 +3,7 @@
 import React from "react"
 import {useLoaderData} from "react-router-dom";
 
-import { requireAuth } from "../../../api/utils.js";
+import { requireAuth } from "../../../utils/utils.js";
 import { getPatientsCount } from "../../../api/app/patients.js";
 import Cards from "../../../components/Cards.jsx";
 import styles from "./Dashboard.module.css"

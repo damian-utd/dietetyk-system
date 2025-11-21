@@ -1,7 +1,7 @@
 //Analysis
 
 import React from "react"
-import { requireAuth } from "../../../api/utils.js";
+import { requireAuth } from "../../../utils/utils.js";
 
 export async function loader( { request }){
     await requireAuth(request)

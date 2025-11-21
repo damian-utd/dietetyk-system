@@ -1,5 +1,5 @@
 import React from "react"
-import {requireAuth} from "../../../api/utils.js";
+import {requireAuth} from "../../../utils/utils.js";
 import PatientForm from "./components/PatientForm.jsx";
 import {useOutletContext} from "react-router-dom";
 import {updatePatient} from "../../../api/app/patients.js";
