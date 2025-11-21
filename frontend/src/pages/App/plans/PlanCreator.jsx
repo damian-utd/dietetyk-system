@@ -1,15 +1,14 @@
 //PlanCreator
 
-import React from "react"
-import {Form, Link, useActionData, useLoaderData, useSubmit} from "react-router-dom";
-import { requireAuth } from "../../../api/utils.js";
-import {searchProducts} from "../../../api/app/diet.js";
+import React, {useState} from "react"
+import {useLoaderData, Form} from "react-router-dom";
 
 import styles from "./Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
+import Day from "./Day.jsx"
 
-export async function loader( { request }){
-    await requireAuth(request)
+export async function loader( { request } ){
+    // await requireAuth(request)
 
     try {
         return await getPatients()
@@ -19,43 +18,77 @@ export async function loader( { request }){
 
 }
 
-export async function action({ request }) {
-    const formData = await request.formData()
-    const form_id = formData.get("form_id")
+export async function action( {request} ) {
+    // const formData = await request.formData()
+    // const data = Object.fromEntries(formData);
 
-    switch (form_id) {
-        case "1":
-        {
-            const search = formData.get("search")
-
-            if (search.length >= 3) {
-                try{
-                    return await searchProducts(search)
-                } catch (err) {
-                    return err.message
-                }
-            }
-
-            break;
-        }
-    }
+    // console.log(data)
 }
 
+
+
 export default function PlanCreator() {
-    const submit = useSubmit()
-    const actionData = useActionData()
     const loaderData = useLoaderData()
 
-    const patients = loaderData?.patients || []
+    const [days, setDays] = useState([
+        {
+            day_number: 1,
+            meals: [
+                {
+                    name: "Śniadanie",
+                    order_number: 1,
+                    notes: "",
+                    meal_products: [
+                        {
+                            product_id: "mleko",
+                            quantity: 150,
+                            unit: "ml"
+                        },
+                        {
+                            product_id: "płatki",
+                            quantity: 100,
+                            unit: "g"
+                        },
+                    ]
+                },
+                {
+                    name: "Obiad",
+                    order_number: 2,
+                    notes: "",
+                    meal_products: [
+                        {
+                            product_id: "kurczak",
+                            quantity: 350,
+                            unit: "g"
+                        },
+                        {
+                            product_id: "ugotowany ryż",
+                            quantity: 150,
+                            unit: "g"
+                        },
+                    ]
+                }
+            ]
+        },
+    ])
 
-    const searchResults = actionData ? actionData.products.map((product) => {
-        const {lp, nazwa_polska, nazwa_angielska} = product
-        return (
-            <div key={lp}>
-                {nazwa_polska}
-            </div>
-        )
-    }) : ""
+    function addDay() {
+        setDays(prev => (
+            [...prev, {day_number: prev.length+1, meals: []}]
+        ))
+    }
+
+    function removeLastDay() {
+        if(days.length === 1) return
+
+        if(days.slice(-1)[0].day_number === currentDayNumber) setCurrentDayNumber(prev => Math.max(1, prev - 1))
+
+        setDays(prev => prev.slice(0, -1));
+    }
+
+    const [currentDayNumber, setCurrentDayNumber] = useState(1)
+
+    const patients = loaderData?.patients || []
 
     const patientsList = patients.map((patient) => {
         return (
@@ -65,24 +98,89 @@ export default function PlanCreator() {
         )
     })
 
+    const activeStyle = {
+        color: "#000",
+        borderBottom: "2px solid #7EDC00"
+    }
+
+    const daysList = days.map((day, index) =>
+        <b
+            key={index}
+            onClick={() => setCurrentDayNumber(day.day_number)}
+            style={index + 1 === currentDayNumber ? activeStyle : {}}
+        >
+            Dzień {day.day_number}
+        </b>
+    )
+
     return (
         <div className={styles.planCreatorBody}>
-            <h1>Wybierz pacjenta</h1>
-            <select>
-                <option value={false}>Nie wybieram</option>
-                {patientsList}
-            </select>
+            <Form method="post" className={styles.main}>
+                <fieldset className={styles.metaData}>
+                    <legend>Stwórz plan dietetyczny</legend>
+                    <div>
+                        <select
+                            name="patient_id"
+                            defaultValue=""
+                            required
+                            className={styles.patient}
+                        >
+                            <option value="" disabled>Wybierz pacjenta</option>
+                            <option value={-1}>Szablon ogólny</option>
+                            {patientsList}
+                        </select>
 
-            <section className={styles.searchSection}>
-                <Form
-                    method="post"
-                    onChange={(event) => submit(event.currentTarget)}
-                >
-                    <input name="form_id" hidden defaultValue="1"/>
-                    <input type="search" name="search" defaultValue=""/>
-                </Form>
-                <div>
-                    {searchResults}
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Tytuł (np. Redukcja 2400kcal)"
+                            required
+                            className={styles.title}
+                        />
+                    </div>
+
+                    <textarea
+                        name="description"
+                        id="description"
+                        placeholder="Opis... "
+                        required
+                        rows={3}
+                        className={styles.description}
+                    />
+                </fieldset>
+                <fieldset className={styles.days}>
+                    <div className={styles.daysHeader}>
+                        <button
+                            type="button"
+                            onClick={addDay}
+                            className={styles.addDayButton}
+                        >
+                            <i className="ri-add-large-line"></i>
+                        </button>
+                        <nav className={styles.navDays}>
+                            {daysList}
+                        </nav>
+                        <button
+                            type="button"
+                            onClick={removeLastDay}
+                            className={styles.addDayButton}
+                        >
+                            <i className="ri-subtract-line"></i>
+                        </button>
+                    </div>
+
+                    <Day
+                        day={days.find(d => d.day_number === currentDayNumber)}
+                    />
+                </fieldset>
+            </Form>
+            <section className={styles.side}>
+                <div className={styles.buttonContainer}>
+                    <button className={styles.saveButton}>Zapisz plan</button>
+                    <button className={styles.pdfButton}>Wygeneruj pdf</button>
+                </div>
+                <div className={styles.nutritionProgress}>
+                {/*    dodać dynamiczny progres makro */}
                 </div>
             </section>
 

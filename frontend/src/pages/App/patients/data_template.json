@@ -1,0 +1,34 @@
+{
+  "patient_id": 5,
+  "title": "tytuł",
+  "description": "opis",
+  "days":
+  [
+    {
+      "id": 1,
+      "meals":
+      [
+        {
+          "id": 1,
+          "name": "śniadanie",
+          "order": 1,
+          "notes": "notatka",
+          "meal_products":
+          [
+            {
+              "id": 1,
+              "product": "cos",
+              "quantity": "100",
+              "unit": "g"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2
+    }
+  ]
+
+
+}
