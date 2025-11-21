@@ -1,0 +1,52 @@
+//NavDays
+
+import React from "react"
+
+import styles from "../Plans.module.css"
+import PlanDay from "./PlanDay.jsx";
+
+export default function PlanDaysSection({ planDispatch, days, currentDayNumber }) {
+
+    const activeStyle = {
+        color: "#000",
+        borderBottom: "2px solid #7EDC00"
+    }
+
+    const daysList = days.map((day, index) =>
+        <b
+            key={day.day_number}
+            onClick={() => planDispatch({type: 'setField', value: day.day_number, field: 'currentDayNumber'})}
+            style={index + 1 === currentDayNumber ? activeStyle : {}}
+        >
+            Dzień {day.day_number}
+        </b>
+    )
+
+    return (
+        <fieldset className={styles.days}>
+            <div className={styles.daysHeader}>
+                <button
+                    type="button"
+                    onClick={() => planDispatch({type: 'addDay'})}
+                    className={styles.addDayButton}
+                >
+                    <i className="ri-add-large-line"></i>
+                </button>
+                <nav className={styles.navDays}>
+                    {daysList}
+                </nav>
+                <button
+                    type="button"
+                    onClick={() => planDispatch({type: 'removeLastDay'})}
+                    className={styles.addDayButton}
+                >
+                    <i className="ri-subtract-line"></i>
+                </button>
+            </div>
+
+            <PlanDay
+                day={days.find(d => d.day_number === currentDayNumber)}
+            />
+        </fieldset>
+    )
+}
