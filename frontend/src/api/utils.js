@@ -32,21 +32,22 @@ export function roundDec(number, precision) {
 export function calcBMI(weight, height) {
     const fixedHeight = height/100
     const ratio = weight/(fixedHeight*fixedHeight)
-    let description
+    let unit
     if (ratio < 18.5){
-        description = "Niedowaga"
+        unit = "Niedowaga"
     }else if(ratio < 25){
-        description = "Norma"
+        unit = "Norma"
     }else if(ratio < 30) {
-        description = "Nadwaga"
+        unit = "Nadwaga"
     }else{
-        description = "Otyłość"
+        unit = "Otyłość"
     }
 
     return {
         title: "BMI",
         value: ratio,
-        description: description
+        description: "Wskaźnik masy ciała",
+        unit: unit
     }
 }
 
@@ -55,13 +56,15 @@ export function calcBMR(weight, height, age, sex) {
         return {
             title: "PPM",
             value: 10 * weight + 6.25 * height - 5 * age + 5,
-            description: "Podstawowa przemiana materii"
+            description: "Podstawowa przemiana materii",
+            unit: "kcal"
         }
     }else {
         return {
             title: "PPM",
             value: 10 * weight + 6.25 * height - 5 * age - 161,
-            description: "Podstawowa przemiana materii"
+            description: "Podstawowa przemiana materii",
+            unit: "kcal"
         }
     }
 }
@@ -70,7 +73,8 @@ export function calcTDEE(BMR, activity) {
     return {
         title: "CPM",
         value: BMR.value * activity,
-        description: "Całkowita przemiana materii"
+        description: "Całkowita przemiana materii",
+        unit: "kcal"
     }
 }
 
