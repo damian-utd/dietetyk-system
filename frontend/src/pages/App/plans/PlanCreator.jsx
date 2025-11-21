@@ -30,63 +30,16 @@ export async function action( {request} ) {
 export default function PlanCreator() {
     const loaderData = useLoaderData()
 
-    const [days, setDays] = useState([
-        {
+    const [planState, planDispatch] = useReducer(planReducer, {
+        patient_id: null,
+        title: "",
+        description: "",
+        days: [{
             day_number: 1,
-            meals: [
-                {
-                    name: "Śniadanie",
-                    order_number: 1,
-                    notes: "",
-                    meal_products: [
-                        {
-                            product_id: "mleko",
-                            quantity: 150,
-                            unit: "ml"
-                        },
-                        {
-                            product_id: "płatki",
-                            quantity: 100,
-                            unit: "g"
-                        },
-                    ]
-                },
-                {
-                    name: "Obiad",
-                    order_number: 2,
-                    notes: "",
-                    meal_products: [
-                        {
-                            product_id: "kurczak",
-                            quantity: 350,
-                            unit: "g"
-                        },
-                        {
-                            product_id: "ugotowany ryż",
-                            quantity: 150,
-                            unit: "g"
-                        },
-                    ]
-                }
-            ]
-        },
-    ])
-
-    function addDay() {
-        setDays(prev => (
-            [...prev, {day_number: prev.length+1, meals: []}]
-        ))
-    }
-
-    function removeLastDay() {
-        if(days.length === 1) return
-
-        if(days.slice(-1)[0].day_number === currentDayNumber) setCurrentDayNumber(prev => Math.max(1, prev - 1))
-
-        setDays(prev => prev.slice(0, -1));
-    }
-
-    const [currentDayNumber, setCurrentDayNumber] = useState(1)
+            meals: []
+        }],
+        currentDayNumber: 1
+    })
 
     const patients = loaderData?.patients || []
 
