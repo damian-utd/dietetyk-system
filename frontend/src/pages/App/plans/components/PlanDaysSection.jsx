@@ -1,4 +1,4 @@
-//NavDays
+//PlanDaysSection
 
 import React from "react"
 
@@ -46,6 +46,7 @@ export default function PlanDaysSection({ planDispatch, days, currentDayNumber }
 
             <PlanDay
                 day={days.find(d => d.day_number === currentDayNumber)}
+                planDispatch={planDispatch}
             />
         </fieldset>
     )

@@ -1,13 +1,39 @@
-//Day
+//PlanDay
 
-import React from "react"
+import React, {useState, useRef} from "react"
 
-export default function PlanDay({ day }) {
+export default function PlanDay({ day, planDispatch }) {
+
+    const [showMealForm, setShowMealForm] = useState(false)
+    const mealName = useRef(null)
+    const mealNotes = useRef(null)
+
+
+    function handleAddMeal() {
+        console.log("handleAddMeal")
+
+        if (!showMealForm) {
+            setShowMealForm(true)
+            return
+        }
+
+        planDispatch({
+            type: 'addMeal',
+            name: mealName.current.value,
+            notes: mealNotes.current.value
+        })
+
+        setShowMealForm(false)
+        mealName.current.value = ""
+        mealNotes.current.value = ""
+    }
+
+    console.log(day)
 
     const meals = day.meals.map((meal, index) => {
         return (
             <div key={index} >
-                {meal.name}
+                {meal.name} - {meal.notes}
                 <ul>
                     {meal.meal_products.map((product, pindex) => (
                         <li key={pindex}>
@@ -23,7 +49,18 @@ export default function PlanDay({ day }) {
     return (
         <div>
             {meals}
-            <div onClick={() => {}}>+</div> {/* dodać funkcje addMeal */}
+
+            {showMealForm && <div>
+                <input type="text" ref={mealName} placeholder="np. Śniadanie"/>
+                <input type="text" ref={mealNotes} placeholder="Notatka... "/>
+            </div>}
+            <button
+                type="button"
+                onClick={handleAddMeal}
+            >
+                + Dodaj posiłek
+            </button>
+
         </div>
     )
 }

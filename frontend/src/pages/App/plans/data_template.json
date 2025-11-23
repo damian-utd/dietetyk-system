@@ -12,7 +12,7 @@
         {
           "id": 1,
           "name": "śniadanie",
-          "order": 1,
+          "order_number": 1,
           "notes": "notatka",
           "meal_products":
           [

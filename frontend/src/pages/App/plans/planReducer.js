@@ -37,7 +37,26 @@ export function planReducer(state, action) {
 
         case 'addMeal': {
             return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: [
+                                ...day.meals,
+                                {
+                                    name: action.name,
+                                    notes: action.notes,
+                                    order_number: day.meals.length+1,
+                                    meal_products: []
+                                }
+                            ]
+                        }
+                    } else {
+                        return day
+                    }
 
+                })
             }
         }
 
