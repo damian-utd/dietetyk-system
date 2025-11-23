@@ -4,7 +4,7 @@ import React from "react"
 
 import styles from "../Plans.module.css"
 
-export default function PlanMetaSection({ patients, planDispatch }) {
+export default function PlanMetaSection({ patients, planDispatch, patientId, title, description }) {
 
     const patientsList = patients.map((patient) => {
         return (
@@ -20,7 +20,7 @@ export default function PlanMetaSection({ patients, planDispatch }) {
             <div>
                 <select
                     name="patient_id"
-                    defaultValue=""
+                    value={patientId || ""}
                     required
                     className={styles.patient}
                     onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
@@ -33,21 +33,23 @@ export default function PlanMetaSection({ patients, planDispatch }) {
                 <input
                     type="text"
                     name="title"
+                    value={title}
                     placeholder="Tytuł (np. Redukcja 2400kcal)"
                     required
                     className={styles.title}
-                    onBlur={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
+                    onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
                 />
             </div>
 
             <textarea
                 name="description"
                 id="description"
+                value={description}
                 placeholder="Opis... "
                 required
                 rows={3}
                 className={styles.description}
-                onBlur={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
+                onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
             />
         </fieldset>
     )

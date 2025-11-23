@@ -45,6 +45,7 @@ export default function PlanDaysSection({ planDispatch, days, currentDayNumber }
             </div>
 
             <PlanDay
+                key={currentDayNumber}
                 day={days.find(d => d.day_number === currentDayNumber)}
                 planDispatch={planDispatch}
             />

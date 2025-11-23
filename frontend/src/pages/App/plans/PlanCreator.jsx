@@ -1,11 +1,11 @@
 //PlanCreator
 
-import React, { useReducer } from "react"
+import React, { useReducer, useEffect } from "react"
 import {useLoaderData, Form} from "react-router-dom";
 
 import styles from "./Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
-import {planReducer} from "./planReducer.js";
+import {planReducer, initPlanState} from "./planReducer.js";
 import PlanSidebar from "./components/PlanSidebar.jsx";
 import PlanMetaSection from "./components/PlanMetaSection.jsx";
 import PlanDaysSection from "./components/PlanDaysSection.jsx";
@@ -31,7 +31,7 @@ export async function action( {request} ) {
 export default function PlanCreator() {
     const loaderData = useLoaderData()
 
-    const [planState, planDispatch] = useReducer(planReducer, {
+    const [planState, planDispatch] = useReducer(planReducer,  {
         patient_id: null,
         title: "",
         description: "",
@@ -40,7 +40,16 @@ export default function PlanCreator() {
             meals: []
         }],
         currentDayNumber: 1
-    })
+    }, initPlanState)
+
+    useEffect(() => {
+        localStorage.setItem("planData", JSON.stringify(planState));
+    }, [planState]);
+
+    function clearPlan() {
+        planDispatch({type: 'setDefault'})
+        localStorage.clear();
+    }
 
     const patients = loaderData?.patients || []
 
@@ -50,6 +59,9 @@ export default function PlanCreator() {
                 <PlanMetaSection
                     patients={patients}
                     planDispatch={planDispatch}
+                    patientId={planState.patient_id}
+                    title={planState.title}
+                    description={planState.description}
                 />
                 <PlanDaysSection
                     days={planState.days}
@@ -57,7 +69,9 @@ export default function PlanCreator() {
                     planDispatch={planDispatch}
                 />
             </Form>
-            <PlanSidebar />
+            <PlanSidebar
+                clearPlan={clearPlan}
+            />
         </div>
     )
 }

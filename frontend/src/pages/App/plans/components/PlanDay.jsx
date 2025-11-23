@@ -2,6 +2,8 @@
 
 import React, {useState, useRef} from "react"
 
+import styles from "../Plans.module.css"
+
 export default function PlanDay({ day, planDispatch }) {
 
     const [showMealForm, setShowMealForm] = useState(false)
@@ -10,8 +12,6 @@ export default function PlanDay({ day, planDispatch }) {
 
 
     function handleAddMeal() {
-        console.log("handleAddMeal")
-
         if (!showMealForm) {
             setShowMealForm(true)
             return
@@ -28,15 +28,19 @@ export default function PlanDay({ day, planDispatch }) {
         mealNotes.current.value = ""
     }
 
-    console.log(day)
+    function handleBack() {
+        mealName.current.value = ""
+        mealNotes.current.value = ""
+        setShowMealForm(false)
+    }
 
-    const meals = day.meals.map((meal, index) => {
+    const meals = day.meals.map(meal => {
         return (
-            <div key={index} >
+            <div key={meal.order_number} >
                 {meal.name} - {meal.notes}
                 <ul>
-                    {meal.meal_products.map((product, pindex) => (
-                        <li key={pindex}>
+                    {meal.meal_products.map((product, index) => (
+                        <li key={index}>
                             <p>Produkt: {product.product_id}</p>
                             <p>Ilość: {product.quantity} {product.unit}</p>
                         </li>
@@ -47,15 +51,26 @@ export default function PlanDay({ day, planDispatch }) {
     })
 
     return (
-        <div>
+        <div className={styles.dayContainer}>
             {meals}
-
-            {showMealForm && <div>
-                <input type="text" ref={mealName} placeholder="np. Śniadanie"/>
-                <input type="text" ref={mealNotes} placeholder="Notatka... "/>
-            </div>}
+            {showMealForm &&
+                <div>
+                    <input
+                        type="text"
+                        ref={mealName}
+                        placeholder="np. Śniadanie"
+                    />
+                    <input
+                        type="text"
+                        ref={mealNotes}
+                        placeholder="Notatka... "
+                    />
+                    <button type="button" onClick={handleBack}>Wróć</button>
+                </div>
+            }
             <button
                 type="button"
+                className={`${styles.addMealButton} ${!showMealForm && styles.addMealButtonLarge}`}
                 onClick={handleAddMeal}
             >
                 + Dodaj posiłek

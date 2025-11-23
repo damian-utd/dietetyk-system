@@ -1,6 +1,19 @@
 export function planReducer(state, action) {
     switch(action.type) {
 
+        case 'setDefault': {
+            return {
+                patient_id: null,
+                title: "",
+                description: "",
+                days: [{
+                    day_number: 1,
+                    meals: []
+                }],
+                currentDayNumber: 1
+            }
+        }
+
         case 'setField': {
             return {
                 ...state,
@@ -63,4 +76,28 @@ export function planReducer(state, action) {
         default:
             return state
     }
+}
+
+export function initPlanState(initialState) {
+    try {
+        const lSData = localStorage.getItem("planData")
+
+        if (lSData) {
+            const lSDataParsed = JSON.parse(lSData)
+
+            if (
+                typeof lSDataParsed === "object" &&
+                'title' in lSDataParsed &&
+                'description' in lSDataParsed &&
+                'days' in lSDataParsed
+            ) {
+                return lSDataParsed
+            }
+        }
+
+    } catch (err) {
+        console.warn("Invalid planData in LocalStorage", err)
+    }
+
+    return initialState
 }
