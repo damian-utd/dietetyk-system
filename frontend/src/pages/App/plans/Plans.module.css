@@ -157,7 +157,38 @@ fieldset.days {
 }
 
 .mealContainer {
-    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #E7E7E7;
+    padding: 0.5rem 1rem 1rem;
+}
+
+.lastMeal{
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.mealContainer > div {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+
+.mealTitle {
+    display: flex;
+    flex-direction: column;
+}
+
+.mealNotes {
+    color: #455666;
+}
+
+.mealInfo {
+    padding-right: 1rem;
+    margin-left: auto;
+    display: flex;
 }
 
 .mealFormContainer{
