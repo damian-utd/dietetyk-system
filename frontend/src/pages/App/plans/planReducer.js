@@ -99,6 +99,30 @@ export function planReducer(state, action) {
             }
         }
 
+        case 'updateMeal': {
+            return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: day.meals.map(meal => {
+                                if (meal.order_number === action.order) {
+                                        return {
+                                            ...meal,
+                                            [action.field]: action.value
+                                        }
+                                }
+                                return meal
+                            })
+                        }
+                    } else {
+                        return day
+                    }
+                })
+            }
+        }
+
         default:
             return state
     }

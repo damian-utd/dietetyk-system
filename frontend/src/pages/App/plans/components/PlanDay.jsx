@@ -35,12 +35,13 @@ export default function PlanDay({ day, planDispatch }) {
         setShowMealForm(false)
     }
 
-    const meals = day.meals.map(meal => {
+    const meals = day.meals.map((meal, index) => {
         return (
             <PlanMeal
                 key={meal.order_number}
                 meal={meal}
                 planDispatch={planDispatch}
+                isLast={index === day.meals.length - 1 && !showMealForm}
             />
         )
     })
@@ -62,11 +63,15 @@ export default function PlanDay({ day, planDispatch }) {
                             type="text"
                             ref={mealName}
                             placeholder="np. Śniadanie"
+                            className={styles.mealInput}
+                            onKeyDown={(e) => e.key === "Enter" && handleAddMeal()}
                         />
                         <input
                             type="text"
                             ref={mealNotes}
                             placeholder="Notatka... "
+                            className={styles.mealInput}
+                            onKeyDown={(e) => e.key === "Enter" && handleAddMeal()}
                         />
                     </div>
                 }
