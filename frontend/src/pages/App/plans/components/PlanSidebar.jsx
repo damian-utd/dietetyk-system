@@ -9,7 +9,7 @@ export default function PlanSidebar({ clearPlan }) {
     return (
         <section className={styles.side}>
             <div className={styles.buttonContainer}>
-                <button type="button" className={styles.saveButton}>Zapisz plan</button>
+                <button className={styles.saveButton} form="planForm">Zapisz plan</button>
                 <button type="button" className={styles.pdfButton}>Wygeneruj pdf</button>
                 <button type="button" className={styles.saveButton} onClick={clearPlan}>Wyczysc plan</button>
             </div>

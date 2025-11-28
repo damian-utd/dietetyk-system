@@ -20,10 +20,10 @@ export async function loader(){
 }
 
 export async function action( {request} ) {
-    // const formData = await request.formData()
-    // const data = Object.fromEntries(formData);
+    const formData = await request.formData()
+    const data = JSON.parse(formData.get("planState"))
 
-    // console.log(data)
+    console.log(data)
 }
 
 
@@ -55,7 +55,7 @@ export default function PlanCreator() {
 
     return (
         <div className={styles.planCreatorBody}>
-            <Form method="post" className={styles.main}>
+            <Form method="post" className={styles.main} id="planForm">
                 <PlanMetaSection
                     patients={patients}
                     planDispatch={planDispatch}
@@ -68,6 +68,7 @@ export default function PlanCreator() {
                     currentDayNumber={planState.currentDayNumber}
                     planDispatch={planDispatch}
                 />
+                <input name="planState" defaultValue={JSON.stringify(planState)} hidden/>
             </Form>
             <PlanSidebar
                 clearPlan={clearPlan}

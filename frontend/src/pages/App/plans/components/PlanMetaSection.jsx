@@ -19,7 +19,6 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
             <legend>Stwórz plan dietetyczny</legend>
             <div>
                 <select
-                    name="patient_id"
                     value={patientId || ""}
                     required
                     className={styles.patient}
@@ -32,7 +31,6 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
 
                 <input
                     type="text"
-                    name="title"
                     value={title}
                     placeholder="Tytuł (np. Redukcja 2400kcal)"
                     required
@@ -42,7 +40,6 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
             </div>
 
             <textarea
-                name="description"
                 id="description"
                 value={description}
                 placeholder="Opis... "
