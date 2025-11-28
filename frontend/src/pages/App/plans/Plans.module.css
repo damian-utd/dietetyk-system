@@ -179,7 +179,8 @@ fieldset.days {
 .mealTitle {
     display: flex;
     flex-direction: column;
-    max-width: 40%;
+    width: 45%;
+    max-width: 45%;
 }
 
 .mealNotes {

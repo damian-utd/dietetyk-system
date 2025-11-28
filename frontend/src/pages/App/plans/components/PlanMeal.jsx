@@ -42,7 +42,7 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
             <div>
                 <i className={`ri-delete-bin-6-line`} style={{fontSize: "1.5rem", cursor: "pointer"}}
                    onDoubleClick={() => deleteMeal()}></i>
-                <div className={styles.mealTitle} style={(showNameInput || showNotesInput) ? {flexDirection: "row", alignItems: "center", gap: "1rem"} : {}}>
+                <div className={styles.mealTitle} >
                     {showNameInput
                         ? <input
                             defaultValue={meal.name}
@@ -73,13 +73,12 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                             {meal.notes}
                         </span>}
                 </div>
-                {!(showNameInput || showNotesInput) &&
-                    <div className={styles.mealInfo}>
-                        białko: 10g
-                        węglowodany: 10g
-                        tłuszcze: 10g
-                    </div>
-                }
+                <div className={styles.mealInfo}>
+                    białko: 10g
+                    węglowodany: 10g
+                    tłuszcze: 10g
+                </div>
+
             </div>
             <button type="button" className={styles.addMealButton}>Dodaj produkt</button>
 
