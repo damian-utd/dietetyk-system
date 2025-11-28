@@ -73,6 +73,32 @@ export function planReducer(state, action) {
             }
         }
 
+        case 'deleteMeal': {
+            return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: day.meals
+                                .filter(meal => meal.order_number !== action.order)
+                                .map(meal => {
+                                    if(meal.order_number > action.order){
+                                        return {
+                                            ...meal,
+                                            order_number: meal.order_number - 1
+                                        }
+                                    }
+                                    return meal
+                                })
+                        }
+                    } else {
+                        return day
+                    }
+                })
+            }
+        }
+
         default:
             return state
     }

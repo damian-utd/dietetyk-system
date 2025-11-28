@@ -3,6 +3,7 @@
 import React, {useState, useRef} from "react"
 
 import styles from "../Plans.module.css"
+import PlanMeal from "./PlanMeal.jsx";
 
 export default function PlanDay({ day, planDispatch }) {
 
@@ -28,7 +29,7 @@ export default function PlanDay({ day, planDispatch }) {
         mealNotes.current.value = ""
     }
 
-    function handleBack() {
+    function clearMealForm() {
         mealName.current.value = ""
         mealNotes.current.value = ""
         setShowMealForm(false)
@@ -36,45 +37,47 @@ export default function PlanDay({ day, planDispatch }) {
 
     const meals = day.meals.map(meal => {
         return (
-            <div key={meal.order_number} >
-                {meal.name} - {meal.notes}
-                <ul>
-                    {meal.meal_products.map((product, index) => (
-                        <li key={index}>
-                            <p>Produkt: {product.product_id}</p>
-                            <p>Ilość: {product.quantity} {product.unit}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <PlanMeal
+                key={meal.order_number}
+                meal={meal}
+                planDispatch={planDispatch}
+            />
         )
     })
 
     return (
         <div className={styles.dayContainer}>
             {meals}
-            {showMealForm &&
-                <div>
-                    <input
-                        type="text"
-                        ref={mealName}
-                        placeholder="np. Śniadanie"
-                    />
-                    <input
-                        type="text"
-                        ref={mealNotes}
-                        placeholder="Notatka... "
-                    />
-                    <button type="button" onClick={handleBack}>Wróć</button>
-                </div>
-            }
-            <button
-                type="button"
-                className={`${styles.addMealButton} ${!showMealForm && styles.addMealButtonLarge}`}
-                onClick={handleAddMeal}
-            >
-                + Dodaj posiłek
-            </button>
+            <div className={styles.mealFormContainer}>
+                {showMealForm &&
+                    <div className={styles.mealForm}>
+                        <button
+                            type="button"
+                            onClick={clearMealForm}
+                            className={styles.backArrow}
+                        >
+                            <i className="ri-arrow-left-fill"></i>
+                        </button>
+                        <input
+                            type="text"
+                            ref={mealName}
+                            placeholder="np. Śniadanie"
+                        />
+                        <input
+                            type="text"
+                            ref={mealNotes}
+                            placeholder="Notatka... "
+                        />
+                    </div>
+                }
+                <button
+                    type="button"
+                    className={`${styles.addMealButton} ${!showMealForm && styles.addMealButtonLarge}`}
+                    onClick={handleAddMeal}
+                >
+                    <i className="ri-add-large-line"></i> Dodaj posiłek
+                </button>
+            </div>
 
         </div>
     )
