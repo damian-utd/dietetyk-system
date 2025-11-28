@@ -179,10 +179,13 @@ fieldset.days {
 .mealTitle {
     display: flex;
     flex-direction: column;
+    max-width: 40%;
 }
 
 .mealNotes {
     color: #455666;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .mealInfo {
@@ -238,6 +241,7 @@ fieldset.days {
     background-color: #a8da8f;
     color: #3e4c55;
     transition: 0.2s;
+    align-self: center;
 }
 
 .addMealButton:hover {
