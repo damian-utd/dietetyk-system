@@ -123,6 +123,38 @@ export function planReducer(state, action) {
             }
         }
 
+        case 'addProduct': {
+
+            return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: day.meals.map(meal => {
+                                if (meal.order_number === action.order) {
+                                    return {
+                                        ...meal,
+                                        meal_products: [
+                                            ...meal.meal_products,
+                                            {
+                                                product: action.product,
+                                                quantity: action.quantity,
+                                                unit: action.unit
+                                            }
+                                        ]
+                                    }
+                                }
+                                return meal
+                            })
+                        }
+                    } else {
+                        return day
+                    }
+                })
+            }
+        }
+
         default:
             return state
     }
