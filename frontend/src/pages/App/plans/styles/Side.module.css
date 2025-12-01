@@ -1,0 +1,48 @@
+.side {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.saveButton, .pdfButton {
+    width: 100%;
+    font-weight: 700;
+    padding: 0.75rem 0;
+    border-radius: 0.5rem;
+    transition: 0.2s;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.04);
+}
+
+.saveButton {
+    background-color: #a8da8f;
+    color: #3e4c55;
+}
+
+.saveButton:hover {
+    background-color: #7EDC00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pdfButton {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+.pdfButton:hover {
+    background-color: #d1d5db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nutritionProgress{
+
+}

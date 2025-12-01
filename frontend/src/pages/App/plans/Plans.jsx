@@ -4,7 +4,7 @@ import React from "react"
 import {Link} from "react-router-dom";
 import { requireAuth } from "../../../utils/utils.js";
 
-import styles from "./Plans.module.css"
+import styles from "./styles/Plans.module.css"
 
 export async function loader( { request }){
     await requireAuth(request)

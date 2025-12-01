@@ -1,0 +1,118 @@
+.productsSection {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.searchSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.searchWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.searchWrapper > i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.searchWrapper > input {
+    border-radius: 0.5rem;
+    background-color: #f8f8f8;
+    border: 1px solid #d1d5db;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #455666;
+    font-size: 1rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+}
+
+.searchResultsList {
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    /*padding: 0.5rem 1rem;*/
+    display: flex;
+    flex-direction: column;
+    max-height: calc(5*4.9375rem);
+    overflow-y: auto;
+}
+
+.searchResultElement {
+    padding: 1rem;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: 1px solid #d1d5db;;
+    color: #455666;
+}
+
+.searchResultElement:last-of-type {
+    border: none;
+}
+
+.productName {
+    font-size: 1.5rem;
+}
+
+.productContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.productAction {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.productAction > input {
+    border-radius: 0.5rem;
+    background-color: #f8f8f8;
+    border: 1px solid #d1d5db;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #455666;
+    font-size: 1rem;
+    width: 5rem;
+    padding: 0.5rem;
+
+}
+
+.productAction > input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.productAction > span {
+    position: absolute;
+    left: 4rem;
+    color: #455666;
+}
+
+.productDesc {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    font-size: 0.875rem;
+}

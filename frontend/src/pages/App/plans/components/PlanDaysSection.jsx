@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import styles from "../Plans.module.css"
+import daysStyles from "../styles/Days.module.css"
 import PlanDay from "./PlanDay.jsx";
 
 export default function PlanDaysSection({ planDispatch, days, currentDayNumber }) {
@@ -23,22 +23,22 @@ export default function PlanDaysSection({ planDispatch, days, currentDayNumber }
     )
 
     return (
-        <fieldset className={styles.days}>
-            <div className={styles.daysHeader}>
+        <fieldset className={daysStyles.days}>
+            <div className={daysStyles.daysHeader}>
                 <button
                     type="button"
                     onClick={() => planDispatch({type: 'addDay'})}
-                    className={styles.addDayButton}
+                    className={daysStyles.addDayButton}
                 >
                     <i className="ri-add-large-line"></i>
                 </button>
-                <nav className={styles.navDays}>
+                <nav className={daysStyles.navDays}>
                     {daysList}
                 </nav>
                 <button
                     type="button"
                     onClick={() => planDispatch({type: 'removeLastDay'})}
-                    className={styles.addDayButton}
+                    className={daysStyles.addDayButton}
                 >
                     <i className="ri-subtract-line"></i>
                 </button>

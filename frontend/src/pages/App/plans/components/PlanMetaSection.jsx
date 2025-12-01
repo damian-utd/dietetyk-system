@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import styles from "../Plans.module.css"
+import styles from "../styles/Plans.module.css"
 
 export default function PlanMetaSection({ patients, planDispatch, patientId, title, description }) {
 

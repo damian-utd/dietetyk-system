@@ -2,7 +2,7 @@
 
 import React, {useState, useRef} from "react"
 
-import styles from "../Plans.module.css"
+import daysStyles from "../styles/Days.module.css"
 import PlanMeal from "./PlanMeal.jsx";
 
 export default function PlanDay({ day, planDispatch }) {
@@ -47,15 +47,15 @@ export default function PlanDay({ day, planDispatch }) {
     })
 
     return (
-        <div className={styles.dayContainer}>
+        <div className={daysStyles.dayContainer}>
             {meals}
-            <div className={styles.mealFormContainer}>
+            <div className={daysStyles.mealFormContainer}>
                 {showMealForm &&
-                    <div className={styles.mealForm}>
+                    <div className={daysStyles.mealForm}>
                         <button
                             type="button"
                             onClick={clearMealForm}
-                            className={styles.backArrow}
+                            className={daysStyles.backArrow}
                         >
                             <i className="ri-arrow-left-fill"></i>
                         </button>
@@ -63,21 +63,21 @@ export default function PlanDay({ day, planDispatch }) {
                             type="text"
                             ref={mealName}
                             placeholder="np. Śniadanie"
-                            className={styles.mealInput}
+                            className={daysStyles.mealInput}
                             onKeyDown={(e) => e.key === "Enter" && handleAddMeal()}
                         />
                         <input
                             type="text"
                             ref={mealNotes}
                             placeholder="Notatka... "
-                            className={styles.mealInput}
+                            className={daysStyles.mealInput}
                             onKeyDown={(e) => e.key === "Enter" && handleAddMeal()}
                         />
                     </div>
                 }
                 <button
                     type="button"
-                    className={`${styles.addMealButton} ${!showMealForm && styles.addMealButtonLarge}`}
+                    className={`${daysStyles.addMealButton} ${!showMealForm && daysStyles.addMealButtonLarge}`}
                     onClick={handleAddMeal}
                 >
                     <i className="ri-add-large-line"></i> Dodaj posiłek

@@ -3,7 +3,7 @@
 import React, { useReducer, useEffect } from "react"
 import {useLoaderData, Form} from "react-router-dom";
 
-import styles from "./Plans.module.css"
+import styles from "./styles/Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
 import {planReducer, initPlanState} from "./planReducer.js";
 import PlanSidebar from "./components/PlanSidebar.jsx";
