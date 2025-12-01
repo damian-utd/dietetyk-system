@@ -1,7 +1,7 @@
 import React, {useState} from "react"
-import styles from "../Plans.module.css";
 import mealsStyles from "../styles/Meals.module.css";
 import daysStyles from "../styles/Days.module.css"
+import PlanProducts from "./PlanProducts.jsx";
 
 export default function PlanMeal({ meal, planDispatch, isLast }) {
 

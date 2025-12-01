@@ -124,7 +124,6 @@ export function planReducer(state, action) {
         }
 
         case 'addProduct': {
-
             return {
                 ...state,
                 days: state.days.map(day => {
@@ -138,11 +137,74 @@ export function planReducer(state, action) {
                                         meal_products: [
                                             ...meal.meal_products,
                                             {
+                                                name: action.name,
                                                 product: action.product,
-                                                quantity: action.quantity,
-                                                unit: action.unit
+                                                quantity: 100,
+                                                unit: 'g',
+                                                energy: action.energy,
+                                                protein: action.protein,
+                                                carbs: action.carbs,
+                                                fats: action.fats
                                             }
                                         ]
+                                    }
+                                }
+                                return meal
+                            })
+                        }
+                    } else {
+                        return day
+                    }
+                })
+            }
+        }
+
+        case 'deleteProduct': {
+            return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: day.meals.map(meal => {
+                                if (meal.order_number === action.order) {
+                                    return {
+                                        ...meal,
+                                        meal_products: meal.meal_products
+                                            .filter(product => product.product !== action.product)
+                                    }
+                                }
+                                return meal
+                            })
+                        }
+                    } else {
+                        return day
+                    }
+                })
+            }
+        }
+
+        case 'updateProduct': {
+            return {
+                ...state,
+                days: state.days.map(day => {
+                    if (day.day_number === state.currentDayNumber) {
+                        return {
+                            ...day,
+                            meals: day.meals.map(meal => {
+                                if (meal.order_number === action.order) {
+                                    return {
+                                        ...meal,
+                                        meal_products: meal.meal_products.map(product => {
+                                            if (product.product === action.product) {
+                                                return {
+                                                    ...product,
+                                                    quantity: action.quantity
+                                                }
+                                            } else {
+                                                return product
+                                            }
+                                        })
                                     }
                                 }
                                 return meal
