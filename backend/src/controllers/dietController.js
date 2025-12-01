@@ -25,8 +25,10 @@ export async function searchProducts(req, res) {
         })
 
         const query =
-            "SELECT lp, nazwa_polska, nazwa_angielska " +
-            "FROM products " +
+            "SELECT p.lp, p.nazwa_polska, p.nazwa_angielska, m.bialko_ogolem_g, m.tluszcz_g, m.weglowodany_ogolem_g, w.energia_1169_2012_kcal " +
+            "FROM products p " +
+            "JOIN makroskladniki m ON p.lp = m.produkt_id " +
+            "JOIN wartosci_energetyczne w ON p.lp = w.produkt_id " +
             "WHERE " +
             ilikes.join("")
 
