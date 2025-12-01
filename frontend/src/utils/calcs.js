@@ -46,3 +46,8 @@ export function calcTDEE(BMR, activity) {
         unit: "kcal"
     }
 }
+
+export function calcMacrosForWeight(value, weight = 100) {
+    const parsed = parseFloat(value.replace(",", "."));
+    return parsed * weight/100
+}
