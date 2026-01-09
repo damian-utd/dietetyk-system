@@ -22,7 +22,7 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
                     value={patientId || ""}
                     required
                     className={styles.patient}
-                    onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
+                    onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: 'patient_id'})}
                 >
                     <option value="" disabled>Wybierz pacjenta</option>
                     <option value={-1}>Szablon ogólny</option>
@@ -35,7 +35,7 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
                     placeholder="Tytuł (np. Redukcja 2400kcal)"
                     required
                     className={styles.title}
-                    onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
+                    onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: 'title'})}
                 />
             </div>
 
@@ -46,7 +46,7 @@ export default function PlanMetaSection({ patients, planDispatch, patientId, tit
                 required
                 rows={3}
                 className={styles.description}
-                onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: e.target.name})}
+                onChange={(e) => planDispatch({type: 'setField', value: e.target.value, field: 'description'})}
             />
         </fieldset>
     )

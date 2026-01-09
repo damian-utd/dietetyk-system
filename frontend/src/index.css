@@ -149,5 +149,23 @@ button{
     cursor: pointer;
 }
 
+.separatorBar {
+    height: 0;
+    width: 2rem;
+    padding: 0;
+    border: 1px solid #d1d5db;
+    align-self: center;
+    margin-top: 1rem;
+}
+
+.separatorBar:last-of-type {
+    height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+
+}
+
 
 

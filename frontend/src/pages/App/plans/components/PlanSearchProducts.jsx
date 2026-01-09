@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react"
 import productsStyles from "../styles/Products.module.css";
 import {searchProducts} from "../../../../api/app/diet.js";
-import mealsStyles from "../styles/Meals.module.css";
 import daysStyles from "../styles/Days.module.css";
+import PlanMacros from "./PlanMacros.jsx";
 
 export default function PlanSearchProducts({ planDispatch, meal }) {
     const [search, setSearch] = useState("")
@@ -49,20 +49,12 @@ export default function PlanSearchProducts({ planDispatch, meal }) {
                     <p className={productsStyles.productName}>
                         {product.nazwa_polska}
                     </p>
-                    <div className={productsStyles.productDesc}>
-                        <span className={mealsStyles.mealNotes}>
-                            Energia: {product.energia_1169_2012_kcal} kcal
-                        </span>
-                        <span className={mealsStyles.mealNotes}>
-                            Białko: {product.bialko_ogolem_g} g
-                        </span>
-                        <span className={mealsStyles.mealNotes}>
-                            Węglowodany: {product.weglowodany_ogolem_g} g
-                        </span>
-                        <span className={mealsStyles.mealNotes}>
-                            Tłuszcz: {product.tluszcz_g} g
-                        </span>
-                    </div>
+                    <PlanMacros
+                        energy = {product.energia_1169_2012_kcal}
+                        protein = {product.bialko_ogolem_g}
+                        carbs = {product.weglowodany_ogolem_g}
+                        fats = {product.tluszcz_g}
+                    />
                 </div>
                 <button
                     type="button"
@@ -71,10 +63,10 @@ export default function PlanSearchProducts({ planDispatch, meal }) {
                         handleAddProduct(
                             product.lp,
                             product.nazwa_polska,
-                            product.energia_1169_2012_kcal,
-                            product.bialko_ogolem_g,
-                            product.weglowodany_ogolem_g,
-                            product.tluszcz_g
+                            product.energia_1169_2012_kcal.replace(",", "."),
+                            product.bialko_ogolem_g.replace(",", "."),
+                            product.weglowodany_ogolem_g.replace(",", "."),
+                            product.tluszcz_g.replace(",", ".")
                         )
                 }>
                     <i className="ri-add-large-line"></i>

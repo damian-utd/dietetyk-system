@@ -1,3 +1,5 @@
+import {roundDec} from "./utils.js";
+
 export function calcBMI(weight, height) {
     const fixedHeight = height/100
     const ratio = weight/(fixedHeight*fixedHeight)
@@ -48,6 +50,6 @@ export function calcTDEE(BMR, activity) {
 }
 
 export function calcMacrosForWeight(value, weight = 100) {
-    const parsed = parseFloat(value.replace(",", "."));
-    return parsed * weight/100
+    const parsed = parseFloat(value);
+    return roundDec(parsed * weight/100, 2)
 }

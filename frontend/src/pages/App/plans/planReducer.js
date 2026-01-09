@@ -141,10 +141,10 @@ export function planReducer(state, action) {
                                                 product: action.product,
                                                 quantity: 100,
                                                 unit: 'g',
-                                                energy: action.energy,
-                                                protein: action.protein,
-                                                carbs: action.carbs,
-                                                fats: action.fats
+                                                energy: Number(action.energy),
+                                                protein: Number(action.protein),
+                                                carbs: Number(action.carbs),
+                                                fats: Number(action.fats)
                                             }
                                         ]
                                     }
@@ -199,7 +199,7 @@ export function planReducer(state, action) {
                                             if (product.product === action.product) {
                                                 return {
                                                     ...product,
-                                                    quantity: action.quantity
+                                                    quantity: Number(action.quantity)
                                                 }
                                             } else {
                                                 return product

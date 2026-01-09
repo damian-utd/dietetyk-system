@@ -1,16 +1,18 @@
 //PlanDay
 
-import React, {useState, useRef} from "react"
+import React, {useState, useRef, useEffect} from "react"
 
 import daysStyles from "../styles/Days.module.css"
 import PlanMeal from "./PlanMeal.jsx";
+import PlanMacros from "./PlanMacros.jsx";
+import {calcMacrosForWeight} from "../../../../utils/calcs.js";
 
 export default function PlanDay({ day, planDispatch }) {
 
     const [showMealForm, setShowMealForm] = useState(false)
+    const [dayMacros, setDayMacros] = useState({energy: 0, protein: 0, carbs: 0, fats: 0})
     const mealName = useRef(null)
     const mealNotes = useRef(null)
-
 
     function handleAddMeal() {
         if (!showMealForm) {
@@ -42,9 +44,29 @@ export default function PlanDay({ day, planDispatch }) {
                 meal={meal}
                 planDispatch={planDispatch}
                 isLast={index === day.meals.length - 1 && !showMealForm}
+                setDayMacros={setDayMacros}
             />
         )
     })
+
+    const calculateDayMacros = (day) =>
+        day.meals.reduce(
+            (dayAcc, meal) => {
+                meal.meal_products.forEach(mp => {
+                    dayAcc.energy  += calcMacrosForWeight(mp.energy,  mp.quantity);
+                    dayAcc.protein += calcMacrosForWeight(mp.protein, mp.quantity);
+                    dayAcc.carbs   += calcMacrosForWeight(mp.carbs,   mp.quantity);
+                    dayAcc.fats    += calcMacrosForWeight(mp.fats,    mp.quantity);
+                });
+                return dayAcc;
+            },
+            { energy: 0, protein: 0, carbs: 0, fats: 0 }
+        );
+
+    useEffect(() => {
+        setDayMacros(calculateDayMacros(day));
+    }, [day]);
+
 
     return (
         <div className={daysStyles.dayContainer}>
@@ -83,7 +105,14 @@ export default function PlanDay({ day, planDispatch }) {
                     <i className="ri-add-large-line"></i> Dodaj posiłek
                 </button>
             </div>
-
+            <div className={daysStyles.daySummary}>
+                <PlanMacros
+                    energy={dayMacros?.energy || 0}
+                    protein={dayMacros?.protein || 0}
+                    carbs={dayMacros?.carbs || 0}
+                    fats={dayMacros?.fats || 0}
+                />
+            </div>
         </div>
     )
 }

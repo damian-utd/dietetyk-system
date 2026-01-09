@@ -8,7 +8,9 @@
 
 .mealContainer {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
 }
 
 .lastMeal{
@@ -16,30 +18,41 @@
     border-bottom: none;
 }
 
-.mealContainer > div {
+.mealMeta {
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction: column;
     align-items: center;
+    gap: 1rem;
     width: 100%;
 }
 
 .mealTitle {
     display: flex;
-    flex-direction: column;
-    width: 45%;
-    max-width: 45%;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .mealNotes {
     color: #455666;
-    max-width: 100%;
     overflow-wrap: break-word;
+    display: inline-block;
+    max-width: fit-content;
+    white-space: normal;
+    text-align: right;
+    flex: 0 1 auto;
 }
 
 .mealInfo {
     padding-right: 1rem;
     margin-left: auto;
     display: flex;
+}
+
+.mealMacros {
+    width: 100%;
+    display: flex;
+    font-size: 0.875rem;
+    justify-content: space-between;
 }
 
