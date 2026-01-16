@@ -43,7 +43,7 @@ export function calcBMR(weight, height, age, sex) {
 export function calcTDEE(BMR, activity) {
     return {
         title: "CPM",
-        value: BMR.value * activity,
+        value: roundDec(BMR.value * activity, 2),
         description: "Całkowita przemiana materii",
         unit: "kcal"
     }
