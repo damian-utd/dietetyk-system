@@ -35,8 +35,15 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch}) 
         const carbs = calcMacrosForWeight(product.carbs, product.quantity)
         const fats = calcMacrosForWeight(product.fats, product.quantity)
 
+        console.log("index ", index)
+        console.log("len ", meal.meal_products.length)
+
+        const isLast = index + 1 === meal.meal_products.length
+
+        console.log(isLast ? productsStyles.separatorBarLast : productsStyles.separatorBar)
+
         return (
-            <div key={index}>
+            <div key={index} style={{display: "flex", flexDirection: "column"}}>
                 <div  className={productsStyles.productContainer}>
                     <div className={productsStyles.productInfo}>
                         <p className={productsStyles.productName}>
@@ -62,8 +69,7 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch}) 
                         </i>
                     </div>
                 </div>
-                <div className="separatorBar"></div>
-
+                <div className={isLast ? productsStyles.separatorBarLast : productsStyles.separatorBar}></div>
             </div>
         )
     })

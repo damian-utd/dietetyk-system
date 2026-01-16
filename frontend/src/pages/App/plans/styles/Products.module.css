@@ -114,3 +114,20 @@
     color: #455666;
 }
 
+.separatorBar {
+    height: 1px;
+    width: 2rem;
+    padding: 0;
+    border: 1px solid #d1d5db;
+    align-self: center;
+    margin-top: 1rem;
+}
+
+.separatorBarLast {
+    height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+
+}
