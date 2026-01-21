@@ -224,6 +224,8 @@ export function planReducer(state, action) {
 
 export function initPlanState(initialState) {
     try {
+        if (initialState.__meta === "db") return initialState
+
         const lSData = localStorage.getItem("planData")
 
         if (lSData) {
