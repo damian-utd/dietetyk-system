@@ -157,6 +157,41 @@ fieldset.days {
     border-radius: 12px;
     background-color: #ffffff;
     width: 100%;
-    height: 5rem;
+    /*height: 10rem;*/
     margin-bottom: 30%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 1rem;
+    place-items: center;
+    row-gap: 1rem;
+}
+
+.macroAction {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.macroAction > input {
+    border-radius: 0.5rem;
+    background-color: #f8f8f8;
+    border: 1px solid #d1d5db;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #455666;
+    font-size: 1rem;
+    width: 4rem;
+    padding: 0.5rem;
+}
+
+.macroAction > input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.macroAction > span {
+    position: absolute;
+    left: 2.75rem;
+    color: #455666;
 }
