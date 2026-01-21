@@ -29,7 +29,7 @@ import PatientsPersonalData, {
     loader as patientsPersonalDataLoader,
     action as patientsPersonalDataAction
 } from "./pages/App/patients/PatientsPersonalData.jsx";
-import Plans, {loader as plansLoader, action as plansAction} from "./pages/App/plans/Plans.jsx";
+import Plans, {loader as plansLoader} from "./pages/App/plans/Plans.jsx";
 import PlanCreator, {loader as planCreatorLoader, action as planCreatorAction} from "./pages/App/plans/PlanCreator.jsx";
 import Analysis, {loader as analysisLoader} from "./pages/App/analysis/Analysis.jsx";
 
@@ -104,7 +104,6 @@ const router = createBrowserRouter(createRoutesFromElements(
                 path="plans"
                 element={<Plans/>}
                 loader={plansLoader}
-                action={plansAction}
             />
             <Route
                 path="plans/create"
