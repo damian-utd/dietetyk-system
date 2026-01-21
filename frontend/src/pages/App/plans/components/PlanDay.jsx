@@ -6,11 +6,13 @@ import daysStyles from "../styles/Days.module.css"
 import PlanMeal from "./PlanMeal.jsx";
 import PlanMacros from "./PlanMacros.jsx";
 import {calcMacrosForWeight} from "../../../../utils/calcs.js";
+import PlanDaySummary from "./PlanDaySummary.jsx";
+import {roundDec} from "../../../../utils/utils.js";
 
-export default function PlanDay({ day, planDispatch }) {
+export default function PlanDay({ day, planDispatch, patient }) {
 
     const [showMealForm, setShowMealForm] = useState(false)
-    const [dayMacros, setDayMacros] = useState({energy: 0, protein: 0, carbs: 0, fats: 0})
+    const [dayMacros, setDayMacros] = useState({day_number: day.day_number, energy: 0, protein: 0, carbs: 0, fats: 0})
     const mealName = useRef(null)
     const mealNotes = useRef(null)
 
@@ -58,9 +60,15 @@ export default function PlanDay({ day, planDispatch }) {
                     dayAcc.carbs   += calcMacrosForWeight(mp.carbs,   mp.quantity);
                     dayAcc.fats    += calcMacrosForWeight(mp.fats,    mp.quantity);
                 });
-                return dayAcc;
+
+                return Object.fromEntries(
+                    Object.entries(dayAcc).map(([key, value]) => [
+                        key,
+                        roundDec(value, 2)
+                    ])
+                )
             },
-            { energy: 0, protein: 0, carbs: 0, fats: 0 }
+            { day_number: day.day_number, energy: 0, protein: 0, carbs: 0, fats: 0 }
         );
 
     useEffect(() => {
@@ -105,14 +113,10 @@ export default function PlanDay({ day, planDispatch }) {
                     <i className="ri-add-large-line"></i> Dodaj posiłek
                 </button>
             </div>
-            <div className={daysStyles.daySummary}>
-                <PlanMacros
-                    energy={dayMacros?.energy || 0}
-                    protein={dayMacros?.protein || 0}
-                    carbs={dayMacros?.carbs || 0}
-                    fats={dayMacros?.fats || 0}
-                />
-            </div>
+            <PlanDaySummary
+                dayMacros={dayMacros}
+                patient={patient}
+            />
         </div>
     )
 }

@@ -5,7 +5,7 @@ import React from "react"
 import daysStyles from "../styles/Days.module.css"
 import PlanDay from "./PlanDay.jsx";
 
-export default function PlanDaysSection({ planDispatch, days, currentDayNumber }) {
+export default function PlanDaysSection({ planDispatch, days, currentDayNumber, patient }) {
 
     const activeStyle = {
         color: "#000",
@@ -48,6 +48,7 @@ export default function PlanDaysSection({ planDispatch, days, currentDayNumber }
                 key={currentDayNumber}
                 day={days.find(d => d.day_number === currentDayNumber)}
                 planDispatch={planDispatch}
+                patient={patient}
             />
         </fieldset>
     )

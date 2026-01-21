@@ -51,7 +51,9 @@ export default function PlanCreator() {
         localStorage.clear();
     }
 
-    const patients = loaderData?.patients || []
+    const patients = loaderData?.patients.patients || []
+
+    const patient = patients.find(p => p.id === Number(planState.patient_id)) || null
 
     return (
         <div className={styles.planCreatorBody}>
@@ -67,11 +69,15 @@ export default function PlanCreator() {
                     days={planState.days}
                     currentDayNumber={planState.currentDayNumber}
                     planDispatch={planDispatch}
+                    patient={patient}
                 />
                 <input name="planState" value={JSON.stringify(planState)} readOnly hidden/>
             </Form>
             <PlanSidebar
                 clearPlan={clearPlan}
+                days={planState.days}
+                planDispatch={planDispatch}
+                patient={patient}
             />
         </div>
     )
