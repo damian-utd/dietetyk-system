@@ -113,6 +113,12 @@ const router = createBrowserRouter(createRoutesFromElements(
                 action={planCreatorAction}
             />
             <Route
+                path="plans/:id"
+                element={<PlanCreator/>}
+                loader={planCreatorLoader}
+                action={planCreatorAction}
+            />
+            <Route
                 path="calcs"
                 element={<Analysis/>}
                 loader={analysisLoader}
