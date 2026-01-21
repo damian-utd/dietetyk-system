@@ -68,7 +68,7 @@ export default function PlanCreator() {
                     currentDayNumber={planState.currentDayNumber}
                     planDispatch={planDispatch}
                 />
-                <input name="planState" defaultValue={JSON.stringify(planState)} hidden/>
+                <input name="planState" value={JSON.stringify(planState)} readOnly hidden/>
             </Form>
             <PlanSidebar
                 clearPlan={clearPlan}
