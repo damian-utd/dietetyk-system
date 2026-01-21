@@ -7,6 +7,7 @@ import { requireAuth } from "../../../utils/utils.js";
 import { getPatientsCount } from "../../../api/app/patients.js";
 import Cards from "../../../components/Cards.jsx";
 import styles from "./Dashboard.module.css"
+import {getPlansCount} from "../../../api/app/diet.js";
 
 
 export async function loader( { request }){
@@ -16,7 +17,7 @@ export async function loader( { request }){
         return {
             patientsCount: await getPatientsCount(),
             notesCount: { value: 2, title: "Liczba notatek" }, // sztuczny async
-            plansCount: { value: 1, title: "Liczba planów" }
+            plansCount: await getPlansCount()
         }
 
     }
