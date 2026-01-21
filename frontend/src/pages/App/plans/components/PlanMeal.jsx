@@ -74,7 +74,7 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                 </i>
                 <div className={mealsStyles.mealMeta}>
                     <div className={mealsStyles.mealTitle}>
-                        {showNameInput
+                        {showNameInput || meal.name.length < 1
                             ? <input
                                 defaultValue={meal.name}
                                 className={daysStyles.mealInput}
@@ -82,13 +82,14 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                                 onBlur={(e) => updateMeal(e)}
                                 onKeyDown={(e) => e.key === "Enter" && updateMeal(e)}
                                 autoFocus={true}
+                                placeholder="Nazwa posiłku"
                             />
                             : <h2
                                 onDoubleClick={() => setShowNameInput(prev => !prev)}
                             >
                                 {meal.name}
                             </h2>}
-                        {showNotesInput
+                        {showNotesInput|| meal.notes.length < 1
                             ? <input
                                 defaultValue={meal.notes}
                                 className={daysStyles.mealInput}
@@ -96,6 +97,7 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                                 onBlur={(e) => updateMeal(e)}
                                 onKeyDown={(e) => e.key === "Enter" && updateMeal(e)}
                                 autoFocus={true}
+                                placeholder="Notatka"
                             />
                             : <span
                                 className={mealsStyles.mealNotes}

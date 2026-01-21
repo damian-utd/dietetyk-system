@@ -50,10 +50,10 @@ export default function PlanSearchProducts({ planDispatch, meal }) {
                         {product.nazwa_polska}
                     </p>
                     <PlanMacros
-                        energy = {product.energia_1169_2012_kcal}
-                        protein = {product.bialko_ogolem_g}
-                        carbs = {product.weglowodany_ogolem_g}
-                        fats = {product.tluszcz_g}
+                        energy = {product.energia_1169_2012_kcal.replace(",", ".")}
+                        protein = {product.bialko_ogolem_g.replace(",", ".")}
+                        carbs = {product.weglowodany_ogolem_g.replace(",", ".")}
+                        fats = {product.tluszcz_g.replace(",", ".")}
                     />
                 </div>
                 <button
