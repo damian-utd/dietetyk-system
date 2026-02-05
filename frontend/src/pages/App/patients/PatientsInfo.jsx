@@ -33,7 +33,7 @@ export default function PatientsInfo() {
                     style={({isActive}) => (isActive ? activeStyle : null)}
                     end
                 >
-                    Analiza
+                    Podsumowanie
                 </NavLink>
                 <NavLink
                     to="health"
