@@ -1,7 +1,6 @@
-import React, {useRef, useState} from "react"
+import React, {useState} from "react"
 import daysStyles from "../styles/Days.module.css";
 import {calcBMR, calcTDEE} from "../../../../utils/calcs.js";
-import PlanMacros from "./PlanMacros.jsx";
 import {roundDec} from "../../../../utils/utils.js";
 
 
@@ -11,8 +10,7 @@ export default function PlanDaySummary({dayMacros, patient}) {
 
     const {energy, protein, carbs, fats} = dayMacros
 
-    // const tdee = (calcTDEE(calcBMR(patient.weight, patient.height, patient.age, patient.sex), patient.activity_level).value)
-    const tdee = 2500
+    const tdee = (calcTDEE(calcBMR(patient?.weight, patient?.height, patient?.age, patient?.sex), patient?.activity_level).value) || 0
 
     function updateRatio(key, value) {
         const newValue = Number(value)
