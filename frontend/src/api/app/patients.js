@@ -93,3 +93,4 @@ export async function deletePatient(id) {
 
     return data
 }
+
