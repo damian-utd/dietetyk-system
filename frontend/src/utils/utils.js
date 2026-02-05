@@ -25,6 +25,7 @@ export function sleep(ms) {
 
 export function roundDec(number, precision) {
     const x = Math.pow(10, precision)
+    if (typeof number === "string") number = Number(number.replace(",", "."))
 
     return Math.round(number*x)/x
 }
