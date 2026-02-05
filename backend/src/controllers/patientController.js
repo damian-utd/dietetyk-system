@@ -1,3 +1,4 @@
+// patientController
 import { appDb } from "../config/db.js";
 
 export async function getPatients(req, res) {
@@ -44,24 +45,40 @@ export async function addPatient(req, res) {
     const user_id = req.user.id
     const { first_name, last_name, age, sex, weight, height, activity_level, goal, conditions } = req.body
 
+    const client = await appDb.connect()
+
     try {
-        const result = await appDb.query(
+        await client.query("BEGIN")
+
+        const result = await client.query(
             "INSERT INTO patients " +
             "(dietician_id, first_name, last_name, age, sex, weight, height, activity_level, goal, conditions) " +
             "SELECT d.id, $2, $3, $4, $5, $6, $7, $8, $9, $10 " +
             "FROM dieticians d " +
             "WHERE d.user_id = $1 " +
-            "RETURNING first_name, last_name, created_at",
+            "RETURNING id, first_name, last_name, created_at",
             [user_id, first_name, last_name, age, sex, weight, height, activity_level, goal, conditions]
         )
 
         const patient = result.rows[0];
 
+        await client.query(
+            "INSERT INTO patient_progress " +
+            "(patient_id, new_weight) " +
+            "VALUES ($1, $2) ",
+            [patient.id, weight]
+        )
+
+        await client.query("COMMIT")
         res.status(201).json({ message: "Pomyślnie dodano pacjenta", patient});
 
     } catch(err) {
+        await client.query("ROLLBACK")
+
         console.error("Błąd przy dodawaniu pacjenta", err)
         res.status(500).json({message: "Błąd serwera"})
+    } finally {
+        await client.release()
     }
 }
 
@@ -178,3 +195,5 @@ export async function deletePatient(req, res) {
         res.status(500).json({message: "Błąd serwera"})
     }
 }
+
+
