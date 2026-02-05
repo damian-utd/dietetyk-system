@@ -1,7 +1,7 @@
 //PlanCreator
 
 import React, { useReducer, useEffect } from "react"
-import {useLoaderData, Form} from "react-router-dom";
+import {useLoaderData, Form, redirect} from "react-router-dom";
 
 import styles from "./styles/Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
@@ -37,7 +37,8 @@ export async function action( {request} ) {
     const data = JSON.parse(formData.get("planState"))
 
     try {
-        return await savePlan(data)
+        await savePlan(data)
+        return redirect("/plans")
     } catch (err) {
         return {error: err.message}
     }
