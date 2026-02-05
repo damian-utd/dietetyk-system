@@ -120,9 +120,11 @@ button.clearButton {
     position: relative;
     background-image: linear-gradient(
             to right,
-            #ffe900 0%,
+            #dd0008 0%,
+            #ff9d00 10.67%,
+            #ffe900 16.33%,
             #ffe900 23.33%,
-            #7EDC00 33.33%,
+            #7EDC00 36.33%,
             #7EDC00 45%,
             #ffe900 55%,
             #ff9d00 65.67%,
