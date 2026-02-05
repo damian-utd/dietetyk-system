@@ -66,7 +66,22 @@ export async function getPlansCount() {
 }
 
 export async function getPlanById(id) {
-    const res = await fetch(`api/diet/get/${id}`, {
+    const res = await fetch(`/api/diet/get/${id}`, {
+        credentials: "include"
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error(data.message)
+    }
+
+    return data
+}
+
+export async function deletePlan(id) {
+    const res = await fetch(`/api/diet/delete/${id}`, {
+        method: "DELETE",
         credentials: "include"
     })
 
