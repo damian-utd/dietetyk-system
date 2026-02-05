@@ -134,7 +134,7 @@ export async function savePlan(req,res) {
         }
 
         await client.query("COMMIT")
-        return res.status(201).json({
+        res.status(201).json({
             message: "Plan zapisany"
         })
 
@@ -328,6 +328,47 @@ export async function getPlanById(req, res) {
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+    }
+}
+
+export async function deletePlan(req, res) {
+    try{
+        if (req.user.role !== "dietetyk") {
+            return res.status(403).json({
+                message: "Brak uprawnień do wykonania operacji"
+            })
+        }
+
+        const user_id = req.user.id
+
+        const dieticianRes = await appDb.query(
+            "SELECT id FROM dieticians WHERE user_id = $1",
+            [user_id]
+        );
+
+        const dietician_id = dieticianRes.rows[0]?.id;
+        if (!dietician_id) {
+            return res.status(404).json({
+                message: "Brak dietetyka przypisanego do konta uzytkownika"
+            })
+        }
+
+        const plan_id = req.params.id
+
+        const result = appDb.query(
+            "DELETE " +
+            "FROM diet_plans " +
+            "WHERE id = $1 AND dietician_id = $2",
+            [plan_id, dietician_id]
+        )
+
+        res.status(201).json({message: "Pomyślnie usunięto plan", id: plan_id})
+
+    } catch(err) {
+        console.error("Błąd przy usuwaniu planu", err)
         res.status(500).json({
             message: "Błąd serwera"
         })
