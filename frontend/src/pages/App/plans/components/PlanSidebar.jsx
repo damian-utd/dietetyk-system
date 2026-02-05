@@ -1,54 +1,52 @@
 //Sidebar
 
-import React, {useEffect, useState} from "react"
+import React from "react"
 
 import sideStyles from "../styles/Side.module.css"
-import {calcBMR, calcMacrosForWeight, calcTDEE} from "../../../../utils/calcs.js";
-import {roundDec} from "../../../../utils/utils.js";
-import PlanMacros from "./PlanMacros.jsx";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {deletePlan} from "../../../../api/app/diet.js";
 
-export default function PlanSidebar({ clearPlan, days, patient }) {
+export default function PlanSidebar({ clearPlan, patient }) {
 
-    const [planMacros, setPlanMacros] = useState({energy: 0, protein: 0, carbs: 0, fats: 0})
+    const location = useLocation()
+    const params = useParams()
+    const navigate = useNavigate()
 
-    const tdee = (calcTDEE(calcBMR(patient?.weight, patient?.height, patient?.age, patient?.sex), patient?.activity_level).value) || 0
-
-    const calculatePlanMacros = (days) =>
-        days.reduce(
-            (daysAcc, day) => {
-                day.meals.forEach(m => m.meal_products.forEach(mp => {
-                    daysAcc.energy  += calcMacrosForWeight(mp.energy,  mp.quantity);
-                    daysAcc.protein += calcMacrosForWeight(mp.protein, mp.quantity);
-                    daysAcc.carbs   += calcMacrosForWeight(mp.carbs,   mp.quantity);
-                    daysAcc.fats    += calcMacrosForWeight(mp.fats,    mp.quantity);
-                }))
-
-                return daysAcc
-        },
-            { energy: 0, protein: 0, carbs: 0, fats: 0 }
-    )
-
-    useEffect(() => {
-        setPlanMacros(calculatePlanMacros(days));
-    }, [days]);
+    async function handleDeletePlan() {
+        try {
+            await deletePlan(params.id)
+            navigate(-1)
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 
     return (
         <section className={sideStyles.side}>
             <div className={sideStyles.buttonContainer}>
                 <button className={sideStyles.saveButton} form="planForm">Zapisz plan</button>
                 <button type="button" className={sideStyles.pdfButton}>Wygeneruj pdf</button>
-                <button type="button" className={sideStyles.saveButton} onClick={clearPlan}>Wyczysc plan</button>
+                {location.pathname === "/plans/create" ?
+                    <button
+                        type="button"
+                        className={sideStyles.saveButton}
+                        onClick={clearPlan}
+                    >
+                        Wyczysc plan
+                    </button> :
+                    <button
+                        type="button"
+                        className={sideStyles.saveButton}
+                        onClick={handleDeletePlan}
+                    >
+                        Usuń plan
+                    </button>
+                }
+
             </div>
             <div className={sideStyles.nutritionProgress}>
                 {patient?.conditions && <h1>{patient.conditions}</h1>}
                 {patient?.goal && <h1>{patient.goal}</h1>}
-            {/* todo - dodać dynamiczny progres makro */}
-                <PlanMacros
-                    energy={planMacros.energy}
-                    protein={planMacros.protein}
-                    carbs={planMacros.carbs}
-                    fats={planMacros.fats}
-                />
             </div>
         </section>
     )
