@@ -60,3 +60,20 @@ export async function updateNote(note_id, text) {
 
     return data.value
 }
+
+export async function getNotesCount() {
+    const res = await fetch(`/api/notes/count`, {
+        credentials: "include"
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error(data.message)
+    }
+
+    return {
+        value: data.value,
+        title: "Liczba notatek"
+    }
+}
