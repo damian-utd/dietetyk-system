@@ -1,8 +1,11 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import {NavLink, useLoaderData, Outlet} from "react-router-dom";
 import {requireAuth} from "../../../utils/utils.js";
 import {getPatientById} from "../../../api/app/patients.js";
 import styles from "./Patients.module.css";
+import Table from "../../../components/Table.jsx";
+import {getPatientsPlans} from "../../../api/app/diet.js";
+import patientStyles from "./Patients.module.css";
 
 
 export async function loader( { request, params }) {
@@ -10,14 +13,34 @@ export async function loader( { request, params }) {
 
     const patient_id = params.id
     try {
-        return await getPatientById(patient_id)
+        return {
+            patient: await getPatientById(patient_id),
+            plans: await getPatientsPlans(patient_id)
+        }
     } catch (err) {
         return {error: err.message}
     }
 }
 
 export default function PatientsInfo() {
-    const {message, patient} = useLoaderData()
+    const loaderData = useLoaderData()
+
+    const [patient, setPatient] = useState(loaderData?.patient?.patient ?? {})
+    const [plans, setPlans] = useState([])
+
+    useEffect(() => {
+        if(loaderData?.plans?.plans) {
+            setPlans(loaderData.plans.plans.map(p => {
+                return {
+                    id: p.id,
+                    name: p.title,
+                    description: p.description,
+                    createdAt: p.created_at.slice(0, 10)
+                }
+            }))
+        }
+    }, [loaderData?.plans?.plans]);
+
 
     const activeStyle = {
         color: "#000",
@@ -49,8 +72,12 @@ export default function PatientsInfo() {
                 </NavLink>
             </nav>
 
-            <Outlet context={patient}/>
+            <Outlet context={{patient, setPatient, plans}}/>
+
+
+
 
         </div>
     )
+
 }

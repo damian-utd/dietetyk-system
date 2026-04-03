@@ -1,7 +1,7 @@
-import React from "react"
+import React, {useEffect} from "react"
 import {requireAuth} from "../../../utils/utils.js";
 import PatientForm from "./components/PatientForm.jsx";
-import {useOutletContext} from "react-router-dom";
+import {redirect, useActionData, useOutletContext} from "react-router-dom";
 import {updatePatient} from "../../../api/app/patients.js";
 
 export async function loader({ request }) {
@@ -14,20 +14,28 @@ export async function action( { request, params }) {
     const data = Object.fromEntries(formData)
 
     try {
-        const patient = await updatePatient(patient_id, data)
-        return {message: patient.message}
+        const result = await updatePatient(patient_id, data)
+        redirect("")
+        return {message: result.message, patient: result.patient}
     } catch (err) {
         return {error: err.message}
     }
 }
 
 export default function PatientsHealthData() {
-    const patient = useOutletContext()
+    const { patient, setPatient} = useOutletContext()
+
+    const actionData = useActionData()
+    const patientAction = actionData?.patient ?? null
+
+    useEffect(() => {
+        if(patientAction) setPatient(patientAction)
+    }, [patientAction]);
 
     return (
         <>
             <PatientForm
-                defValues={patient}
+                defValues={patientAction || patient}
                 show="health"
             />
         </>
