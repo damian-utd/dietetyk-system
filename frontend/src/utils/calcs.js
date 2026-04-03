@@ -2,40 +2,47 @@ import {roundDec} from "./utils.js";
 
 export function calcBMI(weight, height) {
     const fixedHeight = height/100
-    const ratio = weight/(fixedHeight*fixedHeight)
+    const ratio = !weight || !height ? 0 : weight/(fixedHeight*fixedHeight)
     let unit
-    if (ratio < 18.5){
+
+    if (ratio <= 0){
+        unit = "Brak danych"
+    }else if (ratio < 18.5){
         unit = "Niedowaga"
     }else if(ratio < 25){
         unit = "Norma"
     }else if(ratio < 30) {
         unit = "Nadwaga"
-    }else{
+    }else if(ratio < 150){
         unit = "Otyłość"
+    }else{
+        unit = "Brak danych"
     }
 
     return {
         title: "BMI",
-        value: ratio,
+        value: ratio > 150 ? 0 : ratio,
         description: "Wskaźnik masy ciała",
         unit: unit
     }
 }
 
 export function calcBMR(weight, height, age, sex) {
+    const value = 10 * weight + 6.25 * height - 5 * age
+
     if (sex === "male") {
         return {
             title: "PPM",
-            value: 10 * weight + 6.25 * height - 5 * age + 5,
+            value: !weight || !height || !age || !sex ? 0 : value + 5,
             description: "Podstawowa przemiana materii",
-            unit: "kcal"
+            unit: !weight || !height || !age || !sex ? "Brak danych" : "kcal"
         }
     }else {
         return {
             title: "PPM",
-            value: 10 * weight + 6.25 * height - 5 * age - 161,
+            value: !weight || !height || !age || !sex ? 0 : value - 161,
             description: "Podstawowa przemiana materii",
-            unit: "kcal"
+            unit: !weight || !height || !age || !sex ? "Brak danych" : "kcal"
         }
     }
 }
@@ -43,9 +50,9 @@ export function calcBMR(weight, height, age, sex) {
 export function calcTDEE(BMR, activity) {
     return {
         title: "CPM",
-        value: roundDec(BMR.value * activity, 2),
+        value: !BMR || !activity ? 0 : roundDec(BMR.value * activity, 2),
         description: "Całkowita przemiana materii",
-        unit: "kcal"
+        unit: !BMR || !activity ? "Brak danych" : "kcal"
     }
 }
 
