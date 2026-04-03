@@ -8,6 +8,7 @@ import { getPatientsCount } from "../../../api/app/patients.js";
 import Cards from "../../../components/Cards.jsx";
 import styles from "./Dashboard.module.css"
 import {getPlansCount} from "../../../api/app/diet.js";
+import {getNotesCount} from "../../../api/app/notes.js";
 
 
 export async function loader( { request }){
@@ -16,10 +17,9 @@ export async function loader( { request }){
     try{
         return {
             patientsCount: await getPatientsCount(),
-            notesCount: { value: 2, title: "Liczba notatek" }, // sztuczny async
+            notesCount: await getNotesCount(),
             plansCount: await getPlansCount()
         }
-
     }
     catch(err) {
         console.log("laoder error: ", err.message)
