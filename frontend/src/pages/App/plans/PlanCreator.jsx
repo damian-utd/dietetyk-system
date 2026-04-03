@@ -1,7 +1,7 @@
 //PlanCreator
 
 import React, { useReducer, useEffect } from "react"
-import {useLoaderData, Form, redirect} from "react-router-dom";
+import {useLoaderData, Form, redirect, useSearchParams} from "react-router-dom";
 
 import styles from "./styles/Plans.module.css"
 import {getPatients} from "../../../api/app/patients.js";
@@ -9,7 +9,7 @@ import {planReducer, initPlanState} from "./planReducer.js";
 import PlanSidebar from "./components/PlanSidebar.jsx";
 import PlanMetaSection from "./components/PlanMetaSection.jsx";
 import PlanDaysSection from "./components/PlanDaysSection.jsx";
-import {getPlanById, savePlan} from "../../../api/app/diet.js";
+import {editPlan, getPlanById, savePlan} from "../../../api/app/diet.js";
 
 export async function loader({ params }){
     try {
@@ -32,15 +32,25 @@ export async function loader({ params }){
     }
 }
 
-export async function action( {request} ) {
+export async function action( {request, params} ) {
     const formData = await request.formData()
     const data = JSON.parse(formData.get("planState"))
+    const intent = formData.get("intent")
 
-    try {
-        await savePlan(data)
-        return redirect("/plans")
-    } catch (err) {
-        return {error: err.message}
+    if(intent === "create") {
+        try {
+            await savePlan(data)
+            return redirect("/plans")
+        } catch (err) {
+            return {error: err.message}
+        }
+    } else {
+        try {
+            await editPlan(data, params.id)
+            return redirect(`/plans/${params.id}`)
+        } catch (err) {
+            return {error: err.message}
+        }
     }
 
 }
@@ -94,9 +104,8 @@ export default function PlanCreator() {
             </Form>
             <PlanSidebar
                 clearPlan={clearPlan}
-                days={planState.days}
-                planDispatch={planDispatch}
                 patient={patient}
+                patientId={loaderData?.planDb?.patient_id}
             />
         </div>
     )
