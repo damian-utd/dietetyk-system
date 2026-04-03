@@ -6,7 +6,7 @@ import productsStyles from "../styles/Products.module.css"
 import {calcMacrosForWeight} from "../../../../utils/calcs.js";
 import PlanMacros from "./PlanMacros.jsx";
 
-export default function PlanProducts({ meal, showSearchProducts, planDispatch}) {
+export default function PlanProducts({ meal, showSearchProducts, planDispatch, condition}) {
 
     function handleDeleteProduct(lp) {
         planDispatch({
@@ -73,7 +73,7 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch}) 
         <section
             className={`${(meal.meal_products.length > 0 || showSearchProducts) && productsStyles.productsSection}`}
         >
-            {showSearchProducts && <PlanSearchProducts planDispatch={planDispatch} meal={meal}/>}
+            {showSearchProducts && <PlanSearchProducts planDispatch={planDispatch} meal={meal} condition={condition}/>}
             {productsList}
         </section>
     )

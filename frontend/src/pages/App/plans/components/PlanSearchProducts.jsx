@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from "react"
 import productsStyles from "../styles/Products.module.css";
-import {searchProducts} from "../../../../api/app/diet.js";
+import {getBannedProducts, searchProducts} from "../../../../api/app/diet.js";
 import daysStyles from "../styles/Days.module.css";
 import PlanMacros from "./PlanMacros.jsx";
 
-export default function PlanSearchProducts({ planDispatch, meal }) {
+export default function PlanSearchProducts({ planDispatch, meal, condition }) {
     const [search, setSearch] = useState("")
     const [searchResult, setSearchResult] = useState([])
+    const [bannedProd, setBannedProd] = useState([])
 
     useEffect( () => {
         async function fetchData() {
@@ -26,6 +27,17 @@ export default function PlanSearchProducts({ planDispatch, meal }) {
         }
     }, [search]);
 
+    useEffect(() => {
+        const func = async () => await getBannedProducts(condition)
+
+        if(condition > 0) {
+            func().then(res => setBannedProd(res.value))
+        } else {
+            setBannedProd([])
+        }
+
+    }, [condition])
+
     function handleAddProduct(lp, name, energy, protein, carbs, fats) {
         planDispatch({
             type: 'addProduct',
@@ -41,12 +53,12 @@ export default function PlanSearchProducts({ planDispatch, meal }) {
         setSearch("")
     }
 
-
     const resultList = searchResult.map((product) => {
+        const style = bannedProd.includes(product.lp) ? {color: "red"} : {}
         return (
             <div key={product.lp} className={productsStyles.searchResultElement}>
                 <div style={{width: "100%"}}>
-                    <p className={productsStyles.productName}>
+                    <p className={productsStyles.productName} style={style}>
                         {product.nazwa_polska}
                     </p>
                     <PlanMacros

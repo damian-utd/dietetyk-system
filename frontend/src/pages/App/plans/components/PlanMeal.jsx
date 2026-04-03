@@ -6,7 +6,7 @@ import {roundDec} from "../../../../utils/utils.js";
 import {calcMacrosForWeight} from "../../../../utils/calcs.js";
 import PlanMacros from "./PlanMacros.jsx";
 
-export default function PlanMeal({ meal, planDispatch, isLast }) {
+export default function PlanMeal({ meal, planDispatch, isLast, condition }) {
 
     const [showNameInput, setShowNameInput] = useState(false)
     const [showNotesInput, setShowNotesInput] = useState(false)
@@ -56,12 +56,8 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                 fats
             }
         })
-
-
         
     }, [meal.meal_products]);
-
-
 
     return (
         <section className={`${mealsStyles.mealSection} ${isLast ? mealsStyles.lastMeal : ''}`}>
@@ -119,6 +115,7 @@ export default function PlanMeal({ meal, planDispatch, isLast }) {
                 meal={meal}
                 showSearchProducts={showSearchProducts}
                 planDispatch={planDispatch}
+                condition={condition}
             />
 
         </section>

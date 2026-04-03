@@ -1,10 +1,19 @@
 //PlanMetaForm
 
-import React from "react"
+import React, {useEffect, useState} from "react"
 
 import styles from "../styles/Plans.module.css"
+import {useSearchParams} from "react-router-dom";
 
 export default function PlanMetaSection({ patients, planDispatch, patientId, title, description }) {
+    let [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        if(searchParams.get("patientId")) {
+            planDispatch({type: 'setField', value: searchParams.get("patientId"), field: 'patient_id'})
+        }
+    }, [searchParams]);
+
     const patientsList = patients.map((patient) => {
         return (
             <option key={patient.id} value={patient.id}>

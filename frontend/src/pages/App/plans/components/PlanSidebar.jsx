@@ -6,7 +6,7 @@ import sideStyles from "../styles/Side.module.css"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {deletePlan} from "../../../../api/app/diet.js";
 
-export default function PlanSidebar({ clearPlan, patient }) {
+export default function PlanSidebar({ clearPlan, patient, patientId }) {
 
     const location = useLocation()
     const params = useParams()
@@ -21,10 +21,19 @@ export default function PlanSidebar({ clearPlan, patient }) {
         }
     }
 
+    const conditions = ["Brak", "Gluten", "Skorupiaki", "Jaja", "Ryby", "Orzeszki ziemne (arachidowe)", "Soja", "Mleko", "Orzechy", "Seler", "Gorczyca", "Nasiona sezamu", "Dwutlenek siarki", "Łubin", "Mięczaki"]
+
     return (
         <section className={sideStyles.side}>
             <div className={sideStyles.buttonContainer}>
-                <button className={sideStyles.saveButton} form="planForm">Zapisz plan</button>
+                {location.pathname === "/plans/create" ?
+                    <button className={sideStyles.saveButton} name="intent" value="create" form="planForm">Zapisz plan</button> :
+                    <div className={sideStyles.buttonContainer}>
+                        <button className={patientId !== (patient?.id ?? -1) ? sideStyles.saveButtonLocked : sideStyles.saveButton} name="intent" value="update" form="planForm" disabled={patientId !== patient?.id}>Edytuj aktualny plan</button>
+                        <button className={sideStyles.saveButton} name="intent" value="create" form="planForm">Zapisz jako nowy plan</button>
+                    </div>
+
+                }
                 <button type="button" className={sideStyles.pdfButton}>Wygeneruj pdf</button>
                 {location.pathname === "/plans/create" ?
                     <button
@@ -45,8 +54,8 @@ export default function PlanSidebar({ clearPlan, patient }) {
 
             </div>
             <div className={sideStyles.nutritionProgress}>
-                {patient?.conditions && <h1>{patient.conditions}</h1>}
-                {patient?.goal && <h1>{patient.goal}</h1>}
+                {patient?.conditions && <h1>Alergie: {conditions[patient.conditions]}</h1>}
+                {patient?.goal && <h1>Cel: {patient.goal}</h1>}
             </div>
         </section>
     )

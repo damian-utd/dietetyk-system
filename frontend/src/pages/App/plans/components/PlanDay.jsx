@@ -47,6 +47,7 @@ export default function PlanDay({ day, planDispatch, patient }) {
                 planDispatch={planDispatch}
                 isLast={index === day.meals.length - 1 && !showMealForm}
                 setDayMacros={setDayMacros}
+                condition={patient?.conditions}
             />
         )
     })
