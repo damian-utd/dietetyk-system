@@ -97,7 +97,7 @@ export async function getPatientById(req, res) {
 
         const patient = result.rows[0]
 
-        res.status(201).json({message: "Pomyślnie pobrano pacjenta", patient})
+        res.status(200).json({message: "Pomyślnie pobrano pacjenta", patient})
 
     } catch(err) {
         console.error("Błąd przy pobieraniu pacjenta")
@@ -163,8 +163,12 @@ export async function deletePatient(req, res) {
     const patient_id = req.params.id;
     const user_id = req.user.id
 
+    const client = await appDb.connect()
+
     try {
-        const result = await appDb.query(
+        await client.query("BEGIN")
+
+        const result = await client.query(
             "DELETE " +
             "FROM patients p " +
             "USING dieticians d " +
@@ -173,10 +177,8 @@ export async function deletePatient(req, res) {
             "p.id = $2 AND " +
             "p.dietician_id = d.id " +
             "RETURNING p.*",
-
             [user_id, patient_id]
         )
-
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Nie znaleziono pacjenta lub brak uprawnień" });
@@ -184,6 +186,13 @@ export async function deletePatient(req, res) {
 
         const patient = result.rows[0]
 
+        await client.query(
+            "DELETE FROM patient_diet_plan " +
+            "WHERE patient_id = $1",
+            [patient_id]
+        )
+
+        await client.query("COMMIT")
         res.status(200).json({
             message: "Pomyślnie usunięto pacjenta",
             patient,
@@ -191,8 +200,11 @@ export async function deletePatient(req, res) {
 
 
     } catch(err) {
+        await client.query("ROLLBACK")
         console.error("Błąd przy usuwaniu pacjenta")
         res.status(500).json({message: "Błąd serwera"})
+    } finally {
+        client.release()
     }
 }
 
