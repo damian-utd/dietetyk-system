@@ -1,0 +1,40 @@
+.settingsBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.settingsBody > form {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.settingsInput {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    height: 2.625rem;
+    border: 1px solid rgba(126, 220, 0, 0.3);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+    width: inherit;
+}
+
+.settingsInput:global(:-webkit-autofill),
+.settingsInput:global(:-webkit-autofill:hover),
+.settingsInput:global(:-webkit-autofill:focus),
+.settingsInput:global(:-webkit-autofill:active) {
+    transition: background-color 9999s ease-in-out 0s;
+}

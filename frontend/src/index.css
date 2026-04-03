@@ -76,13 +76,15 @@ button.clearButton {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: space-between;
     gap: 3rem;
+    width: 100%;
     /*padding: 2rem;*/
 }
 
 .card {
-    width: 31.875rem;
-    max-width: 31.875rem;
+    width: 31rem;
+    max-width: 31rem;
     height: 6.875rem;
     border: 2px solid #E7E7E7;
     border-radius: 12px;
