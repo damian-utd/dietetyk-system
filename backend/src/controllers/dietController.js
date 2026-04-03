@@ -141,7 +141,111 @@ export async function savePlan(req,res) {
     } catch (err) {
         await client.query("ROLLBACK")
 
-        console.error("Błąd przy zapisywaniu planów", err)
+        console.error("Błąd przy zapisywaniu planu", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+
+    } finally {
+        client.release()
+    }
+}
+
+export async function editPlan(req, res) {
+    const client = await appDb.connect()
+
+    try {
+        if (req.user.role !== "dietetyk") {
+            return res.status(403).json({
+                message: "Brak uprawnień do wykonania operacji"
+            })
+        }
+
+        const user_id = req.user.id
+
+        const dieticianRes = await appDb.query(
+            "SELECT id FROM dieticians WHERE user_id = $1;",
+            [user_id]
+        );
+
+        const dietician_id = dieticianRes.rows[0]?.id;
+        if (!dietician_id) {
+            return res.status(404).json({
+                message: "Brak dietetyka przypisanego do konta uzytkownika"
+            })
+        }
+
+        const planState = req.body.planState
+        if(!planState) {
+            return res.status(400).json({
+                message: "Brak danych do zapisania"
+            })
+        }
+
+        const plan_id = req.params.id
+
+        await client.query("BEGIN")
+
+        await client.query(
+            "UPDATE diet_plans dp " +
+            "SET title = $1, description = $2 " +
+            "FROM dieticians d " +
+            "WHERE d.user_id = $3 AND dp.dietician_id = d.id AND dp.id = $4",
+            [planState.title, planState.description, user_id, plan_id]
+        )
+
+        await client.query(
+            "DELETE FROM diet_days " +
+            "WHERE diet_plan_id = $1",
+            [plan_id]
+        )
+
+        for (const day of planState.days) {
+            const dayRes = await client.query(
+                "INSERT INTO diet_days " +
+                "(diet_plan_id, day_number) " +
+                "VALUES ($1, $2) " +
+                "RETURNING id",
+                [plan_id, day.day_number]
+            )
+            const day_id = dayRes.rows[0].id
+
+            for (const meal of day.meals) {
+                const mealRes = await client.query(
+                    "INSERT INTO meals " +
+                    "(diet_day_id, name, order_number, notes) " +
+                    "VALUES ($1, $2, $3, $4) " +
+                    "RETURNING id",
+                    [day_id, meal.name, meal.order_number, meal.notes]
+                )
+                const meal_id = mealRes.rows[0].id
+
+                for (const product of meal.meal_products) {
+                    await client.query(
+                        "INSERT INTO meal_products " +
+                        "(meal_id, product_id, quantity, unit) " +
+                        "VALUES ($1, $2, $3, $4) ",
+                        [meal_id, product.product, product.quantity, product.unit]
+                    )
+                }
+            }
+        }
+
+        // zamiast delete + insert można zrobić
+        // INSERT ON CONFLICT DO UPDATE + DELETE nadmiarowych rekordów
+
+        // const patientPlanResult = await client.query(
+        //     ""
+        // )
+
+        await client.query("COMMIT")
+        res.status(200).json({
+            message: "Plan edytowany"
+        })
+    } catch (err) {
+        await client.query("ROLLBACK")
+
+        console.error("Błąd przy edytowaniu planu", err)
         res.status(500).json({
             message: "Błąd serwera"
         })
@@ -177,11 +281,11 @@ export async function getPlans(req, res) {
             "SELECT id, title, description, created_at " +
             "FROM diet_plans " +
             "WHERE dietician_id = $1 " +
-            "ORDER BY created_at ASC",
+            "ORDER BY created_at DESC",
             [dietician_id]
         )
 
-        res.status(201).json({message: "Pomyślnie pobrano plany", plans: result.rows})
+        res.status(200).json({message: "Pomyślnie pobrano plany", plans: result.rows})
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
@@ -204,7 +308,7 @@ export async function getPlansCount(req, res) {
 
         const count = result.rows[0]?.count
 
-        res.json({message: "Pomyślnie pobrano plany", count});
+        res.status(200).json({message: "Pomyślnie pobrano plany", count});
 
     } catch(err) {
         console.error("Błąd przy pobieraniu liczby planów", err)
@@ -249,6 +353,8 @@ export async function getPlanById(req, res) {
             "WHERE diet_plan_id = $1",
             [plan_id]
         )
+
+
 
         let plan = {
             currentDayNumber: 1,
@@ -324,7 +430,7 @@ export async function getPlanById(req, res) {
             }
         }
 
-        res.status(201).json({message: "Pomyślnie pobrano plany", plan})
+        res.status(200).json({message: "Pomyślnie pobrano plany", plan})
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
@@ -365,10 +471,126 @@ export async function deletePlan(req, res) {
             [plan_id, dietician_id]
         )
 
-        res.status(201).json({message: "Pomyślnie usunięto plan", id: plan_id})
+        res.status(200).json({message: "Pomyślnie usunięto plan", id: plan_id})
 
     } catch(err) {
         console.error("Błąd przy usuwaniu planu", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+    }
+}
+
+export async function getLoggedDietician(req, res) {
+    const user_id = req.user.id
+
+    try{
+        const result = await appDb.query(
+            "SELECT full_name, specialization " +
+            "FROM dieticians " +
+            "WHERE user_id = $1",
+            [user_id]
+        )
+
+        res.status(200).json({
+            message: "Pomyślnie pobrano dietetyka",
+            value: result.rows[0]
+        })
+
+    } catch (err) {
+        console.error("Błąd przy pobieraniu dietetyka", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+    }
+}
+
+export async function updateLoggedDietician(req, res) {
+    const user_id = req.user.id
+
+    const {full_name, specialization} = req.body
+
+    try {
+        const result = await appDb.query(
+            "UPDATE dieticians " +
+            "SET full_name = $1, specialization = $2 " +
+            "WHERE user_id = $3 " +
+            "RETURNING full_name, specialization",
+            [full_name, specialization, user_id]
+        )
+
+        res.status(200).json({
+            message: "Pomyślnie edytowano dietetyka",
+            value: result.rows[0]
+        })
+
+    } catch (err) {
+        console.error("Błąd przy edytowaniu dietetyka", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+    }
+}
+
+export async function getPatientsPlans(req, res) {
+    try{
+        const patient_id = req.params.id
+
+        if (req.user.role !== "dietetyk") {
+            return res.status(403).json({
+                message: "Brak uprawnień do wykonania operacji"
+            })
+        }
+
+        const user_id = req.user.id
+
+        const dieticianRes = await appDb.query(
+            "SELECT id FROM dieticians WHERE user_id = $1",
+            [user_id]
+        );
+
+        const dietician_id = dieticianRes.rows[0]?.id;
+        if (!dietician_id) {
+            return res.status(404).json({
+                message: "Brak dietetyka przypisanego do konta uzytkownika"
+            })
+        }
+
+        const result = await appDb.query(
+            "SELECT dp.id, dp.title, dp.description, dp.created_at " +
+            "FROM diet_plans dp " +
+            "JOIN patient_diet_plan pdp " +
+            "ON pdp.diet_plan_id = dp.id AND pdp.patient_id = $2 " +
+            "WHERE dp.dietician_id = $1 " +
+            "ORDER BY dp.created_at DESC",
+            [dietician_id, patient_id]
+        )
+
+        res.status(200).json({message: "Pomyślnie pobrano plany", plans: result.rows})
+
+    } catch(err) {
+        console.error("Błąd przy pobieraniu planów", err)
+        res.status(500).json({
+            message: "Błąd serwera"
+        })
+    }
+}
+
+export async function getBannedProducts(req, res) {
+    const condition = req.params.condition
+
+    try {
+        const result = await productsDb.query(
+            "SELECT ARRAY_AGG (produkt_lp ORDER BY produkt_lp) as prod " +
+            "FROM produkt_alergeny " +
+            "WHERE alergen_id = $1 ",
+            [condition]
+        )
+
+        res.status(200).json({message: "Pomyślnie pobrano zabronione produkty", value: result.rows[0].prod ?? []})
+
+    } catch (err) {
+        console.error("Błąd przy pobieraniu zabronionych produktów", err)
         res.status(500).json({
             message: "Błąd serwera"
         })
