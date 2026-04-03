@@ -58,7 +58,7 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                                         type="number"
                                         name="age"
                                         id="age" min={1} max={99}
-                                        defaultValue={defValues?.age || ""}
+                                        defaultValue={Number(defValues?.age) || ""}
                                     />
                                 </div>
                             </div>
@@ -77,7 +77,8 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                                         type="number"
                                         name="weight"
                                         id="weight" min={0}
-                                        defaultValue={defValues?.weight || ""}
+                                        step={0.1}
+                                        defaultValue={Number(defValues?.weight) || ""}
                                     />
                                 </div>
 
@@ -87,7 +88,8 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                                         type="number"
                                         name="height"
                                         id="height" min={0}
-                                        defaultValue={defValues?.height || ""}
+                                        step={0.1}
+                                        defaultValue={Number(defValues?.height) || ""}
                                     />
                                 </div>
                             </div>
@@ -122,24 +124,40 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                             <div className={styles.formGroup}>
                                 <div className={styles.inputGroup}>
                                     <label htmlFor="conditions">Schorzenia / Alergie</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         name="conditions"
                                         id="conditions"
                                         defaultValue={defValues?.conditions || ""}
-                                    />
+                                    >
+                                        <option value="" disabled>Wybierz</option>
+                                        <option value="0">Brak</option>
+                                        <option value="1">Gluten</option>
+                                        <option value="2">Skorupiaki</option>
+                                        <option value="3">Jaja</option>
+                                        <option value="4">Ryby</option>
+                                        <option value="5">Orzeszki ziemne (arachidowe)</option>
+                                        <option value="6">Soja</option>
+                                        <option value="7">Mleko</option>
+                                        <option value="8">Orzechy</option>
+                                        <option value="9">Seler</option>
+                                        <option value="10">Gorczyca</option>
+                                        <option value="11">Nasiona sezamu</option>
+                                        <option value="12">Dwutlenek siarki</option>
+                                        <option value="13">Łubin</option>
+                                        <option value="14">Mięczaki</option>
+                                    </select>
                                 </div>
                                 <div className={styles.inputGroup}>
 
                                 </div>
                             </div>
-                            </>
-                            )
-                            }
+                        </>
+                    )
+                }
                 <div className={styles.buttonContainer}>
                     <button className={styles.addPatientButton}>Zapisz</button>
                 </div>
             </Form>
         </section>
-)
+    )
 }
