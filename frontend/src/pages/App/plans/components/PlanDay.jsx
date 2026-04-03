@@ -4,7 +4,6 @@ import React, {useState, useRef, useEffect} from "react"
 
 import daysStyles from "../styles/Days.module.css"
 import PlanMeal from "./PlanMeal.jsx";
-import PlanMacros from "./PlanMacros.jsx";
 import {calcMacrosForWeight} from "../../../../utils/calcs.js";
 import PlanDaySummary from "./PlanDaySummary.jsx";
 import {roundDec} from "../../../../utils/utils.js";

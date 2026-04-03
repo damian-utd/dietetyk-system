@@ -1,6 +1,6 @@
 //PlanMetaForm
 
-import React, {useEffect, useState} from "react"
+import React, {useEffect} from "react"
 
 import styles from "../styles/Plans.module.css"
 import {useSearchParams} from "react-router-dom";
