@@ -32,6 +32,7 @@ import PatientsPersonalData, {
 import Plans, {loader as plansLoader} from "./pages/App/plans/Plans.jsx";
 import PlanCreator, {loader as planCreatorLoader, action as planCreatorAction} from "./pages/App/plans/PlanCreator.jsx";
 import Analysis, {loader as analysisLoader} from "./pages/App/analysis/Analysis.jsx";
+import Settings, {loader as settingsLoader, action as settingsAction} from "./pages/App/settings/Settings.jsx";
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -65,6 +66,12 @@ const router = createBrowserRouter(createRoutesFromElements(
                 path="dashboard"
                 element={<Dashboard/>}
                 loader={dashboardLoader}
+            />
+            <Route
+                path={"settings"}
+                element={<Settings/>}
+                loader={settingsLoader}
+                action={settingsAction}
             />
             <Route
                 path="patients"
