@@ -1,0 +1,81 @@
+.analysisBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.inputRow {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+}
+
+.inputGroup {
+    display: flex;
+    width: 31rem;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.inputGroup > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputGroup:focus-within > div >  label {
+    font-weight: 800;
+}
+
+.inputGroup > div > label {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+
+.analysisInput {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    height: 2.625rem;
+    border: 1px solid rgba(126, 220, 0, 0.3);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+    width: 5rem;
+}
+
+select.analysisInput {
+    width: inherit;
+    padding-right: 2rem;
+}
+
+.analysisInput:global(:-webkit-autofill),
+.analysisInput:global(:-webkit-autofill:hover),
+.analysisInput:global(:-webkit-autofill:focus),
+.analysisInput:global(:-webkit-autofill:active) {
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+.analysisInput:focus, .analysisInput:focus {
+    outline: none;
+    border: 1px solid rgba(126, 220, 0, 0.3);
+    box-shadow: 0 0 4px rgba(126, 220, 0, 0.65);
+}
+
+.inputGroup > div > select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+
