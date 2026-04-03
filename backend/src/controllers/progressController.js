@@ -50,7 +50,8 @@ export async function getProgress(req, res) {
         const result = await appDb.query(
             "SELECT id, new_weight, created_at " +
             "FROM patient_progress " +
-            "WHERE patient_id = $1 ",
+            "WHERE patient_id = $1 " +
+            "ORDER BY created_at DESC",
             [patient_id]
         )
 
