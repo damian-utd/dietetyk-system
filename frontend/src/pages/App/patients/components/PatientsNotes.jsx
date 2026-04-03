@@ -1,15 +1,24 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useRef, useState} from "react"
 import {createNote, deleteNote, getNotes, updateNote} from "../../../../api/app/notes.js";
+import Table from "../../../../components/Table.jsx";
+import styles from "../Patients.module.css"
 
 export default function PatientsNotes({ patient }) {
     const [notes, setNotes] = useState([])
     const [note, setNote] = useState("")
-    const [showAddNote, setShowAddNote] = useState(false)
-    const [showEditNote, setShowEditNote] = useState({id: 0, text: ""})
+    const editRef = useRef()
 
     useEffect(() => {
         const func = async () => await getNotes(patient.id)
-        func().then(res => setNotes(res))
+        func().then(res =>
+            setNotes(res.map(r => {
+                return {
+                    id: r.id,
+                    name: r.note,
+                    createdAt: r.created_at.slice(0,10)
+                }
+            }))
+        )
     }, [patient]);
 
 
@@ -17,12 +26,12 @@ export default function PatientsNotes({ patient }) {
         await createNote(id, text).then(res => {
             setNotes(prev => {
                 return [
-                    ...prev,
                     {
                         id: res.id,
-                        note: res.note,
-                        created_at: res.created_at
-                    }
+                        name: res.note,
+                        created_at: res.created_at.slice(0,10)
+                    },
+                    ...prev
                 ]
             })
         })
@@ -34,65 +43,75 @@ export default function PatientsNotes({ patient }) {
         setNotes(prev => prev.filter(p => p.id !== id))
     }
 
-    const handleUpdateNote = async (id, text) => {
-        await updateNote(id, text).then(() => {
+    const handleEditNote = async (id, text, edit, setEdit) => {
+        if (!edit) {
             setNotes(prev => {
                 return prev.map(p => {
-                    if (p.id === showEditNote.id) return {...p, note: showEditNote.text}
-                    else return p
+                    if (p.id === id) {
+                        return {
+                            ...p,
+                            name:
+                                <textarea
+                                    defaultValue={text}
+                                    ref={editRef}
+                                    className={styles.textarea}
+
+                                />
+                        }
+                    } else return p
                 })
             })
-            setShowEditNote({id: 0, text: ""})
-        })
-    }
-
-    const handleEditNote = (id, text) => {
-        if (showEditNote.id ) {
-            setShowEditNote({id: 0, text: ""})
+            setEdit(id)
         } else {
-
-            setShowEditNote({id: id, text: text})
+            await updateNote(id, editRef.current.value)
+                .then(res =>
+                    setNotes(prev => {
+                        return prev.map(p => {
+                            if (p.id === id && p.id === res.id) {
+                                return {...p, name: res.note}
+                            } else return p
+                        })
+                    })
+                )
+            setEdit(false)
         }
     }
 
-    console.log(showEditNote)
-
-    const notesList = notes ? notes.map(n => {
-        return (
-            <div key={n.id}>
-                {showEditNote.id === n.id ?
-                    <textarea
-                        value={showEditNote.text}
-                        onChange={(e) =>
-                            setShowEditNote(prev =>
-                                ({...prev, text: e.target.value})
-                            )
-                        }
-                    /> :
-                    <span>{n.note} </span>
-                }
-                <span>{n.created_at.slice(0, 10)} </span>
-                {(showEditNote.id === n.id || !showEditNote.id) && <button onClick={() => handleEditNote(n.id, n.note)}>{showEditNote.id === n.id ? "Cofnij" : "Edytuj"}</button>}
-                {showEditNote.id === n.id && <button onClick={() => handleUpdateNote(showEditNote.id, showEditNote.text)}>Zapisz zmiany</button>}
-                <button onClick={() => handleDeleteNote(n.id)}>Usuń</button>
-            </div>
-        )
-    }) : null
 
     return (
-        <div>
-            <button onClick={() => setShowAddNote(prev => !prev)}>{!showAddNote ? "Dodaj notatkę" : "Nie dodawaj nowej notatki"}</button>
-            {showAddNote &&
-                <div>
-                    <textarea
-                        placeholder="Notatka..."
-                        value={note}
-                        onChange={(e) => setNote(e.target.value)}
-                    />
-                    <button onClick={() => handleCreateNote(note, patient.id)}>Zapisz notatkę</button>
-                </div>
+        <section className={styles.notesSection}>
+            {notes.length > 0 &&
+                <Table
+                    title={"Notatki pacjenta"}
+                    headers={["Notatka", "Data"]}
+                    data={notes}
+                    delFunc={handleDeleteNote}
+                    delText="Czy na pewno chcesz usunąć notatkę"
+                    width="half"
+                    show={true}
+                    showFunc={handleEditNote}
+                />
             }
-            {notesList}
-        </div>
+
+            <div className={styles.inputGroup} style={{flexDirection: "row", alignItems: "top", width: "100%", justifyContent: "space-between", gap: "2rem"}}>
+                <textarea
+                    style={{flexGrow: "1", width: "auto"}}
+                    placeholder="Notatka..."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    className={styles.textarea}
+                    rows={3}
+                />
+                <div>
+                    <button
+                        onClick={() => handleCreateNote(note, patient.id)}
+                        className={styles.addPatientButton}
+                    >
+                        Dodaj notatkę
+                    </button>
+                </div>
+            </div>
+
+        </section>
     )
 }
