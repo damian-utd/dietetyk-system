@@ -56,7 +56,6 @@ const router = createBrowserRouter(createRoutesFromElements(
                 element={<RegisterForm/>}
                 action={registerAction}
             />
-
         </Route>
         <Route
             element={<Layout/>}
@@ -129,8 +128,11 @@ const router = createBrowserRouter(createRoutesFromElements(
                 element={<Analysis/>}
                 loader={analysisLoader}
             />
-
         </Route>
+        <Route
+            path="*"
+            element={<Navigate to="/dashboard"/>}
+        />
     </Route>
 ))
 

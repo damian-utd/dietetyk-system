@@ -54,7 +54,7 @@ export default function Layout() {
                     style={({isActive}) => isActive ? activeStyles : null}
                 >
                     <i className="ri-profile-line"></i>
-                    Plany dietetyczne
+                    Plany żywieniowe
                 </NavLink>
                 <NavLink
                     to="calcs"

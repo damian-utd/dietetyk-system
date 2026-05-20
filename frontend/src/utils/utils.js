@@ -14,8 +14,11 @@ export async function requireAuth(request) {
     }
     catch(err) {
         console.error(err.message)
-        throw redirect(`/login?message=${encodeURIComponent('Najpierw musisz się zalogować')}&redirectTo=${pathname}`
-        )
+        if(err.message === "Brak tokenu autoryzacji") {
+            throw redirect(`/login?message=${encodeURIComponent('Najpierw musisz się zalogować')}&redirectTo=${pathname}`)
+        } else {
+            throw redirect(`/login?message=${encodeURIComponent('Brak uprawnień dietetyka')}&redirectTo=${pathname}`)
+        }
     }
 }
 

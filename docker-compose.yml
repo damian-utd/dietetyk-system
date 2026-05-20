@@ -41,7 +41,6 @@ services:
       PRODUCTS_DATABASE_URL: ${PRODUCTS_DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       TZ: Europe/Warsaw
-
     expose:
       - "5000"
     volumes:
@@ -59,9 +58,9 @@ services:
       - ./frontend:/app
       - node_modules_frontend:/app/node_modules
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - VITE_API_URL=${VITE_API_URL}
-      - "TZ=Europe/Warsaw"
+      CHOKIDAR_USEPOLLING: true
+      VITE_API_URL: ${VITE_API_URL}
+      TZ: Europe/Warsaw
     depends_on:
       - backend
     networks:

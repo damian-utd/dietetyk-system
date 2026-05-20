@@ -19,8 +19,7 @@ export async function action({ request }) {
 
     try{
         const data = await registerUser({ email, password })
-        console.log("Pomyślnie zarejestrowano. Dane: ", data)
-        return redirect("/login")
+        return redirect(`/login?message=${encodeURIComponent('Konto zostalo pomyślnie utworzone')}`)
     } catch(err) {
         return err.message
     }

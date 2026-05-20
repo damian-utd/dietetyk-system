@@ -41,7 +41,7 @@ export default function Plans() {
         <div className={styles.plansBody}>
             <section className={styles.plansSection}>
                 <Table
-                    title={"Plany dietetyczne"}
+                    title={"Plany żywieniowe"}
                     headers={["Tytuł", "Opis", "Data utworzenia"]}
                     data={plans}
                     showLink={"plans"}

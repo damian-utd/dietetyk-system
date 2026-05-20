@@ -6,20 +6,16 @@ import { validateEmail, validatePassword } from "../utils/validators.js";
 export async function register(req, res) {
     const { email, password } = req.body;
 
-    // Walidacja
     if (!validateEmail(email)) return res.status(400).json({ message: "Nieprawidłowy email" });
     if (!validatePassword(password)) return res.status(400).json({ message: "Hasło musi mieć min. 8 znaków, 1 literę i 1 cyfrę" });
 
     try {
-        // Czy istnieje?
         const existing = await appDb.query("SELECT id FROM users WHERE email = $1", [email]);
         if (existing.rowCount > 0) return res.status(409).json({ message: "Użytkownik już istnieje" });
 
-        // Hash hasła
         const hash = await bcrypt.hash(password, 10);
         const role = "dietetyk"
 
-        // Zapis do DB
         const result = await appDb.query(
             "INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, created_at",
             [email, hash, role]
@@ -27,10 +23,8 @@ export async function register(req, res) {
 
         const user = result.rows[0];
 
-        // Token JWT
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-        // Ciasteczko httpOnly
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -66,7 +60,7 @@ export async function login(req, res) {
 
         res.cookie("authToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // na koncu na true
+            secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             path: "/",
         });
@@ -90,7 +84,7 @@ export async function logout(req, res) {
 
 export async function getProfile(req, res) {
     try {
-        const { id } = req.user;
+        const { id, role } = req.user;
         const q = await appDb.query(
             "SELECT id, email, role, created_at FROM users WHERE id = $1",
             [id]
@@ -100,7 +94,11 @@ export async function getProfile(req, res) {
             return res.status(404).json({ message: "Użytkownik nie znaleziony" });
         }
 
-        res.json(q.rows[0]);
+        if(q.rows[0]?.role !== "dietetyk" && q.rows[0]?.role === role ) {
+            return res.status(401).json({ message: "Użytkownik nie ma uprawnień" });
+        }
+
+        res.status(200).json(q.rows[0]);
     } catch (err) {
         console.error("Błąd pobierania profilu:", err);
         res.status(500).json({ message: "Błąd serwera" });

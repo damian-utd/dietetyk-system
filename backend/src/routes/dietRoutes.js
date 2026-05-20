@@ -9,7 +9,8 @@ import {
     searchProducts,
     updateLoggedDietician,
     getPatientsPlans,
-    getBannedProducts
+    getBannedProducts,
+    getPlanInPDF
 } from "../controllers/dietController.js";
 
 const router = express.Router()
@@ -27,5 +28,6 @@ router.get("/", getPlans)
 router.put("/:id", editPlan)
 router.get("/:id", getPlanById)
 router.delete("/:id", deletePlan)
+router.get("/:id/pdf", getPlanInPDF)
 
 export default router

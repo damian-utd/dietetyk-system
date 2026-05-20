@@ -1,5 +1,7 @@
 // diet.js
 
+import download from "downloadjs"
+
 export async function searchProducts(search) {
     const res = await fetch("/api/diet/search", {
         method: "POST",
@@ -168,4 +170,29 @@ export async function getBannedProducts(condition) {
     }
 
     return data
+}
+
+export async function getPlanInPDF(id) {
+    const res = await fetch(`/api/diet/${id}/pdf`, {
+        credentials: "include"
+    })
+
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message)
+    }
+
+    const blob = await res.blob()
+
+    const contentDisposition = res.headers.get("Content-Disposition")
+    const filename = getFilenameFromHeader(contentDisposition) || `plan-${id}.pdf`
+
+    download(blob, filename, "application/pdf")
+}
+
+function getFilenameFromHeader(header) {
+    if (!header) return null
+
+    const match = header.match(/filename="?(.+?)"?$/)
+    return match ? match[1] : null
 }

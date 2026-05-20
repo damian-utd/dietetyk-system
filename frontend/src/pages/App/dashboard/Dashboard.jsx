@@ -22,7 +22,6 @@ export async function loader( { request }){
         }
     }
     catch(err) {
-        console.log("laoder error: ", err.message)
         return {error: err.message}
     }
 }

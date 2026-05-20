@@ -1,7 +1,7 @@
 //LoginForm
 
 import React from "react"
-import {Form, Link, redirect, useLoaderData} from "react-router-dom";
+import {Form, Link, redirect, useActionData, useLoaderData} from "react-router-dom";
 
 import {loginUser} from "../../api/auth/auth.js"
 
@@ -28,6 +28,7 @@ export async function loader({ request }) {
 
 export default function LoginForm() {
     const authMessage = useLoaderData()
+    const actionMessage = useActionData()
 
     return(
         <section>
@@ -44,7 +45,7 @@ export default function LoginForm() {
                 <button>Zaloguj</button>
             </Form>
             <Link to="/register">Nie masz konta? Zarejestruj się</Link>
-            {authMessage && <h1 className={styles.authMessage}>{authMessage}</h1>}
+            {(authMessage || actionMessage) && <h1 className={styles.authMessage}>{authMessage || actionMessage}</h1>}
         </section>
     )
 }

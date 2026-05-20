@@ -4,23 +4,20 @@ import {roundDec} from "../../../../utils/utils.js";
 import Table from "../../../../components/Table.jsx";
 import styles from "../Patients.module.css"
 
-export default function PatientsProgress({ patient, setPatient, setPatientsWeight }) {
+export default function PatientsProgress({ patient, setPatient, setPatientsWeight, progressLoader }) {
 
     const [progress, setProgress] = useState([])
     const [newWeight, setNewWeight] = useState(patient.weight)
 
     useEffect(  () => {
-        const func = async () => await getProgress(patient.id)
-        func().then(res =>
-            setProgress(res.map(r => {
-                return {
-                    id: r.id,
-                    name: r.new_weight.concat(" kg"),
-                    createdAt: r.created_at.slice(0, 10)
-                }
-            }))
-        )
-    }, [patient]);
+        setProgress(progressLoader.map(r => {
+            return {
+                id: r.id,
+                name: r.new_weight.concat(" kg"),
+                createdAt: r.created_at.slice(0, 10)
+            }
+        }))
+    }, [progressLoader]);
 
     const handleCreateProgress = async (weight, id) => {
         await createProgress(weight, id).then(res => {
@@ -28,7 +25,7 @@ export default function PatientsProgress({ patient, setPatient, setPatientsWeigh
                 return [
                     {
                         id: res.id,
-                        new_weight: res.new_weight.concat(" kg"),
+                        name: res.new_weight.concat(" kg"),
                         created_at: res.created_at.slice(0, 10)
                     },
                     ...prev
@@ -45,6 +42,15 @@ export default function PatientsProgress({ patient, setPatient, setPatientsWeigh
     }
     const handleDeleteProgress = async (id) => {
         await deleteProgress(id)
+        if (id === progress[0].id) {
+            setPatientsWeight(roundDec(progress[1].name.slice(0, -3), 2))
+            setPatient(prev => {
+                return {
+                    ...prev,
+                    weight: roundDec(parseFloat(progress[1].name.slice(0, -3)), 2)
+                }
+            })
+        }
         setProgress(prev => prev.filter(p => p.id !== id))
     }
 
@@ -52,11 +58,11 @@ export default function PatientsProgress({ patient, setPatient, setPatientsWeigh
         <section className={styles.progressSection}>
             {progress.length > 0 &&
                 <Table
-                    title={"Progres pacjenta"}
+                    title={"Postępy pacjenta"}
                     headers={["Waga", "Data"]}
                     data={progress}
-                    delFunc={handleDeleteProgress}
-                    delText="Czy na pewno chcesz usunąć progres"
+                    delFunc={progress.length > 1 ? handleDeleteProgress : null}
+                    delText="Czy na pewno chcesz usunąć wpis postępu"
                     width="half"
                 />
             }

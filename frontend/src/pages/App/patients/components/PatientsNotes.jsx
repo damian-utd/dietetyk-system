@@ -3,23 +3,20 @@ import {createNote, deleteNote, getNotes, updateNote} from "../../../../api/app/
 import Table from "../../../../components/Table.jsx";
 import styles from "../Patients.module.css"
 
-export default function PatientsNotes({ patient }) {
+export default function PatientsNotes({ patient, notesLoader }) {
     const [notes, setNotes] = useState([])
     const [note, setNote] = useState("")
     const editRef = useRef()
 
     useEffect(() => {
-        const func = async () => await getNotes(patient.id)
-        func().then(res =>
-            setNotes(res.map(r => {
-                return {
-                    id: r.id,
-                    name: r.note,
-                    createdAt: r.created_at.slice(0,10)
-                }
-            }))
-        )
-    }, [patient]);
+        setNotes(notesLoader.map(r => {
+            return {
+                id: r.id,
+                name: r.note,
+                createdAt: r.created_at.slice(0,10)
+            }
+        }))
+    }, [notesLoader]);
 
 
     const handleCreateNote = async (text, id) => {

@@ -1,5 +1,4 @@
 // notesController
-
 import {appDb} from "../config/db.js";
 
 export async function createNote(req, res) {
@@ -39,7 +38,7 @@ export async function getNotes(req, res) {
             "SELECT dn.id, dn.note, dn.created_at " +
             "FROM dietician_notes dn " +
             "JOIN dieticians d ON d.user_id = $1 " +
-            "WHERE patient_id = $2 " +
+            "WHERE dn.patient_id = $2 AND dn.dietician_id = d.id " +
             "ORDER BY dn.created_at DESC",
             [user_id, patient_id]
         )

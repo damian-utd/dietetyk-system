@@ -43,7 +43,9 @@ export async function isLoggedIn() {
     const data = await res.json()
 
     if (!res.ok) {
-        throw new Error(data.message)
+        const error = new Error(data.message)
+        error.status = res.status
+        throw error
     }
 
     return data

@@ -2,10 +2,10 @@ import React, {useState} from "react"
 import styles from "../pages/App/patients/Patients.module.css";
 import {Link} from "react-router-dom";
 import {roundDec} from "../utils/utils.js";
+import Modal from "./Modal.jsx";
 
 export default function Table({ title, headers = [], data = [], showLink = null, showFunc = null, delFunc = null, delText = "", width = "" }) {
 
-    const [showAlert, setShowAlert] = useState(null)
     const [edit, setEdit] = useState(false)
 
     const dataRows = data.map((d) => {
@@ -51,19 +51,11 @@ export default function Table({ title, headers = [], data = [], showLink = null,
 
                     }
 
-                    {(delFunc) &&
-                        <button
-                            className="clearButton"
-                            onClick={() => {
-                                setShowAlert({
-                                    id: d.id,
-                                    name: d.name
-                                })
-                            }}
-                        >
-                            <i className="ri-delete-bin-6-line" style={{color: "red", fontSize: "1.75rem",}}></i>
-                        </button>
-                    }
+                    <Modal
+                        delFunc = {delFunc}
+                        delText = {delText}
+                        data = {d}
+                    />
                 </div>
             </td>
         )
@@ -100,33 +92,33 @@ export default function Table({ title, headers = [], data = [], showLink = null,
                 {dataRows}
                 </tbody>
             </table>
-            {(delFunc && showAlert) &&
-                <>
-                    <div
-                        className={styles.overlay}
-                        onClick={() => setShowAlert(null)}
-                    ></div>
-                    <div className={styles.alert}>
-                        <span>{delText ? delText : "Czy na pewno chcesz to usunąć?"} <br/><b>{showAlert.name}</b>?</span>
-                        <span>Tej akcji nie można cofnąć</span>
-                        <div>
-                            <button
-                                onClick={() => {
-                                    delFunc(showAlert.id)
-                                    setShowAlert(null)
-                                }}
-                            >
-                                Tak
-                            </button>
-                            <button
-                                onClick={() => setShowAlert(null)}
-                            >
-                                Nie
-                            </button>
-                        </div>
-                    </div>
-                </>
-            }
+            {/*{(delFunc && showAlert) &&*/}
+            {/*    <>*/}
+            {/*        <div*/}
+            {/*            className={styles.overlay}*/}
+            {/*            onClick={() => setShowAlert(null)}*/}
+            {/*        ></div>*/}
+            {/*        <div className={styles.alert}>*/}
+            {/*            <span>{delText ? delText : "Czy na pewno chcesz to usunąć?"} <br/><b>{showAlert.name}</b>?</span>*/}
+            {/*            <span>Tej akcji nie można cofnąć</span>*/}
+            {/*            <div>*/}
+            {/*                <button*/}
+            {/*                    onClick={() => {*/}
+            {/*                        delFunc(showAlert.id)*/}
+            {/*                        setShowAlert(null)*/}
+            {/*                    }}*/}
+            {/*                >*/}
+            {/*                    Tak*/}
+            {/*                </button>*/}
+            {/*                <button*/}
+            {/*                    onClick={() => setShowAlert(null)}*/}
+            {/*                >*/}
+            {/*                    Nie*/}
+            {/*                </button>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </>*/}
+            {/*}*/}
         </>
     )
 }

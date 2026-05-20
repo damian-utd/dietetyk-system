@@ -4,7 +4,8 @@ import React from "react"
 
 import sideStyles from "../styles/Side.module.css"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {deletePlan} from "../../../../api/app/diet.js";
+import {deletePlan, getPlanInPDF} from "../../../../api/app/diet.js";
+import Modal from "../../../../components/Modal.jsx";
 
 export default function PlanSidebar({ clearPlan, patient, patientId }) {
 
@@ -21,6 +22,14 @@ export default function PlanSidebar({ clearPlan, patient, patientId }) {
         }
     }
 
+    async function handleGetPlanInPDF() {
+        try {
+            await getPlanInPDF(params.id)
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     const conditions = ["Brak", "Gluten", "Skorupiaki", "Jaja", "Ryby", "Orzeszki ziemne (arachidowe)", "Soja", "Mleko", "Orzechy", "Seler", "Gorczyca", "Nasiona sezamu", "Dwutlenek siarki", "Łubin", "Mięczaki"]
 
     return (
@@ -29,27 +38,36 @@ export default function PlanSidebar({ clearPlan, patient, patientId }) {
                 {location.pathname === "/plans/create" ?
                     <button className={sideStyles.saveButton} name="intent" value="create" form="planForm">Zapisz plan</button> :
                     <div className={sideStyles.buttonContainer}>
-                        <button className={patientId !== (patient?.id ?? -1) ? sideStyles.saveButtonLocked : sideStyles.saveButton} name="intent" value="update" form="planForm" disabled={patientId !== patient?.id}>Edytuj aktualny plan</button>
+                        <button className={patientId !== (patient?.id ?? -1) ? sideStyles.saveButtonLocked : sideStyles.saveButton} name="intent" value="update" form="planForm" disabled={patientId !== (patient?.id || -1)}>Edytuj aktualny plan</button>
                         <button className={sideStyles.saveButton} name="intent" value="create" form="planForm">Zapisz jako nowy plan</button>
                     </div>
 
                 }
-                <button type="button" className={sideStyles.pdfButton}>Wygeneruj pdf</button>
+
+                {
+                    location.pathname !== "/plans/create" ?
+                    <button
+                        type="button"
+                        className={sideStyles.pdfButton}
+                        onClick={handleGetPlanInPDF}
+                    >
+                        Wygeneruj pdf
+                    </button> : <div></div>
+                }
                 {location.pathname === "/plans/create" ?
-                    <button
-                        type="button"
-                        className={sideStyles.saveButton}
-                        onClick={clearPlan}
-                    >
-                        Wyczysc plan
-                    </button> :
-                    <button
-                        type="button"
-                        className={sideStyles.saveButton}
-                        onClick={handleDeletePlan}
-                    >
-                        Usuń plan
-                    </button>
+                    <Modal
+                        delFunc={clearPlan}
+                        delText={"Czy na pewno chcesz wyczyścić kreator?"}
+                        buttonClass={sideStyles.saveButton}
+                        buttonText="Wyczyść plan"
+                    />
+                    :
+                    <Modal
+                        delFunc={handleDeletePlan}
+                        delText={"Czy na pewno chcesz usunąć plan żywieniowy?"}
+                        buttonClass={sideStyles.saveButton}
+                        buttonText="Usuń plan"
+                    />
                 }
 
             </div>
