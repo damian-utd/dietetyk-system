@@ -1,7 +1,7 @@
 # System wspierający dietetyków w personalizacji planów żywieniowych
 
 Projekt inżynierski przedstawiający aplikację webową, która wspiera dietetyków w procesie tworzenia spersonalizowanych planów żywieniowych dla pacjentów.  
-System umożliwia zarządzanie profilami pacjentów, analizę ich danych zdrowotnych oraz generowanie planów żywieniowych z uwzględnieniem alergii i chorób.
+System umożliwia zarządzanie profilami pacjentów, analizę ich danych zdrowotnych oraz tworzenie spersonalizowanych planów żywieniowych z uwzględnieniem alergii i chorób.
 
 ---
 
