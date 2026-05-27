@@ -38,9 +38,25 @@ Aplikacja działa w architekturze klient–serwer:
 
 1. **Frontend (React)** – interfejs użytkownika uruchamiany w przeglądarce.  
 2. **Backend (Express)** – obsługuje logikę biznesową, autentykację i komunikację z bazą.  
-3. **Baza danych (PostgreSQL)** – przechowuje dane użytkowników, pacjentów i planów.  
-4. **Docker** – konteneryzuje frontend, backend i bazę danych dla łatwego uruchamiania środowiska. (backend i baza danych wewnątrz kontenera, frontend widzi backend przez proxy)
+3. **Baza danych (PostgreSQL)** – przechowuje dane użytkowników, pacjentów i planów, produktów żywieniowych.   
+4. **Docker** – konteneryzuje frontend, backend i bazę danych dla łatwego uruchamiania środowiska.
+
+Użytkownik ma dostęp tylko do warstwy aplikacji, która po wcześniejszej autoryzacji i uwierzytelnianiu uzyskuje dostęp do warstwy serwerowej. Dostęp do baz danych wyłącznie wewnątrz podsieci Docker. 
 
 ---
+
+## Przykładowe widoki
+
+**Tworzenie planów żywieniowych**
+
+<img width="1920" height="1214" alt="pacjent" src="https://github.com/user-attachments/assets/bc52644f-d488-4ac4-8ceb-afdca11c356e" />
+
+
+
+
+
+**Profil pacjenta**
+
+<img width="1920" height="2253" alt="kreator_planu" src="https://github.com/user-attachments/assets/62a99524-be79-4157-8777-7afaa44e85d1" />
 
 
