@@ -6,6 +6,7 @@ import patientRoutes from "./src/routes/patientRoutes.js"
 import dietRoutes from "./src/routes/dietRoutes.js";
 import progressRoutes from "./src/routes/progressRoutes.js";
 import notesRoutes from "./src/routes/notesRoutes.js";
+import foodDataCentralRoutes from "./src/routes/foodDataCentralRoutes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/diet", dietRoutes);
 app.use("/api/progress", progressRoutes)
 app.use("/api/notes", notesRoutes)
+app.use("/api/food-data-central", foodDataCentralRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
