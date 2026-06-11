@@ -61,7 +61,7 @@ flowchart LR
 
 | Obszar | Technologie |
 |---|---|
-| Frontend | React 19, React Router 7, Vite, Axios, CSS Modules |
+| Frontend | React 19, React Router 7, Vite, CSS Modules |
 | Backend | Node.js, Express 5, JWT, bcrypt, pdf-lib |
 | Dane | PostgreSQL 15, SQL |
 | Infrastruktura | Docker, Docker Compose |
