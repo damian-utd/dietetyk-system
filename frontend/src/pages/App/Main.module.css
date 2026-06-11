@@ -1,6 +1,6 @@
 .mainBody{
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f1efef;
     font-family: "Inter", sans-serif;
     display: flex;
@@ -46,7 +46,11 @@
     flex-direction: column;
     width: 100%;
     margin: 0 0 0 16rem;
-    padding: 0 0 2rem;
+}
+
+.contentFooter {
+    flex-shrink: 0;
+    height: 2rem;
 }
 
 header{

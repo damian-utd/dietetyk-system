@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React from "react"
 import {NavLink, Outlet, useLoaderData, useNavigate} from "react-router-dom";
 
 import { logout } from "../../api/auth/auth.js";
@@ -93,6 +93,7 @@ export default function Layout() {
                     </NavLink>
                 </header>
                 <Outlet/>
+                <footer className={styles.contentFooter} aria-hidden="true"/>
             </section>
         </div>
     )
