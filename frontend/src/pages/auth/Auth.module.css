@@ -1,7 +1,6 @@
 img.logo{
     width: 3rem;
     margin-bottom: 1.5rem;
-    /*                kolor logo - #7EDC00               */
 }
 
 .authBody {
@@ -40,7 +39,6 @@ div.authContainer > section > label > p{
     color: #669247;
     font-weight: 700;
     margin-bottom: 2rem;
-    /*max-width: 32rem;*/
 }
 
 form.authForm {

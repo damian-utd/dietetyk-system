@@ -57,7 +57,7 @@ export default function PlanSearchProducts({ planDispatch, meal, condition }) {
         const style = bannedProd.includes(product.lp) ? {color: "red"} : {}
         return (
             <div key={product.lp} className={productsStyles.searchResultElement}>
-                <div style={{width: "100%"}}>
+                <div className={productsStyles.searchResultInfo}>
                     <p className={productsStyles.productName} style={style}>
                         {product.nazwa_polska}
                     </p>

@@ -44,10 +44,6 @@ fieldset.days {
     gap: 0.5rem;
 }
 
-.navDays {
-
-}
-
 .navDays::-webkit-scrollbar {
     height: 6px;
 }
@@ -157,7 +153,6 @@ fieldset.days {
     border-radius: 12px;
     background-color: #ffffff;
     width: 100%;
-    /*height: 10rem;*/
     margin-bottom: 30%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);

@@ -1,0 +1,82 @@
+.tableCaption {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tableCaption > * {
+    min-width: 10rem;
+}
+
+.table {
+    background-color: #ffffff;
+    width: 92rem;
+    text-align: left;
+    box-sizing: border-box;
+    border-radius: 16px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #121A0D;
+    margin-block: 2.25rem;
+}
+
+.table > thead > tr > th {
+    padding: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.table > thead > tr > th:last-of-type,
+.table > tbody > tr > td:last-of-type {
+    text-align: right;
+}
+
+.table > thead > tr > th:first-of-type {
+    border-top-left-radius: 16px;
+}
+
+.table > thead > tr > th:last-of-type {
+    border-top-right-radius: 16px;
+}
+
+.table > thead {
+    background-color: #EAF2E6;
+}
+
+.table > thead > tr {
+    height: 3.25rem;
+}
+
+.table > tbody > tr {
+    height: 4.75rem;
+    border-top: 1px solid #D6E5CE;
+}
+
+.table > tbody > tr:first-of-type {
+    border-top: none;
+}
+
+.table > tbody > tr > td {
+    padding: 0 1rem;
+    font-size: 1rem;
+    height: 100%;
+}
+
+.optionsRow {
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    gap: 1rem;
+}
+
+.viewButton {
+    border: none;
+    background-color: inherit;
+}
+
+.viewIcon {
+    color: #121A0D;
+    font-size: 1.75rem;
+    line-height: 2rem;
+}

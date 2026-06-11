@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react"
 import {createNote, deleteNote, getNotes, updateNote} from "../../../../api/app/notes.js";
 import Table from "../../../../components/Table.jsx";
 import styles from "../Patients.module.css"
+import actionStyles from "../../../../components/ActionButton.module.css"
 
 export default function PatientsNotes({ patient, notesLoader }) {
     const [notes, setNotes] = useState([])
@@ -90,19 +91,18 @@ export default function PatientsNotes({ patient, notesLoader }) {
                 />
             }
 
-            <div className={styles.inputGroup} style={{flexDirection: "row", alignItems: "top", width: "100%", justifyContent: "space-between", gap: "2rem"}}>
+            <div className={`${styles.inputGroup} ${styles.noteInputGroup}`}>
                 <textarea
-                    style={{flexGrow: "1", width: "auto"}}
                     placeholder="Notatka..."
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    className={styles.textarea}
+                    className={`${styles.textarea} ${styles.newNote}`}
                     rows={3}
                 />
                 <div>
                     <button
                         onClick={() => handleCreateNote(note, patient.id)}
-                        className={styles.addPatientButton}
+                        className={actionStyles.actionButton}
                     >
                         Dodaj notatkę
                     </button>

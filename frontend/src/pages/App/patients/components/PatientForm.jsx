@@ -2,6 +2,7 @@ import React from "react"
 import {Form} from "react-router-dom";
 
 import styles from "../Patients.module.css"
+import actionStyles from "../../../../components/ActionButton.module.css"
 
 export default function PatientForm({ defValues = null, show = "all"}) {
 
@@ -154,8 +155,8 @@ export default function PatientForm({ defValues = null, show = "all"}) {
                         </>
                     )
                 }
-                <div className={styles.buttonContainer}>
-                    <button className={styles.addPatientButton}>Zapisz</button>
+                <div className={actionStyles.buttonContainer}>
+                    <button className={actionStyles.actionButton}>Zapisz</button>
                 </div>
             </Form>
         </section>

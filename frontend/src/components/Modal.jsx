@@ -1,7 +1,7 @@
 import React, {useState} from "react"
-import styles from "../pages/App/patients/Patients.module.css";
+import styles from "./Modal.module.css";
 
-export default function Modal({ delFunc, delText, data = {id: 0, name: ""}, buttonClass = "clearButton", buttonText = "" }) {
+export default function Modal({ delFunc, delText, data = {id: 0, name: ""}, buttonClass = styles.clearButton, buttonText = "" }) {
     const [showAlert, setShowAlert] = useState(null)
 
     return (
@@ -17,7 +17,7 @@ export default function Modal({ delFunc, delText, data = {id: 0, name: ""}, butt
                         })
                     }}
                 >
-                    {buttonText ? buttonText : <i className="ri-delete-bin-6-line" style={{color: "red", fontSize: "1.75rem",}}></i>}
+                    {buttonText ? buttonText : <i className={`ri-delete-bin-6-line ${styles.deleteIcon}`}></i>}
                 </button>
             }
 

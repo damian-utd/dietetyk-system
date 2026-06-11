@@ -3,7 +3,8 @@ import {Form, useLoaderData} from "react-router-dom";
 import {getLoggedDietician, updateLoggedDietician} from "../../../api/app/diet.js";
 import {requireAuth} from "../../../utils/utils.js";
 import styles from "./Settings.module.css"
-import patientStyles from "../patients/Patients.module.css"
+import actionStyles from "../../../components/ActionButton.module.css"
+import formStyles from "../../../components/FormInput.module.css"
 
 export async function loader({request}) {
     await requireAuth(request)
@@ -37,7 +38,7 @@ export default function Settings() {
                         name={'full_name'}
                         defaultValue={loaderData.full_name}
                         placeholder={'Imię i nazwisko'}
-                        className={styles.settingsInput}
+                        className={`${formStyles.input} ${styles.settingsInput}`}
                     />
                 </div>
                 <div className={styles.inputGroup}>
@@ -49,11 +50,11 @@ export default function Settings() {
                         name={'specialization'}
                         defaultValue={loaderData.specialization}
                         placeholder={'Specjalizacja'}
-                        className={styles.settingsInput}
+                        className={`${formStyles.input} ${styles.settingsInput}`}
                     />
                 </div>
                 <div>
-                    <button className={patientStyles.addPatientButton}>
+                    <button className={actionStyles.actionButton}>
                         Zapisz
                     </button>
                 </div>

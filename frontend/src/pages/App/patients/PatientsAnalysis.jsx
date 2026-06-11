@@ -7,7 +7,7 @@ import Cards from "../../../components/Cards.jsx";
 import PatientsProgress from "./components/PatientsProgress.jsx";
 import PatientsNotes from "./components/PatientsNotes.jsx";
 import Table from "../../../components/Table.jsx";
-import patientStyles from "./Patients.module.css";
+import actionStyles from "../../../components/ActionButton.module.css";
 import {getProgress} from "../../../api/app/progress.js";
 import {getNotes} from "../../../api/app/notes.js";
 
@@ -40,7 +40,7 @@ export default function PatientsAnalysis() {
     }
 
     return (
-        <section className={styles.patientsSection} style={{gap: "2rem"}}>
+        <section className={`${styles.patientsSection} ${styles.analysisSection}`}>
             <Cards
                 data={calcs}
                 className="big"
@@ -67,9 +67,9 @@ export default function PatientsAnalysis() {
                             data={plans}
                             showLink={"plans"}
                         />
-                        <div className={patientStyles.buttonContainer} style={{width: "92rem"}}>
+                        <div className={`${actionStyles.buttonContainer} ${actionStyles.wideButtonContainer}`}>
                             <NavLink to={`/plans/create?patientId=${patient.id}`}
-                                     className={patientStyles.addPatientButton}>
+                                     className={actionStyles.actionButton}>
                                 Utwórz plan dla tego pacjenta
                             </NavLink>
                         </div>

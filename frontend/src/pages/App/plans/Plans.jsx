@@ -6,8 +6,8 @@ import { requireAuth } from "../../../utils/utils.js";
 
 import {getPlans} from "../../../api/app/diet.js";
 import Table from "../../../components/Table.jsx";
-import styles from "./styles/Plans.module.css"
-import patientStyles from "../patients/Patients.module.css"
+import styles from "./Plans.module.css"
+import actionStyles from "../../../components/ActionButton.module.css"
 
 export async function loader( { request }){
     await requireAuth(request)
@@ -46,8 +46,8 @@ export default function Plans() {
                     data={plans}
                     showLink={"plans"}
                 />
-                <div className={patientStyles.buttonContainer} style={{width: "92rem"}}>
-                    <Link to="create" className={patientStyles.addPatientButton}>
+                <div className={`${actionStyles.buttonContainer} ${actionStyles.wideButtonContainer} ${actionStyles.listActions}`}>
+                    <Link to="create" className={actionStyles.actionButton}>
                         Utwórz plan
                     </Link>
                 </div>

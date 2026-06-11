@@ -5,7 +5,6 @@
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    /*gap: 1rem;*/
     width: 100%;
 }
 
@@ -43,7 +42,6 @@
 .searchResultsList {
     border-radius: 0.5rem;
     border: 1px solid #d1d5db;
-    /*padding: 0.5rem 1rem;*/
     display: flex;
     flex-direction: column;
     max-height: calc(5*4.9375rem);
@@ -77,11 +75,21 @@
     gap: 2rem;
 }
 
+.productWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .productInfo {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
+}
+
+.deleteProductIcon {
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .productAction {
@@ -129,4 +137,8 @@
     padding: 0;
     border: none;
 
+}
+
+.searchResultInfo {
+    width: 100%;
 }

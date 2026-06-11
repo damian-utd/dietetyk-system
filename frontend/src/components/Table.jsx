@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import styles from "../pages/App/patients/Patients.module.css";
+import styles from "./Table.module.css";
 import {Link} from "react-router-dom";
 import {roundDec} from "../utils/utils.js";
 import Modal from "./Modal.jsx";
@@ -32,20 +32,18 @@ export default function Table({ title, headers = [], data = [], showLink = null,
                     {(showLink && !showFunc) &&
                         <Link to={`/${showLink}/${d.id}`}>
                             <i
-                                className="ri-eye-line"
-                                style={{color: "#121A0D", fontSize: "1.75rem", lineHeight: "2rem"}}
+                                className={`ri-eye-line ${styles.viewIcon}`}
                             ></i>
                         </Link>
                     }
                     {(!showLink && showFunc) &&
                         <button
                             onClick={() => showFunc(d.id, d.name, edit, setEdit)}
-                            style={{border: "none", backgroundColor: "inherit"}}
+                            className={styles.viewButton}
                             disabled={!edit ^ edit !== d.id}
                         >
                             <i
-                                className="ri-eye-line"
-                                style={{color: "#121A0D", fontSize: "1.75rem", lineHeight: "2rem"}}
+                                className={`ri-eye-line ${styles.viewIcon}`}
                             ></i>
                         </button>
 
@@ -81,7 +79,7 @@ export default function Table({ title, headers = [], data = [], showLink = null,
             <div className={styles.tableCaption} style={width === "half" ? {justifyContent: "center"} : {}}>
                 <h1>{title}</h1>
             </div>
-            <table className={styles.patientsTable} style={width === "half" ? {width: "45rem"} : {}}>
+            <table className={styles.table} style={width === "half" ? {width: "45rem"} : {}}>
                 <thead>
                     <tr>
                         {headersRow}

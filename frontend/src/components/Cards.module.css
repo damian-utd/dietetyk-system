@@ -1,0 +1,40 @@
+.cardsSection {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 3rem;
+    width: 100%;
+}
+
+.card {
+    width: 31rem;
+    max-width: 31rem;
+    height: 6.875rem;
+    border: 2px solid #E7E7E7;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline: 1.5rem;
+}
+
+.card > span {
+    line-height: 1.5rem;
+    font-size: 1.125rem;
+    color: #3d4d5c;
+}
+
+.card > h1 {
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #11280c;
+    font-weight: 700;
+}
+
+.big {
+    height: 12rem;
+    justify-content: space-between;
+    padding-block: 1.5rem;
+}

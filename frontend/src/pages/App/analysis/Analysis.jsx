@@ -4,8 +4,8 @@ import React, {useReducer} from "react"
 import {requireAuth, roundDec} from "../../../utils/utils.js";
 import Cards from "../../../components/Cards.jsx";
 import {calcBMI, calcBMR, calcTDEE} from "../../../utils/calcs.js";
-import patientsStyles from "../patients/Patients.module.css"
 import styles from "./Analysis.module.css"
+import formStyles from "../../../components/FormInput.module.css"
 
 export async function loader( { request }){
     await requireAuth(request)
@@ -56,7 +56,7 @@ export default function Analysis() {
                             onChange={(e) =>
                                 mDispatch({type: 'setValue', field: e.target.id, value: e.target.value})
                             }
-                            className={styles.analysisInput}
+                            className={`${formStyles.input} ${styles.analysisInput}`}
                         />
                     </div>
                     <div>
@@ -68,7 +68,7 @@ export default function Analysis() {
                             onChange={(e) =>
                                 mDispatch({type: 'setValue', field: e.target.id, value: e.target.value})
                             }
-                            className={styles.analysisInput}
+                            className={`${formStyles.input} ${styles.analysisInput}`}
                         />
                     </div>
                 </div>
@@ -83,7 +83,7 @@ export default function Analysis() {
                             onChange={(e) =>
                                 mDispatch({type: 'setValue', field: e.target.id, value: e.target.value})
                             }
-                            className={styles.analysisInput}
+                            className={`${formStyles.input} ${styles.analysisInput}`}
                         />
                     </div>
                     <div>
@@ -94,7 +94,7 @@ export default function Analysis() {
                             onChange={(e) =>
                                 mDispatch({type: 'setValue', field: e.target.id, value: e.target.value})
                             }
-                            className={styles.analysisInput}
+                            className={`${formStyles.input} ${styles.analysisInput}`}
                         >
                             <option value="" disabled>Wybierz</option>
                             <option value="male">Mężczyzna</option>
@@ -112,7 +112,7 @@ export default function Analysis() {
                             onChange={(e) =>
                                 mDispatch({type: 'setValue', field: e.target.id, value: e.target.value})
                             }
-                            className={styles.analysisInput}
+                            className={`${formStyles.input} ${styles.analysisInput}`}
 
                         >
                             <option value="" disabled>Wybierz</option>

@@ -16,7 +16,7 @@
     justify-content: center;
 }
 
-.planCreatorBody{
+.planCreatorBody {
     width: 87%;
     height: 100%;
     padding: 2rem;
@@ -28,7 +28,7 @@
     min-width: 0;
 }
 
-.main{
+.main {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -36,7 +36,7 @@
     min-width: 0;
 }
 
-fieldset {
+.main fieldset {
     border: 0;
 }
 
@@ -46,7 +46,7 @@ fieldset.metaData {
     gap: 1rem;
 }
 
-fieldset.metaData > legend{
+fieldset.metaData > legend {
     margin-bottom: 2rem;
     font-size: 1.875rem;
     line-height: 1.875rem;
@@ -58,7 +58,6 @@ fieldset.metaData > div {
     flex-direction: row;
     gap: 1rem;
     justify-content: space-around;
-
 }
 
 select.patient, input.title, textarea.description {
@@ -82,13 +81,4 @@ input.title {
 
 textarea.description {
     resize: none;
-
 }
-
-
-
-
-
-
-
-

@@ -1,0 +1,21 @@
+.spinner {
+    align-self: center;
+    justify-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: left;
+    width: 4rem;
+    height: 4rem;
+}
+
+.spinner i {
+    font-size: 3rem;
+    line-height: 100%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

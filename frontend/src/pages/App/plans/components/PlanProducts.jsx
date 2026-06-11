@@ -38,7 +38,7 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch, c
         const isLast = index + 1 === meal.meal_products.length
 
         return (
-            <div key={index} style={{display: "flex", flexDirection: "column"}}>
+            <div key={index} className={productsStyles.productWrapper}>
                 <div  className={productsStyles.productContainer}>
                     <div className={productsStyles.productInfo}>
                         <p className={productsStyles.productName}>
@@ -59,7 +59,7 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch, c
                             max={1000}
                         />
                         <span>g</span>
-                        <i className={`ri-delete-bin-6-line`} style={{fontSize: "1.5rem", cursor: "pointer"}}
+                        <i className={`ri-delete-bin-6-line ${productsStyles.deleteProductIcon}`}
                            onDoubleClick={() => handleDeleteProduct(product.product)}>
                         </i>
                     </div>

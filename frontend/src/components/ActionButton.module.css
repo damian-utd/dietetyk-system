@@ -1,0 +1,43 @@
+.buttonContainer {
+    width: 64rem;
+    display: flex;
+    justify-content: end;
+}
+
+.wideButtonContainer {
+    width: 92rem;
+}
+
+.listActions {
+    margin-bottom: 2rem;
+}
+
+.actionButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    gap: 0.75rem;
+    color: #121A0D;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 1rem;
+    background-color: #a8da8f;
+    line-height: 1.5rem;
+    border-radius: 10rem;
+    border: none;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.actionButton:hover {
+    background-color: #7EDC00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.actionButton:active {
+    background-color: #7EDC00;
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

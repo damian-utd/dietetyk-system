@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {roundDec} from "../utils/utils.js";
+import styles from "./BmiBar.module.css";
 
 export default function BMIBar({ value, empty = false }) {
     const [position, setPosition] = useState(50)
@@ -13,9 +14,9 @@ export default function BMIBar({ value, empty = false }) {
     }, [targetPosition]);
 
     return (
-        <div className={`bmiBar ${empty ? "empty" : ""}`}>
+        <div className={`${styles.bmiBar} ${empty ? styles.empty : ""}`}>
             <div
-                className={`bmiMarker ${empty ? "empty" : ""}`}
+                className={`${styles.bmiMarker} ${empty ? styles.empty : ""}`}
                 style={{ left: `${position}%` }}
             ></div>
         </div>

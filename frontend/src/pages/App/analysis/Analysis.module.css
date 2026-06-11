@@ -37,15 +37,6 @@
 }
 
 .analysisInput {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    height: 2.625rem;
-    border: 1px solid rgba(126, 220, 0, 0.3);
-    box-sizing: border-box;
-    border-radius: 0.5rem;
-    padding: 0 1rem;
-    background-color: rgba(255, 255, 255, 0.4);
-    font-weight: 400;
     width: 5rem;
 }
 
@@ -54,14 +45,7 @@ select.analysisInput {
     padding-right: 2rem;
 }
 
-.analysisInput:global(:-webkit-autofill),
-.analysisInput:global(:-webkit-autofill:hover),
-.analysisInput:global(:-webkit-autofill:focus),
-.analysisInput:global(:-webkit-autofill:active) {
-    transition: background-color 9999s ease-in-out 0s;
-}
-
-.analysisInput:focus, .analysisInput:focus {
+.analysisInput:focus {
     outline: none;
     border: 1px solid rgba(126, 220, 0, 0.3);
     box-shadow: 0 0 4px rgba(126, 220, 0, 0.65);
@@ -77,5 +61,3 @@ select.analysisInput {
     background-size: 20px;
     cursor: pointer;
 }
-
-

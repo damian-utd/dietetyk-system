@@ -81,7 +81,7 @@ export default function Layout() {
                                     {dietician.full_name}
                                 </span>
                             }
-                            {(dietician.full_name && dietician.specialization) && <i className="ri-separator" style={{marginInline: '4px'}}></i>}
+                            {(dietician.full_name && dietician.specialization) && <i className={`ri-separator ${styles.separator}`}></i>}
                             {dietician?.specialization &&
                                 <span>
                                     {dietician.specialization}
