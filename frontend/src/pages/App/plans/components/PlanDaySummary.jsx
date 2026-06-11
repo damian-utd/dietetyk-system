@@ -1,125 +1,61 @@
-import React, {useState} from "react"
-import daysStyles from "../styles/Days.module.css";
+import React from "react"
+
+import sideStyles from "../styles/Side.module.css"
 import {calcBMR, calcTDEE} from "../../../../utils/calcs.js";
 import {roundDec} from "../../../../utils/utils.js";
 
+export default function PlanDaySummary({dayMacros, patient, currentDayNumber}) {
+    const {energy = 0, protein = 0, carbs = 0, fats = 0} = dayMacros ?? {}
+    const tdee = calcTDEE(
+        calcBMR(patient?.weight, patient?.height, patient?.age, patient?.sex),
+        patient?.activity_level
+    ).value || 0
 
-export default function PlanDaySummary({dayMacros, patient}) {
-
-    const [ratios, setRatios] = useState({carbs: 0.6, proteins: 0.15, fats: 0.25})
-
-    const {energy, protein, carbs, fats} = dayMacros
-
-    const tdee = (calcTDEE(calcBMR(patient?.weight, patient?.height, patient?.age, patient?.sex), patient?.activity_level).value) || 0
-
-    function updateRatio(key, value) {
-        const newValue = Number(value)
-        if (newValue < 0 || newValue > 1) return
-
-        setRatios(prev => {
-            const restKeys = Object.keys(prev).filter(k => k !== key)
-
-            const restSum = restKeys.reduce((sum, k) => sum + prev[k], 0)
-
-            let next = {
-                ...prev,
-                [key]: newValue
-            }
-
-            if (restSum === 0) {
-                const raw = (1 - newValue) / restKeys.length
-                next[restKeys[0]] = raw
-                next[restKeys[1]] = raw
-            } else {
-                const scale = (1 - newValue) / restSum
-                next[restKeys[0]] = prev[restKeys[0]] * scale
-                next[restKeys[1]] = prev[restKeys[1]] * scale
-            }
-
-            const rounded = {}
-            let sum = 0
-
-            Object.keys(next).forEach((k, i, arr) => {
-                if (i === arr.length - 1) {
-                    rounded[k] = roundDec(1 - sum, 2)
-                } else {
-                    rounded[k] = roundDec(next[k], 2)
-                    sum += rounded[k]
-                }
-            })
-
-            return rounded
-        })
-    }
-
-
-
-    const pFinal = roundDec(tdee * ratios.proteins / 4, 2)
-    const cFinal = roundDec(tdee * ratios.carbs / 4, 2)
-    const fFinal = roundDec(tdee * ratios.fats / 9, 2)
+    const macroCalories = protein * 4 + carbs * 4 + fats * 9
+    const macroItems = [
+        {label: "Białko", value: protein, share: macroCalories ? protein * 4 / macroCalories * 100 : 0},
+        {label: "Węglowodany", value: carbs, share: macroCalories ? carbs * 4 / macroCalories * 100 : 0},
+        {label: "Tłuszcze", value: fats, share: macroCalories ? fats * 9 / macroCalories * 100 : 0}
+    ]
+    const energyProgress = tdee ? energy / tdee * 100 : 0
 
     return (
-        <div className={daysStyles.daySummary}>
-            <div>
-                Energia
+        <section className={sideStyles.daySummary}>
+            <div className={sideStyles.summaryHeader}>
+                <div>
+                    <span>Podsumowanie</span>
+                    <h2>Dzień {currentDayNumber}</h2>
+                </div>
+                <strong>{energy} kcal</strong>
             </div>
-            <div>
-                Białko
+
+            <div className={sideStyles.energySummary}>
+                <div className={sideStyles.summaryRow}>
+                    <span>Energia względem CPM</span>
+                    <span>{tdee ? `${roundDec(energyProgress, 0)}%` : "Brak danych pacjenta"}</span>
+                </div>
+                <div className={sideStyles.progressTrack}>
+                    <span style={{width: `${Math.min(energyProgress, 100)}%`}} />
+                </div>
+                {tdee > 0 && <small>{energy} / {tdee} kcal</small>}
             </div>
-            <div>
-                Węglowodany
+
+            <div className={sideStyles.macroList}>
+                {macroItems.map(macro => (
+                    <div className={sideStyles.macroItem} key={macro.label}>
+                        <div className={sideStyles.summaryRow}>
+                            <strong>{macro.label}</strong>
+                            <span>{macro.value} g · {roundDec(macro.share, 0)}%</span>
+                        </div>
+                        <div className={sideStyles.progressTrack}>
+                            <span style={{width: `${macro.share}%`}} />
+                        </div>
+                    </div>
+                ))}
             </div>
-            <div>
-                Tłuszcze
-            </div>
-            <div>
-                {energy} / {tdee} kcal
-            </div>
-            <div>
-                {protein} / {pFinal} g
-            </div>
-            <div>
-                {carbs} / {cFinal} g
-            </div>
-            <div>
-                {fats} / {fFinal} g
-            </div>
-            <div>
-                Procentowy udział B/W/T w diecie
-            </div>
-            <div className={daysStyles.macroAction}>
-                <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    max="100"
-                    value={roundDec(ratios.proteins*100, 2)}
-                    onChange={e => updateRatio("proteins", e.target.value/100)}
-                />
-                <span>%</span>
-            </div>
-            <div className={daysStyles.macroAction}>
-                <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    max="100"
-                    value={roundDec(ratios.carbs*100, 2)}
-                    onChange={e => updateRatio("carbs", e.target.value/100)}
-                />
-                <span>%</span>
-            </div>
-            <div className={daysStyles.macroAction}>
-                <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    max="100"
-                    value={roundDec(ratios.fats*100, 2)}
-                    onChange={e => updateRatio("fats", e.target.value/100)}
-                />
-                <span>%</span>
-            </div>
-        </div>
+            <small className={sideStyles.summaryHint}>
+                Udział makroskładników wyliczony z wartości energetycznej aktualnego dnia.
+            </small>
+        </section>
     )
 }

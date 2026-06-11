@@ -1,7 +1,9 @@
 .side {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: min(24rem, 40%);
+    flex-shrink: 0;
+    gap: 1.5rem;
 }
 
 .buttonContainer {
@@ -50,6 +52,133 @@
 .nutritionProgress{
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+}
+
+.daySummary, .nutritionProgress {
+    padding: 1.25rem;
+    border: 1px solid #e2e8dc;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(38, 65, 30, 0.07);
+}
+
+.summaryHeader, .summaryRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
-    margin-top: 2rem;
+}
+
+.summaryHeader {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #edf2e9;
+}
+
+.summaryHeader span, .patientInfoCard span {
+    color: #71806d;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.summaryHeader h2, .sectionTitle {
+    margin: 0.2rem 0 0;
+    font-size: 1.15rem;
+}
+
+.summaryHeader > strong {
+    padding: 0.5rem 0.75rem;
+    border-radius: 2rem;
+    background: #edf9e7;
+    color: #376c20;
+}
+
+.energySummary, .macroList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.energySummary {
+    margin-top: 1rem;
+}
+
+.energySummary small, .summaryHint {
+    color: #71806d;
+}
+
+.macroList {
+    margin-top: 1.25rem;
+}
+
+.macroItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.summaryRow {
+    font-size: 0.875rem;
+}
+
+.progressTrack {
+    height: 0.45rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #edf1eb;
+}
+
+.progressTrack > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #8dcc6d, #63ad3e);
+    transition: width 0.25s ease;
+}
+
+.summaryHint {
+    display: block;
+    margin-top: 1rem;
+    line-height: 1.4;
+}
+
+.patientInfoGrid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.patientInfoCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    border-radius: 0.75rem;
+    background: #f7faf5;
+}
+
+.patientInfoCard > i {
+    padding: 0.45rem;
+    border-radius: 0.5rem;
+    background: #e4f4dc;
+    color: #4d8b30;
+    font-size: 1.1rem;
+}
+
+.patientInfoCard > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.patientInfoCard strong {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 1050px) {
+    .side {
+        width: 100%;
+    }
 }
