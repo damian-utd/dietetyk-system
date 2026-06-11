@@ -6,8 +6,9 @@ import sideStyles from "../styles/Side.module.css"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {deletePlan, getPlanInPDF} from "../../../../api/app/diet.js";
 import Modal from "../../../../components/Modal.jsx";
+import PlanDaySummary from "./PlanDaySummary.jsx";
 
-export default function PlanSidebar({ clearPlan, patient, patientId }) {
+export default function PlanSidebar({ clearPlan, patient, patientId, currentDayNumber, dayMacros }) {
 
     const location = useLocation()
     const params = useParams()
@@ -31,6 +32,8 @@ export default function PlanSidebar({ clearPlan, patient, patientId }) {
     }
 
     const conditions = ["Brak", "Gluten", "Skorupiaki", "Jaja", "Ryby", "Orzeszki ziemne (arachidowe)", "Soja", "Mleko", "Orzechy", "Seler", "Gorczyca", "Nasiona sezamu", "Dwutlenek siarki", "Łubin", "Mięczaki"]
+
+    const patientCondition = conditions[patient?.conditions] ?? patient?.conditions
 
     return (
         <section className={sideStyles.side}>
@@ -71,9 +74,29 @@ export default function PlanSidebar({ clearPlan, patient, patientId }) {
                 }
 
             </div>
+            <PlanDaySummary
+                dayMacros={dayMacros}
+                patient={patient}
+                currentDayNumber={currentDayNumber}
+            />
             <div className={sideStyles.nutritionProgress}>
-                {patient?.conditions && <h1>Alergie: {conditions[patient.conditions]}</h1>}
-                {patient?.goal && <h1>Cel: {patient.goal}</h1>}
+                <h2 className={sideStyles.sectionTitle}>Informacje o pacjencie</h2>
+                <div className={sideStyles.patientInfoGrid}>
+                    <div className={sideStyles.patientInfoCard}>
+                        <i className="ri-focus-3-line"></i>
+                        <div>
+                            <span>Cel diety</span>
+                            <strong>{patient?.goal || "Nie określono"}</strong>
+                        </div>
+                    </div>
+                    <div className={sideStyles.patientInfoCard}>
+                        <i className="ri-alert-line"></i>
+                        <div>
+                            <span>Alergie</span>
+                            <strong>{patientCondition || "Nie określono"}</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     )
