@@ -3,6 +3,7 @@ import {Form} from "react-router-dom";
 
 import styles from "../Patients.module.css"
 import actionStyles from "../../../../components/ActionButton.module.css"
+import {PATIENT_GOALS} from "../patientGoals.js";
 
 export default function PatientForm({ defValues = null, show = "all"}) {
 
@@ -114,12 +115,17 @@ export default function PatientForm({ defValues = null, show = "all"}) {
 
                                 <div className={styles.inputGroup}>
                                     <label htmlFor="goal">Cel</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         name="goal"
                                         id="goal"
                                         defaultValue={defValues?.goal || ""}
-                                    />
+                                        required
+                                    >
+                                        <option value="" disabled>Wybierz</option>
+                                        {PATIENT_GOALS.map(goal => (
+                                            <option key={goal} value={goal}>{goal}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                             <div className={styles.formGroup}>
