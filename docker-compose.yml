@@ -40,6 +40,7 @@ services:
       APP_DATABASE_URL: ${APP_DATABASE_URL}
       PRODUCTS_DATABASE_URL: ${PRODUCTS_DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
+      USDA_API_KEY: ${USDA_API_KEY}
       TZ: Europe/Warsaw
     expose:
       - "5000"

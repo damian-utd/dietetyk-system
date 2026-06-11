@@ -1,12 +1,12 @@
 import React from "react"
-import PlanSearchProducts from "./PlanSearchProducts.jsx";
+import PlanSearchProductsUSDA from "./PlanSearchProductsUSDA.jsx";
 
 import productsStyles from "../styles/Products.module.css"
 
 import {calcMacrosForWeight} from "../../../../utils/calcs.js";
 import PlanMacros from "./PlanMacros.jsx";
 
-export default function PlanProducts({ meal, showSearchProducts, planDispatch, condition}) {
+export default function PlanProducts({ meal, showSearchProducts, planDispatch }) {
 
     function handleDeleteProduct(lp) {
         planDispatch({
@@ -73,7 +73,7 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch, c
         <section
             className={`${(meal.meal_products.length > 0 || showSearchProducts) && productsStyles.productsSection}`}
         >
-            {showSearchProducts && <PlanSearchProducts planDispatch={planDispatch} meal={meal} condition={condition}/>}
+            {showSearchProducts && <PlanSearchProductsUSDA />}
             {productsList}
         </section>
     )
