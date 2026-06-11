@@ -46,7 +46,7 @@ export default function Plans() {
                     data={plans}
                     showLink={"plans"}
                 />
-                <div className={patientStyles.buttonContainer} style={{width: "92rem"}}>
+                <div className={`${patientStyles.buttonContainer} ${styles.listActions}`} style={{width: "92rem"}}>
                     <Link to="create" className={patientStyles.addPatientButton}>
                         Utwórz plan
                     </Link>
