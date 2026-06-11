@@ -203,6 +203,10 @@
     justify-content: end;
 }
 
+.patientsSection > .buttonContainer {
+    margin-bottom: 2rem;
+}
+
 .addPatientButton{
     display: flex;
     justify-content: center;

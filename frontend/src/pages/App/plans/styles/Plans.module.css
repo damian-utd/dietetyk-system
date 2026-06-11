@@ -16,6 +16,10 @@
     justify-content: center;
 }
 
+.listActions {
+    margin-bottom: 2rem;
+}
+
 .planCreatorBody{
     width: 87%;
     height: 100%;
