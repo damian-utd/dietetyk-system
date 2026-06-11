@@ -3,9 +3,7 @@ import {NavLink, useLoaderData, Outlet} from "react-router-dom";
 import {requireAuth} from "../../../utils/utils.js";
 import {getPatientById} from "../../../api/app/patients.js";
 import styles from "./Patients.module.css";
-import Table from "../../../components/Table.jsx";
 import {getPatientsPlans} from "../../../api/app/diet.js";
-import patientStyles from "./Patients.module.css";
 
 
 export async function loader( { request, params }) {

@@ -11,6 +11,7 @@ import { requireAuth } from "../../../utils/utils.js";
 import {deletePatient, getPatients} from "../../../api/app/patients.js";
 
 import styles from "./Patients.module.css"
+import actionStyles from "../../../components/ActionButton.module.css"
 import Table from "../../../components/Table.jsx";
 
 export async function loader( { request }) {
@@ -65,8 +66,8 @@ export default function Patients() {
                     delFunc={handleDeletePatient}
                     delText={"Czy na pewno chcesz usunąć pacjenta"}
                 />
-                <div className={styles.buttonContainer} style={{width: "92rem"}}>
-                    <Link to="add" className={styles.addPatientButton}>
+                <div className={`${actionStyles.buttonContainer} ${actionStyles.wideButtonContainer} ${actionStyles.listActions}`}>
+                    <Link to="add" className={actionStyles.actionButton}>
                         <i className="ri-add-large-line"></i><span>Dodaj pacjenta</span>
                     </Link>
                 </div>

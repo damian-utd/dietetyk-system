@@ -13,6 +13,11 @@
     gap: 1rem;
 }
 
+.deleteMealIcon {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
 .lastMeal{
     padding-bottom: 0;
     border-bottom: none;
@@ -41,12 +46,6 @@
     white-space: normal;
     text-align: right;
     flex: 0 1 auto;
-}
-
-.mealInfo {
-    padding-right: 1rem;
-    margin-left: auto;
-    display: flex;
 }
 
 .mealMacros {

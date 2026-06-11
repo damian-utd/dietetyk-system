@@ -3,6 +3,7 @@ import {createProgress, deleteProgress, getProgress} from "../../../../api/app/p
 import {roundDec} from "../../../../utils/utils.js";
 import Table from "../../../../components/Table.jsx";
 import styles from "../Patients.module.css"
+import actionStyles from "../../../../components/ActionButton.module.css"
 
 export default function PatientsProgress({ patient, setPatient, setPatientsWeight, progressLoader }) {
 
@@ -66,10 +67,10 @@ export default function PatientsProgress({ patient, setPatient, setPatientsWeigh
                     width="half"
                 />
             }
-            <div className={styles.inputGroup} style={{flexDirection: "row", alignItems: "center", gap: "2rem"}}>
+            <div className={`${styles.inputGroup} ${styles.progressInputGroup}`}>
                 <button
                     onClick={() => handleCreateProgress(newWeight, patient.id)}
-                    className={styles.addPatientButton}
+                    className={actionStyles.actionButton}
                 >
                     Dodaj progres
                 </button>

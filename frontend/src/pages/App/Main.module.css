@@ -71,6 +71,10 @@ header{
     color: #000;
 }
 
+.separator {
+    margin-inline: 4px;
+}
+
 .remix {
     position: fixed;
     left: 0;

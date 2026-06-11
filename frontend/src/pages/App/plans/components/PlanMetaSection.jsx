@@ -2,7 +2,7 @@
 
 import React, {useEffect} from "react"
 
-import styles from "../styles/Plans.module.css"
+import styles from "../Plans.module.css"
 import {useSearchParams} from "react-router-dom";
 
 export default function PlanMetaSection({ patients, planDispatch, patientId, title, description }) {

@@ -65,7 +65,7 @@ export default function PlanMeal({ meal, planDispatch, isLast, condition }) {
                 key={meal.order_number}
                 className={`${mealsStyles.mealContainer}`}
             >
-                <i className={`ri-delete-bin-6-line`} style={{fontSize: "2rem", cursor: "pointer"}}
+                <i className={`ri-delete-bin-6-line ${mealsStyles.deleteMealIcon}`}
                    onDoubleClick={() => deleteMeal()}>
                 </i>
                 <div className={mealsStyles.mealMeta}>
