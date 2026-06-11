@@ -1,5 +1,6 @@
 // patientController
 import { appDb } from "../config/db.js";
+import { isValidPatientGoal } from "../utils/patientGoals.js";
 
 export async function getPatients(req, res) {
     try {
@@ -44,6 +45,10 @@ export async function getPatientsCount(req, res) {
 export async function addPatient(req, res) {
     const user_id = req.user.id
     const { first_name, last_name, age, sex, weight, height, activity_level, goal, conditions } = req.body
+
+    if (!isValidPatientGoal(goal)) {
+        return res.status(400).json({message: "Wybierz prawidłowy cel żywieniowy"})
+    }
 
     const client = await appDb.connect()
 
@@ -107,6 +112,11 @@ export async function getPatientById(req, res) {
 
 export async function updatePatient(req, res) {
     const patient_id = req.params.id;
+
+    if (req.body.goal !== undefined && !isValidPatientGoal(req.body.goal)) {
+        return res.status(400).json({ message: "Wybierz prawidłowy cel żywieniowy" });
+    }
+
     const fields = [
         "first_name",
         "last_name",
