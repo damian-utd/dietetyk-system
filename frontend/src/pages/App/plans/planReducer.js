@@ -138,7 +138,7 @@ export function planReducer(state, action) {
                                             ...meal.meal_products,
                                             {
                                                 name: action.name,
-                                                product: action.product,
+                                                fdcId: action.fdcId,
                                                 quantity: 100,
                                                 unit: 'g',
                                                 energy: Number(action.energy),
@@ -171,7 +171,7 @@ export function planReducer(state, action) {
                                     return {
                                         ...meal,
                                         meal_products: meal.meal_products
-                                            .filter(product => product.product !== action.product)
+                                            .filter(product => product.fdcId !== action.fdcId)
                                     }
                                 }
                                 return meal
@@ -196,7 +196,7 @@ export function planReducer(state, action) {
                                     return {
                                         ...meal,
                                         meal_products: meal.meal_products.map(product => {
-                                            if (product.product === action.product) {
+                                            if (product.fdcId === action.fdcId) {
                                                 return {
                                                     ...product,
                                                     quantity: Number(action.quantity)
@@ -235,7 +235,14 @@ export function initPlanState(initialState) {
                 typeof lSDataParsed === "object" &&
                 'title' in lSDataParsed &&
                 'description' in lSDataParsed &&
-                'days' in lSDataParsed
+                Array.isArray(lSDataParsed.days) &&
+                lSDataParsed.days.every(day =>
+                    Array.isArray(day.meals) &&
+                    day.meals.every(meal =>
+                        Array.isArray(meal.meal_products) &&
+                        meal.meal_products.every(product => Number.isInteger(product.fdcId))
+                    )
+                )
             ) {
                 return lSDataParsed
             }

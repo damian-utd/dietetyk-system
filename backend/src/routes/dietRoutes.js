@@ -6,10 +6,8 @@ import {
     getPlans,
     getPlansCount,
     savePlan,
-    searchProducts,
     updateLoggedDietician,
     getPatientsPlans,
-    getBannedProducts,
     getPlanInPDF
 } from "../controllers/dietController.js";
 
@@ -17,8 +15,6 @@ const router = express.Router()
 
 router.use(authMiddleware)
 
-router.post("/search", searchProducts)
-router.get("/search/:condition", getBannedProducts)
 router.get("/count", getPlansCount)
 router.get("/dietician", getLoggedDietician)
 router.put("/dietician", updateLoggedDietician)

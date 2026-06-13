@@ -1,5 +1,6 @@
 import {
     FoodDataCentralError,
+    normalizeFoodDataCentralFood,
     requestFoodDataCentral
 } from "../services/foodDataCentralService.js";
 
@@ -45,7 +46,12 @@ export async function searchFoods(req, res) {
             body: searchParams
         });
 
-        return res.status(200).json(data);
+        return res.status(200).json({
+            products: (data.foods ?? []).map(normalizeFoodDataCentralFood),
+            totalHits: data.totalHits ?? 0,
+            currentPage: data.currentPage ?? searchParams.pageNumber ?? 1,
+            totalPages: data.totalPages ?? 0
+        });
     } catch (err) {
         return handleFoodDataCentralError(err, res);
     }
@@ -65,7 +71,7 @@ export async function getFoodById(req, res) {
 
     try {
         const data = await requestFoodDataCentral(`/food/${fdcId}`, { query });
-        return res.status(200).json(data);
+        return res.status(200).json(normalizeFoodDataCentralFood(data));
     } catch (err) {
         return handleFoodDataCentralError(err, res);
     }

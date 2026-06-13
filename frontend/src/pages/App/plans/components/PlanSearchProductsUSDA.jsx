@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { searchFoodDataCentral } from "../../../../api/app/foodDataCentral.js";
 import productsStyles from "../styles/Products.module.css";
+import daysStyles from "../styles/Days.module.css";
 import PlanMacros from "./PlanMacros.jsx";
 
 const MIN_SEARCH_LENGTH = 3;
 const SEARCH_DELAY_MS = 400;
 const USDA_DATA_TYPES = ["Foundation", "SR Legacy", "Survey (FNDDS)"];
-const MACRO_NUTRIENT_IDS = {
-    protein: 1003,
-    fats: 1004,
-    carbs: 1005,
-    energy: 1008
-};
-
-function getNutrientValue(foodNutrients, nutrientId) {
-    return foodNutrients.find(nutrient => nutrient.nutrientId === nutrientId)?.value ?? 0;
-}
-
-export default function PlanSearchProductsUSDA() {
+export default function PlanSearchProductsUSDA({ planDispatch, meal }) {
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +32,7 @@ export default function PlanSearchProductsUSDA() {
                 });
 
                 if (!ignoreResult) {
-                    setSearchResult(data.foods ?? []);
+                    setSearchResult(data.products ?? []);
                 }
             } catch (err) {
                 if (!ignoreResult) {
@@ -77,25 +67,46 @@ export default function PlanSearchProductsUSDA() {
         }
     }
 
-    const resultList = searchResult.map(product => {
-        const nutrients = product.foodNutrients ?? [];
+    function handleAddProduct(product) {
+        const hasAllMacros = ["energy", "protein", "carbs", "fats"]
+            .every(field => product[field] !== null);
 
-        return (
+        if (!hasAllMacros) {
+            setError("Produkt nie zawiera kompletu podstawowych wartości odżywczych.");
+            return;
+        }
+
+        planDispatch({
+            type: "addProduct",
+            order: meal.order_number,
+            ...product
+        });
+        setSearch("");
+        setSearchResult([]);
+    }
+
+    const resultList = searchResult.map(product => (
             <div key={product.fdcId} className={productsStyles.searchResultElement}>
                 <div className={productsStyles.searchResultInfo}>
                     <p className={productsStyles.productName}>
-                        {product.description}
+                        {product.name}
                     </p>
                     <PlanMacros
-                        energy={getNutrientValue(nutrients, MACRO_NUTRIENT_IDS.energy)}
-                        protein={getNutrientValue(nutrients, MACRO_NUTRIENT_IDS.protein)}
-                        carbs={getNutrientValue(nutrients, MACRO_NUTRIENT_IDS.carbs)}
-                        fats={getNutrientValue(nutrients, MACRO_NUTRIENT_IDS.fats)}
+                        energy={product.energy}
+                        protein={product.protein}
+                        carbs={product.carbs}
+                        fats={product.fats}
                     />
                 </div>
+                <button
+                    type="button"
+                    className={daysStyles.addMealButton}
+                    onClick={() => handleAddProduct(product)}
+                >
+                    <i className="ri-add-large-line"></i>
+                </button>
             </div>
-        );
-    });
+    ));
 
     const hasSearchQuery = search.trim().length >= MIN_SEARCH_LENGTH;
 

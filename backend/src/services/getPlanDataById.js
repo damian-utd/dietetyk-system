@@ -1,4 +1,4 @@
-import { appDb, productsDb } from "../config/db.js";
+import { appDb } from "../config/db.js";
 
 export async function getPlanDataById(plan_id, dietician_id) {
 
@@ -8,6 +8,10 @@ export async function getPlanDataById(plan_id, dietician_id) {
         "WHERE id = $1 AND dietician_id = $2",
         [plan_id, dietician_id]
     )
+
+    if (planRes.rows.length === 0) {
+        return null
+    }
 
     const patientRes = await appDb.query(
         "SELECT patient_id " +
@@ -21,8 +25,8 @@ export async function getPlanDataById(plan_id, dietician_id) {
     let plan = {
         currentDayNumber: 1,
         patient_id: patientRes.rows[0]?.patient_id || -1,
-        title: planRes.rows[0]?.title,
-        description: planRes.rows[0]?.description,
+        title: planRes.rows[0].title,
+        description: planRes.rows[0].description,
         days: []
     }
 
@@ -57,36 +61,22 @@ export async function getPlanDataById(plan_id, dietician_id) {
             })
 
             const productsRes = await appDb.query(
-                "SELECT * " +
+                "SELECT fdc_id, name, quantity, unit, energy, protein, carbs, fats " +
                 "FROM meal_products " +
                 "WHERE meal_id = $1",
                 [meal.id]
             )
 
             for (const product of productsRes.rows) {
-                const macroRes = await productsDb.query(
-                    "SELECT p.nazwa_polska, m.bialko_ogolem_g, m.tluszcz_g, m.weglowodany_ogolem_g, w.energia_1169_2012_kcal " +
-                    "FROM products p " +
-                    "JOIN makroskladniki m ON p.lp = m.produkt_id " +
-                    "JOIN wartosci_energetyczne w ON p.lp = w.produkt_id " +
-                    "WHERE p.lp = $1 ",
-                    [product.product_id]
-                )
-
-                const carbs = Math.round(parseFloat(macroRes.rows[0]?.weglowodany_ogolem_g.replace(",", ".")) * 100) / 100 || 0
-                const energy = Math.round(parseFloat(macroRes.rows[0]?.energia_1169_2012_kcal.replace(",", ".")) * 100) / 100 || 0
-                const fats = Math.round(parseFloat(macroRes.rows[0]?.tluszcz_g.replace(",", ".")) * 100) / 100 || 0
-                const protein = Math.round(parseFloat(macroRes.rows[0]?.bialko_ogolem_g.replace(",", ".")) * 100) / 100 || 0
-
                 plan.days[plan.days.length - 1].meals[plan.days[plan.days.length - 1].meals.length - 1].meal_products.push({
-                    carbs: carbs,
-                    energy: energy,
-                    fats: fats,
-                    name: macroRes.rows[0].nazwa_polska,
-                    protein: protein,
-                    product: product.product_id,
+                    fdcId: product.fdc_id,
+                    name: product.name,
                     quantity: Number(product.quantity),
-                    unit: product.unit
+                    unit: product.unit,
+                    energy: Number(product.energy),
+                    protein: Number(product.protein),
+                    carbs: Number(product.carbs),
+                    fats: Number(product.fats)
                 })
             }
         }

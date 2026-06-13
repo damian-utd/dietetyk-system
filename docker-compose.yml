@@ -13,32 +13,15 @@ services:
     networks:
       - backend_net
 
-  db-products:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER_PRODUCTS}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_PRODUCTS}
-      POSTGRES_DB: ${POSTGRES_DB_PRODUCTS}
-      TZ: Europe/Warsaw
-    volumes:
-      - ./db/products-data:/var/lib/postgresql/data
-      - ./db/init-products.sql:/docker-entrypoint-initdb.d/init-products.sql
-      - ./products.csv:/products.csv
-    networks:
-      - backend_net
-
   backend:
     build: ./backend
     restart: always
     depends_on:
       - db-app
-      - db-products
     environment:
       CHOKIDAR_USEPOLLING: true
       PORT: ${PORT}
       APP_DATABASE_URL: ${APP_DATABASE_URL}
-      PRODUCTS_DATABASE_URL: ${PRODUCTS_DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       USDA_API_KEY: ${USDA_API_KEY}
       TZ: Europe/Warsaw

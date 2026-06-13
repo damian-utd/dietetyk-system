@@ -15,7 +15,7 @@ Projekt inżynierski rozwijany jako pełny system klient-serwer. Łączy zarząd
 - obliczanie wskaźników **BMI**, **BMR** i **TDEE**,
 - tworzenie wielodniowych planów żywieniowych z podziałem na posiłki,
 - wyszukiwanie produktów i automatyczne podsumowanie kalorii oraz makroskładników,
-- uwzględnianie schorzeń i alergii pacjenta podczas pracy nad jadłospisem,
+- wyświetlanie schorzeń i alergii pacjenta podczas pracy nad jadłospisem,
 - zapisywanie wersji roboczej planu w `localStorage`,
 - prowadzenie notatek oraz monitorowanie postępów pacjenta,
 - eksport gotowego planu żywieniowego do pliku PDF,
@@ -33,7 +33,7 @@ Szczególnie istotne elementy techniczne:
 - autoryzacja JWT przechowywana w ciasteczku `httpOnly` z flagą `sameSite=strict`,
 - hashowanie haseł za pomocą `bcrypt`,
 - parametryzowane zapytania SQL do PostgreSQL,
-- dwie niezależne bazy danych: dane aplikacji oraz katalog produktów,
+- integracja backendu z USDA FoodData Central i lokalne snapshoty produktów użytych w planach,
 - generowanie dokumentów PDF po stronie backendu przy użyciu `pdf-lib`,
 - izolacja usług i komunikacja między nimi przez sieci Docker Compose.
 
@@ -44,18 +44,17 @@ flowchart LR
     U[Dietetyk] --> F[React + Vite]
     F -->|REST API / JWT cookie| B[Express.js]
     B --> A[(Baza aplikacji<br/>PostgreSQL)]
-    B --> P[(Baza produktów<br/>PostgreSQL)]
+    B --> USDA[USDA FoodData Central API]
     B --> PDF[Generator PDF]
 ```
 
-Środowisko składa się z czterech kontenerów:
+Środowisko składa się z trzech kontenerów:
 
 | Usługa | Odpowiedzialność |
 |---|---|
 | `frontend` | interfejs użytkownika i komunikacja z API przez proxy Vite |
 | `backend` | logika biznesowa, autoryzacja, REST API i generowanie PDF |
 | `db-app` | użytkownicy, dietetycy, pacjenci, pomiary, notatki i plany |
-| `db-products` | produkty oraz ich wartości odżywcze |
 
 ## Stack technologiczny
 
@@ -72,7 +71,7 @@ flowchart LR
 
 - Docker i Docker Compose,
 - pliki inicjalizujące schematy baz danych w katalogu `db/`,
-- plik `products.csv` z katalogiem produktów.
+- klucz API USDA FoodData Central.
 
 Skopiuj przykładową konfigurację i uzupełnij własne hasła oraz sekret JWT:
 

@@ -24,12 +24,8 @@ coverage/
 # Database
 /db/
 
-# Data files
-products.csv
-
 # Docker
 app-data/
-products-data/
 
 # Vite temp
 frontend/.vite/

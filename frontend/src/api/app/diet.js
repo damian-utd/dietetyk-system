@@ -2,11 +2,41 @@
 
 import download from "downloadjs"
 
-export async function searchProducts(search) {
-    const res = await fetch("/api/diet/search", {
-        method: "POST",
+function serializeProduct(product) {
+    return {
+        fdcId: Number(product.fdcId),
+        name: product.name,
+        quantity: Number(product.quantity),
+        unit: product.unit,
+        energy: Number(product.energy),
+        protein: Number(product.protein),
+        carbs: Number(product.carbs),
+        fats: Number(product.fats)
+    }
+}
+
+function serializePlan(planState) {
+    return {
+        patient_id: planState.patient_id ? Number(planState.patient_id) : null,
+        title: planState.title,
+        description: planState.description,
+        days: planState.days.map(day => ({
+            day_number: Number(day.day_number),
+            meals: day.meals.map(meal => ({
+                name: meal.name,
+                notes: meal.notes,
+                order_number: Number(meal.order_number),
+                meal_products: meal.meal_products.map(serializeProduct)
+            }))
+        }))
+    }
+}
+
+async function savePlanRequest(planState, url, method) {
+    const res = await fetch(url, {
+        method,
         headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({search}),
+        body: JSON.stringify({planState: serializePlan(planState)}),
         credentials: "include"
     })
 
@@ -20,20 +50,7 @@ export async function searchProducts(search) {
 }
 
 export async function savePlan(planState) {
-    const res = await fetch("/api/diet/", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({planState}),
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error (data.message)
-    }
-
-    return data
+    return savePlanRequest(planState, "/api/diet/", "POST")
 }
 
 export async function getPlans() {
@@ -51,20 +68,7 @@ export async function getPlans() {
 }
 
 export async function editPlan(planState, id) {
-    const res = await fetch(`/api/diet/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({planState}),
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error (data.message)
-    }
-
-    return data
+    return savePlanRequest(planState, `/api/diet/${id}`, "PUT")
 }
 
 export async function getPlansCount() {
@@ -153,20 +157,6 @@ export async function getPatientsPlans(id) {
 
     if (!res.ok) {
         throw new Error(data.message)
-    }
-
-    return data
-}
-
-export async function getBannedProducts(condition) {
-    const res = await fetch(`/api/diet/search/${condition}`, {
-        credentials: "include"
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error (data.message)
     }
 
     return data
