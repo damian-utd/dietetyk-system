@@ -1,0 +1,37 @@
+name: dietetyk-system-tests
+
+services:
+  db-test:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: dietetyk_app
+      TZ: Europe/Warsaw
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d dietetyk_app"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+    volumes:
+      - ./db/init-app.sql:/docker-entrypoint-initdb.d/init-app.sql:ro
+      - ./backend/test/sql/99-test-environment-marker.sql:/docker-entrypoint-initdb.d/99-test-environment-marker.sql:ro
+
+  backend-test:
+    build: ./backend
+    depends_on:
+      db-test:
+        condition: service_healthy
+    environment:
+      APP_DATABASE_URL: postgresql://test_user:test_password@db-test:5432/dietetyk_app
+      JWT_SECRET: integration-test-secret
+      NODE_ENV: test
+      ALLOW_TEST_DB_RESET: "true"
+      TZ: Europe/Warsaw
+    command: npm run test:integration
+    volumes:
+      - ./backend:/app
+      - backend_test_node_modules:/app/node_modules
+
+volumes:
+  backend_test_node_modules:
