@@ -1,6 +1,10 @@
 import { appDb } from "../config/db.js";
 import {getPlanDataById} from "../services/getPlanDataById.js";
 import {getPDFFromPlan} from "../services/getPDFFromPlan.js";
+import {
+    getDieticianIdForUser,
+    requireResourceOwnership
+} from "../services/resourceAuthorization.js";
 
 function getProductSnapshotValues(mealId, product) {
     const fdcId = Number(product.fdcId)
@@ -41,18 +45,6 @@ export async function savePlan(req,res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1;",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
-
         const planState = req.body.planState
         if(!planState) {
             return res.status(400).json({
@@ -61,6 +53,11 @@ export async function savePlan(req,res) {
         }
 
         await client.query("BEGIN")
+        const dietician_id = await getDieticianIdForUser(client, user_id)
+
+        if(planState.patient_id > 0) {
+            await requireResourceOwnership(client, user_id, "patient", planState.patient_id)
+        }
 
         const planResult = await client.query(
             "INSERT INTO diet_plans " +
@@ -104,12 +101,20 @@ export async function savePlan(req,res) {
         }
 
         if(planState.patient_id > 0) {
-            await client.query(
+            const assignmentResult = await client.query(
                 "INSERT INTO patient_diet_plan " +
                 "(patient_id, diet_plan_id) " +
-                "VALUES ($1, $2) ",
-                [planState.patient_id, plan_id]
+                "SELECT p.id, $2 " +
+                "FROM patients p " +
+                "WHERE p.id = $1 AND p.dietician_id = $3",
+                [planState.patient_id, plan_id, dietician_id]
             )
+
+            if (assignmentResult.rowCount === 0) {
+                const error = new Error("Nie znaleziono zasobu lub brak uprawnień")
+                error.status = 404
+                throw error
+            }
         }
 
         await client.query("COMMIT")
@@ -142,18 +147,6 @@ export async function editPlan(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1;",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
-
         const planState = req.body.planState
         if(!planState) {
             return res.status(400).json({
@@ -164,6 +157,7 @@ export async function editPlan(req, res) {
         const plan_id = req.params.id
 
         await client.query("BEGIN")
+        await requireResourceOwnership(client, user_id, "plan", plan_id)
 
         const updateResult = await client.query(
             "UPDATE diet_plans dp " +
@@ -250,17 +244,7 @@ export async function getPlans(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
+        const dietician_id = await getDieticianIdForUser(appDb, user_id)
 
         const result = await appDb.query(
             "SELECT id, title, description, created_at " +
@@ -274,8 +258,8 @@ export async function getPlans(req, res) {
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
     }
 }
@@ -311,21 +295,10 @@ export async function getPlanById(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
-
         const plan_id = req.params.id
+        const resource = await requireResourceOwnership(appDb, user_id, "plan", plan_id)
 
-        const plan = await getPlanDataById(plan_id, dietician_id)
+        const plan = await getPlanDataById(plan_id, resource.dietician_id)
 
         if (!plan) {
             return res.status(404).json({
@@ -337,8 +310,8 @@ export async function getPlanById(req, res) {
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
     }
 }
@@ -353,33 +326,26 @@ export async function deletePlan(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
-
         const plan_id = req.params.id
+        const resource = await requireResourceOwnership(appDb, user_id, "plan", plan_id)
 
-        const result = appDb.query(
+        const result = await appDb.query(
             "DELETE " +
             "FROM diet_plans " +
             "WHERE id = $1 AND dietician_id = $2",
-            [plan_id, dietician_id]
+            [plan_id, resource.dietician_id]
         )
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({message: "Nie znaleziono zasobu lub brak uprawnień"})
+        }
 
         res.status(200).json({message: "Pomyślnie usunięto plan", id: plan_id})
 
     } catch(err) {
         console.error("Błąd przy usuwaniu planu", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
     }
 }
@@ -447,17 +413,8 @@ export async function getPatientsPlans(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
+        const resource = await requireResourceOwnership(appDb, user_id, "patient", patient_id)
+        const dietician_id = resource.dietician_id
 
         const result = await appDb.query(
             "SELECT dp.id, dp.title, dp.description, dp.created_at " +
@@ -473,8 +430,8 @@ export async function getPatientsPlans(req, res) {
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
     }
 }
@@ -489,21 +446,10 @@ export async function getPlanInPDF(req, res) {
 
         const user_id = req.user.id
 
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta uzytkownika"
-            })
-        }
-
         const plan_id = req.params.id
+        const resource = await requireResourceOwnership(appDb, user_id, "plan", plan_id)
 
-        const plan = await getPlanDataById(plan_id, dietician_id)
+        const plan = await getPlanDataById(plan_id, resource.dietician_id)
 
         if (!plan) {
             return res.status(404).json({
@@ -519,8 +465,8 @@ export async function getPlanInPDF(req, res) {
 
     } catch(err) {
         console.error("Błąd przy generowaniu PDF planu", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
     }
 }

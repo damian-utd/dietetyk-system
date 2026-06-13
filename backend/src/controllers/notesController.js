@@ -1,20 +1,28 @@
 // notesController
 import {appDb} from "../config/db.js";
+import { requireResourceOwnership } from "../services/resourceAuthorization.js";
 
 export async function createNote(req, res) {
     const user_id = req.user.id
     const { patient_id, note } = req.body
 
     try {
+        await requireResourceOwnership(appDb, user_id, "patient", patient_id)
+
         const result = await appDb.query(
             "INSERT INTO dietician_notes " +
             "(dietician_id, patient_id, note) " +
-            "SELECT d.id, $2, $3 " +
+            "SELECT d.id, p.id, $3 " +
             "FROM dieticians d " +
-            "WHERE d.user_id = $1 " +
+            "JOIN patients p ON p.dietician_id = d.id " +
+            "WHERE d.user_id = $1 AND p.id = $2 " +
             "RETURNING id, dietician_id, patient_id, note, created_at",
             [user_id, patient_id, note]
         )
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({message: "Nie znaleziono zasobu lub brak uprawnień"})
+        }
 
         res.status(201).json({
             message: "Pomyślnie dodano notatkę",
@@ -23,8 +31,8 @@ export async function createNote(req, res) {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy dodawaniu notatki",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy dodawaniu notatki",
         });
     }
 }
@@ -34,6 +42,8 @@ export async function getNotes(req, res) {
     const user_id = req.user.id
 
     try {
+        await requireResourceOwnership(appDb, user_id, "patient", patient_id)
+
         const result = await appDb.query(
             "SELECT dn.id, dn.note, dn.created_at " +
             "FROM dietician_notes dn " +
@@ -50,8 +60,8 @@ export async function getNotes(req, res) {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy pobieraniu listy notatek",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy pobieraniu listy notatek",
         });
     }
 }
@@ -61,21 +71,27 @@ export async function deleteNotes(req, res) {
     const user_id = req.user.id
 
     try {
-        await appDb.query(
+        await requireResourceOwnership(appDb, user_id, "note", note_id)
+
+        const result = await appDb.query(
             "DELETE " +
             "FROM dietician_notes dn " +
             "USING dieticians d " +
-            "WHERE dn.id = $1 AND d.user_id = $2",
+            "WHERE dn.id = $1 AND d.user_id = $2 AND dn.dietician_id = d.id",
             [note_id, user_id]
         )
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({message: "Nie znaleziono zasobu lub brak uprawnień"})
+        }
 
         res.status(200).json({
             message: "Pomyślnie usunięto notatkę",
         })
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy usuwaniu notatki",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy usuwaniu notatki",
         });
     }
 }
@@ -86,6 +102,8 @@ export async function updateNote(req, res) {
     const text = req.body.text
 
     try {
+        await requireResourceOwnership(appDb, user_id, "note", note_id)
+
         const result = await appDb.query(
             "UPDATE dietician_notes " +
             "SET note = $1 " +
@@ -102,8 +120,8 @@ export async function updateNote(req, res) {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy edytowaniu notatki",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy edytowaniu notatki",
         });
     }
 }
