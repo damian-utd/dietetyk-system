@@ -1,55 +1,32 @@
-import { appDb, productsDb } from "../config/db.js";
+import { appDb } from "../config/db.js";
 import {getPlanDataById} from "../services/getPlanDataById.js";
 import {getPDFFromPlan} from "../services/getPDFFromPlan.js";
 
-export async function searchProducts(req, res) {
-    try {
-        if (req.user.role !== "dietetyk") return res.status(403).json({
-            message: "Brak uprawnień do wykonania operacji"
-        })
+function getProductSnapshotValues(mealId, product) {
+    const fdcId = Number(product.fdcId)
+    const quantity = Number(product.quantity)
+    const nutrientValues = [product.energy, product.protein, product.carbs, product.fats]
+    const nutrients = nutrientValues.map(Number)
+    const name = product.name?.trim()
+    const unit = product.unit?.trim()
 
-        const search = req.body.search
-
-        if(!search || search.length < 3) return res.status(400).json({
-            message: "Zbyt krótkie lub brak zapytania"
-        })
-
-        const searchArray = search.split(" ").filter(word => word !== "").map((s, index) => {
-            if (s !== "") {
-                return `%${s}%`
-            }
-        })
-
-        if(!searchArray) return res.status(400).json({
-            message: "Zbyt krótkie lub brak zapytania"
-        })
-
-        const ilikes = searchArray.map((s, index) => {
-            if (index === 0) {
-                return `nazwa_polska ILIKE $${index+1} `
-            } else {
-                return `AND nazwa_polska ILIKE $${index+1} `
-            }
-        })
-
-        const query =
-            "SELECT p.lp, p.nazwa_polska, p.nazwa_angielska, m.bialko_ogolem_g, m.tluszcz_g, m.weglowodany_ogolem_g, w.energia_1169_2012_kcal " +
-            "FROM products p " +
-            "JOIN makroskladniki m ON p.lp = m.produkt_id " +
-            "JOIN wartosci_energetyczne w ON p.lp = w.produkt_id " +
-            "WHERE " +
-            ilikes.join("")
-
-        const result = await productsDb.query(query, searchArray)
-
-        res.status(200).json({message: "Pomyślnie wyszukano produkty", products: result.rows})
-
-    } catch (err) {
-        console.error("Błąd przy wyszukiwaniu produktów", err)
-        res.status(500).json({
-            message: "Błąd serwera"
-        })
+    if (
+        !Number.isInteger(fdcId) ||
+        fdcId <= 0 ||
+        !name ||
+        !unit ||
+        !Number.isFinite(quantity) ||
+        quantity <= 0 ||
+        quantity > 10000 ||
+        nutrientValues.some(value => value === null || value === undefined || value === "") ||
+        nutrients.some(value => !Number.isFinite(value) || value < 0)
+    ) {
+        const error = new Error("Nieprawidłowe dane produktu")
+        error.status = 400
+        throw error
     }
+
+    return [mealId, fdcId, name, quantity, unit, ...nutrients]
 }
 
 export async function savePlan(req,res) {
@@ -118,9 +95,9 @@ export async function savePlan(req,res) {
                 for (const product of meal.meal_products) {
                     await client.query(
                         "INSERT INTO meal_products " +
-                        "(meal_id, product_id, quantity, unit) " +
-                        "VALUES ($1, $2, $3, $4) ",
-                        [meal_id, product.product, product.quantity, product.unit]
+                        "(meal_id, fdc_id, name, quantity, unit, energy, protein, carbs, fats) " +
+                        "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ",
+                        getProductSnapshotValues(meal_id, product)
                     )
                 }
             }
@@ -144,8 +121,8 @@ export async function savePlan(req,res) {
         await client.query("ROLLBACK")
 
         console.error("Błąd przy zapisywaniu planu", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
 
     } finally {
@@ -188,13 +165,19 @@ export async function editPlan(req, res) {
 
         await client.query("BEGIN")
 
-        await client.query(
+        const updateResult = await client.query(
             "UPDATE diet_plans dp " +
             "SET title = $1, description = $2 " +
             "FROM dieticians d " +
             "WHERE d.user_id = $3 AND dp.dietician_id = d.id AND dp.id = $4",
             [planState.title, planState.description, user_id, plan_id]
         )
+
+        if (updateResult.rowCount === 0) {
+            const error = new Error("Nie znaleziono planu")
+            error.status = 404
+            throw error
+        }
 
         await client.query(
             "DELETE FROM diet_days " +
@@ -225,9 +208,9 @@ export async function editPlan(req, res) {
                 for (const product of meal.meal_products) {
                     await client.query(
                         "INSERT INTO meal_products " +
-                        "(meal_id, product_id, quantity, unit) " +
-                        "VALUES ($1, $2, $3, $4) ",
-                        [meal_id, product.product, product.quantity, product.unit]
+                        "(meal_id, fdc_id, name, quantity, unit, energy, protein, carbs, fats) " +
+                        "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ",
+                        getProductSnapshotValues(meal_id, product)
                     )
                 }
             }
@@ -248,8 +231,8 @@ export async function editPlan(req, res) {
         await client.query("ROLLBACK")
 
         console.error("Błąd przy edytowaniu planu", err)
-        res.status(500).json({
-            message: "Błąd serwera"
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera"
         })
 
     } finally {
@@ -343,6 +326,12 @@ export async function getPlanById(req, res) {
         const plan_id = req.params.id
 
         const plan = await getPlanDataById(plan_id, dietician_id)
+
+        if (!plan) {
+            return res.status(404).json({
+                message: "Nie znaleziono planu"
+            })
+        }
 
         res.status(200).json({message: "Pomyślnie pobrano plany", plan})
 
@@ -484,27 +473,6 @@ export async function getPatientsPlans(req, res) {
 
     } catch(err) {
         console.error("Błąd przy pobieraniu planów", err)
-        res.status(500).json({
-            message: "Błąd serwera"
-        })
-    }
-}
-
-export async function getBannedProducts(req, res) {
-    const condition = req.params.condition
-
-    try {
-        const result = await productsDb.query(
-            "SELECT ARRAY_AGG (produkt_lp ORDER BY produkt_lp) as prod " +
-            "FROM produkt_alergeny " +
-            "WHERE alergen_id = $1 ",
-            [condition]
-        )
-
-        res.status(200).json({message: "Pomyślnie pobrano zabronione produkty", value: result.rows[0].prod ?? []})
-
-    } catch (err) {
-        console.error("Błąd przy pobieraniu zabronionych produktów", err)
         res.status(500).json({
             message: "Błąd serwera"
         })

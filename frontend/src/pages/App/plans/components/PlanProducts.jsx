@@ -8,23 +8,23 @@ import PlanMacros from "./PlanMacros.jsx";
 
 export default function PlanProducts({ meal, showSearchProducts, planDispatch }) {
 
-    function handleDeleteProduct(lp) {
+    function handleDeleteProduct(fdcId) {
         planDispatch({
             type: 'deleteProduct',
             order: meal.order_number,
-            product: lp
+            fdcId
         })
     }
 
-    function handleUpdateProduct(lp, newQuantity) {
-        if(newQuantity < 0 || newQuantity > 10000) {
+    function handleUpdateProduct(fdcId, newQuantity) {
+        if(newQuantity <= 0 || newQuantity > 10000) {
             return
         }
 
         planDispatch({
             type: 'updateProduct',
             order: meal.order_number,
-            product: lp,
+            fdcId,
             quantity: newQuantity
         })
     }
@@ -55,12 +55,13 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch })
                         <input
                             type="number"
                             value={product.quantity}
-                            onChange={(e) => handleUpdateProduct(product.product, e.target.value)}
+                            onChange={(e) => handleUpdateProduct(product.fdcId, e.target.value)}
+                            min={1}
                             max={1000}
                         />
                         <span>g</span>
                         <i className={`ri-delete-bin-6-line ${productsStyles.deleteProductIcon}`}
-                           onDoubleClick={() => handleDeleteProduct(product.product)}>
+                           onDoubleClick={() => handleDeleteProduct(product.fdcId)}>
                         </i>
                     </div>
                 </div>
@@ -73,7 +74,9 @@ export default function PlanProducts({ meal, showSearchProducts, planDispatch })
         <section
             className={`${(meal.meal_products.length > 0 || showSearchProducts) && productsStyles.productsSection}`}
         >
-            {showSearchProducts && <PlanSearchProductsUSDA />}
+            {showSearchProducts && (
+                <PlanSearchProductsUSDA meal={meal} planDispatch={planDispatch} />
+            )}
             {productsList}
         </section>
     )

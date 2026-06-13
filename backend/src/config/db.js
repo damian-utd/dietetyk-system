@@ -7,10 +7,6 @@ const appDb = new Pool({
     connectionString: process.env.APP_DATABASE_URL
 });
 
-const productsDb = new Pool({
-    connectionString: process.env.PRODUCTS_DATABASE_URL
-});
-
 (async () => {
     try {
         await appDb.query("SELECT NOW()");
@@ -20,14 +16,5 @@ const productsDb = new Pool({
     }
 })();
 
-(async () => {
-    try {
-        await productsDb.query("SELECT NOW()");
-        console.log(`✅ Połączono z bazą produktów: ${localNow()}`);
-    } catch (err) {
-        console.error("❌ Błąd połączenia z bazą produktów:", err.message);
-    }
-})();
 
-
-export {appDb, productsDb};
+export {appDb};
