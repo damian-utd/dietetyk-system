@@ -1,5 +1,6 @@
 // progressController
 import { appDb } from "../config/db.js";
+import { requireResourceOwnership } from "../services/resourceAuthorization.js";
 
 export async function createProgress(req, res) {
     const client = await appDb.connect()
@@ -7,44 +8,30 @@ export async function createProgress(req, res) {
     const { weight, patient_id } = req.body
 
     try {
-        const dieticianRes = await client.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta użytkownika"
-            });
-        }
-
-        const patientRes = await client.query(
-            "SELECT id FROM patients WHERE id = $1 AND dietician_id = $2",
-            [patient_id, dietician_id]
-        );
-
-        if (!patientRes.rows[0]) {
-            return res.status(404).json({
-                message: "Nie znaleziono pacjenta przypisanego do zalogowanego dietetyka"
-            });
-        }
-
         await client.query("BEGIN")
+        const patient = await requireResourceOwnership(client, user_id, "patient", patient_id)
 
         const result = await client.query(
             "INSERT INTO patient_progress " +
             "(patient_id, new_weight) " +
-            "VALUES ($1, $2) " +
+            "SELECT p.id, $2 " +
+            "FROM patients p " +
+            "WHERE p.id = $1 AND p.dietician_id = $3 " +
             "RETURNING id, new_weight, created_at",
-            [patient_id, weight]
+            [patient_id, weight, patient.dietician_id]
         )
+
+        if (result.rowCount === 0) {
+            const error = new Error("Nie znaleziono zasobu lub brak uprawnień")
+            error.status = 404
+            throw error
+        }
 
         await client.query(
             "UPDATE patients " +
             "SET weight = $1 " +
-            "WHERE id = $2 ",
-            [weight, patient_id]
+            "WHERE id = $2 AND dietician_id = $3",
+            [weight, patient_id, patient.dietician_id]
         )
 
         await client.query("COMMIT")
@@ -57,8 +44,8 @@ export async function createProgress(req, res) {
         await client.query("ROLLBACK")
 
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy dodawaniu progresu",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy dodawaniu progresu",
         });
     } finally {
         client.release()
@@ -70,17 +57,8 @@ export async function getProgress(req, res) {
     const patient_id = req.params.id;
 
     try {
-        const dieticianRes = await appDb.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta użytkownika"
-            });
-        }
+        const resource = await requireResourceOwnership(appDb, user_id, "patient", patient_id)
+        const dietician_id = resource.dietician_id
 
         const result = await appDb.query(
             "SELECT pp.id, pp.new_weight, pp.created_at " +
@@ -98,8 +76,8 @@ export async function getProgress(req, res) {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy pobieraniu listy progresów",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy pobieraniu listy progresów",
         });
     }
 }
@@ -110,35 +88,16 @@ export async function deleteProgress(req, res) {
     const progress_id = req.params.id;
 
     try {
-        const dieticianRes = await client.query(
-            "SELECT id FROM dieticians WHERE user_id = $1",
-            [user_id]
-        );
-
-        const dietician_id = dieticianRes.rows[0]?.id;
-        if (!dietician_id) {
-            return res.status(404).json({
-                message: "Brak dietetyka przypisanego do konta użytkownika"
-            });
-        }
-
         await client.query("BEGIN");
+        const authorizedProgress = await requireResourceOwnership(
+            client,
+            user_id,
+            "progress",
+            progress_id
+        )
+        const dietician_id = authorizedProgress.dietician_id
 
-        const progressRes = await client.query(
-            "SELECT pp.id, pp.patient_id, pp.created_at " +
-            "FROM patient_progress pp " +
-            "JOIN patients p ON pp.patient_id = p.id " +
-            "WHERE pp.id = $1 AND p.dietician_id = $2",
-            [progress_id, dietician_id]
-        );
-
-        const progress = progressRes.rows[0];
-        if (!progress) {
-            await client.query("ROLLBACK");
-            return res.status(404).json({
-                message: "Nie znaleziono progresu przypisanego do pacjenta zalogowanego dietetyka"
-            });
-        }
+        const progress = authorizedProgress
 
         const progressCountRes = await client.query(
             "SELECT COUNT(*) " +
@@ -170,9 +129,10 @@ export async function deleteProgress(req, res) {
         const isLatestProgress = latestProgress?.id === progress.id;
 
         await client.query(
-            "DELETE FROM patient_progress " +
-            "WHERE id = $1",
-            [progress_id]
+            "DELETE FROM patient_progress pp " +
+            "USING patients p " +
+            "WHERE pp.id = $1 AND pp.patient_id = p.id AND p.dietician_id = $2",
+            [progress_id, dietician_id]
         );
 
         if (isLatestProgress) {
@@ -204,8 +164,8 @@ export async function deleteProgress(req, res) {
     } catch (err) {
         await client.query("ROLLBACK");
         console.error(err.message);
-        res.status(500).json({
-            message: "Błąd serwera przy usuwaniu progresu",
+        res.status(err.status ?? 500).json({
+            message: err.status ? err.message : "Błąd serwera przy usuwaniu progresu",
         });
     } finally {
         client.release();
