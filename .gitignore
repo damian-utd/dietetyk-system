@@ -36,3 +36,6 @@ AGENTS.md
 .codex/
 .agents/
 
+# Private project checklists
+PRODUCTION_READINESS_TODO.md
+
