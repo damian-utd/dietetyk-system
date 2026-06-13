@@ -90,33 +90,6 @@ export default function Table({ title, headers = [], data = [], showLink = null,
                 {dataRows}
                 </tbody>
             </table>
-            {/*{(delFunc && showAlert) &&*/}
-            {/*    <>*/}
-            {/*        <div*/}
-            {/*            className={styles.overlay}*/}
-            {/*            onClick={() => setShowAlert(null)}*/}
-            {/*        ></div>*/}
-            {/*        <div className={styles.alert}>*/}
-            {/*            <span>{delText ? delText : "Czy na pewno chcesz to usunąć?"} <br/><b>{showAlert.name}</b>?</span>*/}
-            {/*            <span>Tej akcji nie można cofnąć</span>*/}
-            {/*            <div>*/}
-            {/*                <button*/}
-            {/*                    onClick={() => {*/}
-            {/*                        delFunc(showAlert.id)*/}
-            {/*                        setShowAlert(null)*/}
-            {/*                    }}*/}
-            {/*                >*/}
-            {/*                    Tak*/}
-            {/*                </button>*/}
-            {/*                <button*/}
-            {/*                    onClick={() => setShowAlert(null)}*/}
-            {/*                >*/}
-            {/*                    Nie*/}
-            {/*                </button>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </>*/}
-            {/*}*/}
         </>
     )
 }
