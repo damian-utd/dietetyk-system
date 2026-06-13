@@ -35,5 +35,8 @@ products-data/
 frontend/.vite/
 **/.vite/
 
-
+# Codex / Agent instructions
+AGENTS.md
+.codex/
+.agents/
 
